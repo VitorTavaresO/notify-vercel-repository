@@ -1,6 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
-import Registration from './pages/registration/registration.jsx';
+import Register from './pages/register/register.jsx';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -9,7 +8,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path='/registration' element={<Registration />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>

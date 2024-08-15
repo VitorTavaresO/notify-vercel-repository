@@ -1,0 +1,21 @@
+.register {
+    height: 100vh;
+}
+
+.p-icon-field {
+    width: 100%;
+}
+
+.container-register {
+    width: 75%;
+}
+
+@media screen and (max-width: 600px) {
+    .container-register {
+        width: 100%;
+    }
+
+    .register {
+        height: 100%;
+    }
+}
