@@ -1,0 +1,27 @@
+[
+    {
+        "nome": "João Silva",
+        "siape": "1234567",
+        "cargo": "Docente"
+    },
+    {
+        "nome": "Maria Oliveira",
+        "siape": "2345678",
+        "cargo": "Docente"
+    },
+    {
+        "nome": "Carlos Souza",
+        "siape": "3456789",
+        "cargo": "Secretariado"
+    },
+    {
+        "nome": "Ana Costa",
+        "siape": "4567890",
+        "cargo": "Pedagogo"
+    },
+    {
+        "nome": "Paulo Santos",
+        "siape": "5678901",
+        "cargo": "Secretarado Acadêmico"
+    }
+]
