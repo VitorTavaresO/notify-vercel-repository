@@ -28,11 +28,11 @@ function EmployeeList() {
     const itemTemplate = (employee) => {
         return (
             <Card className="card-container">
-                <Avatar icon="pi pi-user" size="large" shape="square" />
-                <div>
-                    <div>{employee.nome}</div>
-                    <div>SIAPE: {employee.siape}</div>
-                    <div>{employee.cargo}</div>
+                <Avatar icon="pi pi-user" size="large" shape="square" className="employee-avatar" />
+                <div className="employee-details">
+                    <div className="employee-name">{employee.nome}</div>
+                    <div className="employee-siape">SIAPE: {employee.siape}</div>
+                    <div className="employee-cargo">{employee.cargo}</div>
                 </div>
                 <Divider />
             </Card>
@@ -48,7 +48,7 @@ function EmployeeList() {
             <Card title='Lista de Funcionários'>
             <DataView 
                 value={employees} 
-                layout="grid" 
+                layout="list" 
                 itemTemplate={itemTemplate} 
                 paginator
                 rows={9}

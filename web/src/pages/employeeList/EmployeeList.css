@@ -8,6 +8,31 @@
     position: relative;
     border-radius: 20px;
     width: 80%;
+    margin: 10px auto;
+}
+
+.employee-item {
+    display: flex;
+    align-items: center;
+}
+
+.employee-avatar {
+    margin-right: 15px;
+}
+
+.employee-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.employee-siape, .employee-cargo {
+    font-size: 1rem;
+    color: #555;
 }
 
 @media (max-width: 600px) {
