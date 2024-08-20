@@ -59,48 +59,49 @@ const Register = () => {
         passwordCriteria,
     ]);
 
-    const header = <div className="font-bold mb-3">Chose a Password</div>;
+    const header = <div className="font-bold mb-3">Informe a Senha</div>;
     const footer = (
         <>
             <Divider />
-            <p className="mt-2">Required</p>
+            <p className="mt-2">Obrigatório:</p>
             <ul className="pl-2 ml-2 mt-0 line-height-3">
                 <li
                     className={
                         passwordCriteria.hasLowerCase ? "text-green-500" : "text-red-500"
                     }
                 >
-                    At least one lowercase
+                    Ao menos uma letra minúscula
                 </li>
                 <li
                     className={
                         passwordCriteria.hasUpperCase ? "text-green-500" : "text-red-500"
                     }
                 >
-                    At least one uppercase
+                    Ao menos uma letra maiúscula
                 </li>
                 <li
                     className={
                         passwordCriteria.hasNumber ? "text-green-500" : "text-red-500"
                     }
                 >
-                    At least one numeric
+                    Ao menos um número
                 </li>
                 <li
                     className={
                         passwordCriteria.hasSpecialChar ? "text-green-500" : "text-red-500"
                     }
                 >
-                    At least one special character
+                    Ao menos um caractere especial
                 </li>
                 <li
                     className={
                         passwordCriteria.minLength ? "text-green-500" : "text-red-500"
                     }
                 >
-                    Minimum 6 characters
+                    Mínimo de 6 caracteres
                 </li>
             </ul>
+
         </>
     );
 
@@ -112,7 +113,7 @@ const Register = () => {
             hasUpperCase: /[A-Z]/.test(newPassword),
             hasLowerCase: /[a-z]/.test(newPassword),
             hasNumber: /[0-9]/.test(newPassword),
-            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(newPassword),
+            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>_\-\\]/.test(newPassword), // O '\\' é necessario para não ficar como palavra reservada.
         });
     };
 
@@ -145,6 +146,7 @@ const Register = () => {
     return (
         <div className="register flex align-items-center justify-content-center">
             <Card title="Registro" className="m-2 container-register grid align-items-center justify-content-center text-center">
+                <p className="font-bold mb-3">Ingresse no Notify IFPR:</p>
                 <div className="grid justify-content-center">
                     <div className="sm:col-9 col-1">
                         <FloatLabel className="w-full mb-5">
@@ -163,8 +165,8 @@ const Register = () => {
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={cpf}
-                                mask="(99) 99999-9999"
-                                onChange={(e) => setPhone(e.target.value)}
+                                mask="999.999.999-99"
+                                onChange={(e) => setCpf(e.target.value)}
                                 onFocus={() => handleFieldFocus("CPF")}
                                 onBlur={() => handleFieldBlur("CPF", cpf)}
                                 keyfilter="int"
@@ -172,6 +174,21 @@ const Register = () => {
                                 className={`w-full ${fieldErrors.phone ? "p-invalid" : ""}`}
                             />
                             <label htmlFor="cpf">CPF</label>
+                        </FloatLabel>
+                    </div>
+                    <div className="sm:col-9 col-1">
+                        <FloatLabel className="w-full mb-5">
+                            <InputMask
+                                value={siape}
+                                mask="99999999999"
+                                onChange={(e) => setSiape(e.target.value)}
+                                onFocus={() => handleFieldFocus("SIAPE")}
+                                onBlur={() => handleFieldBlur("SIAPE", siape)}
+                                keyfilter="int"
+                                required
+                                className={`w-full ${fieldErrors.phone ? "p-invalid" : ""}`}
+                            />
+                            <label htmlFor="siape">SIAPE</label>
                         </FloatLabel>
                     </div>
                     <div className="sm:col-9 col-1">
