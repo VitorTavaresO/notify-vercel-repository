@@ -145,10 +145,10 @@ const Register = () => {
 
     return (
         <div className="register flex align-items-center justify-content-center">
-            <Card title="Registro" className="m-2 container-register grid align-items-center justify-content-center text-center">
+            <Card title="Registro" className="container-register grid max-w-30rem align-items-center justify-content-center text-center">
                 <p className="font-bold mb-3">Ingresse no Notify IFPR:</p>
-                <div className="grid justify-content-center">
-                    <div className="sm:col-9 col-1">
+                <div className="flex flex-column justify-content-center">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <InputText
                                 value={firstName}
@@ -161,7 +161,7 @@ const Register = () => {
                             <label htmlFor="first-name">Nome</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={cpf}
@@ -176,7 +176,7 @@ const Register = () => {
                             <label htmlFor="cpf">CPF</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={siape}
@@ -191,7 +191,7 @@ const Register = () => {
                             <label htmlFor="siape">SIAPE</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={phone}
@@ -206,7 +206,7 @@ const Register = () => {
                             <label htmlFor="phone">Telefone</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <InputText
                                 value={email}
@@ -220,7 +220,7 @@ const Register = () => {
                             <label htmlFor="email">Email</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
@@ -243,7 +243,7 @@ const Register = () => {
                             <label htmlFor="password">Senha</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <FloatLabel className="w-full mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
@@ -265,14 +265,14 @@ const Register = () => {
                     <div className="col-12">
                         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <Button
                             label="Voltar"
                             className="mb-3 w-full bg-red-500 border-red-500"
                             onClick={handleGoBack}
                         />
                     </div>
-                    <div className="sm:col-9 col-1">
+                    <div className="">
                         <Button
                             label="Criar Conta"
                             className={`mb-4 w-full ${isFormValid

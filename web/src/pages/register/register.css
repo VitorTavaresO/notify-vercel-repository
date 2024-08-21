@@ -1,21 +1,15 @@
 .register {
-    height: 100vh;
-}
-
-.p-icon-field {
-    width: 100%;
-}
-
-.container-register {
-    width: 75%;
+    height: 100%;
+    margin: 20px 0;
 }
 
 @media screen and (max-width: 600px) {
-    .container-register {
-        width: 100%;
+    .register {
+        margin: 0;
     }
 
-    .register {
-        height: 100%;
+    .container-register{
+        width: 100%;
+        box-shadow: none;
     }
 }
