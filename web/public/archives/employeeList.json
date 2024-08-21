@@ -2,26 +2,106 @@
     {
         "nome": "João Silva",
         "siape": "1234567",
-        "cargo": "Docente"
+        "cargo": "Docente",
+        "email": "joaosilva@email.com",
+        "telefone": "(44) 99999-9999"
     },
     {
         "nome": "Maria Oliveira",
         "siape": "2345678",
-        "cargo": "Docente"
+        "cargo": "Docente",
+        "email": "mariaoliveira@email",
+        "telefone": "(44) 88888-8888"
     },
     {
         "nome": "Carlos Souza",
         "siape": "3456789",
-        "cargo": "Secretariado"
+        "cargo": "Secretariado",
+        "email": "carlossouza@gmail.com",
+        "telefone": "(44) 77777-7777"
     },
     {
         "nome": "Ana Costa",
         "siape": "4567890",
-        "cargo": "Pedagogo"
+        "cargo": "Pedagogo",
+        "email": "anacosta@email.com",
+        "telefone": "(44) 66666-6666"
     },
     {
         "nome": "Paulo Santos",
         "siape": "5678901",
-        "cargo": "Secretarado Acadêmico"
+        "cargo": "Secretarado Acadêmico",
+        "email": "paulosantos@email.com",
+        "telefone": "(44) 55555-5555"
+    },
+    {
+        "nome": "Carlinha",
+        "siape": "0000001",
+        "cargo": "Diretora Geral",
+        "email": "carlinha@email.com",
+        "telefone": "(44) 44444-4444"
+    },
+    {
+        "nome": "Joãozinho",
+        "siape": "0000002",
+        "cargo": "Diretor Acadêmico",
+        "email": "joazinho@email.com",
+        "telefone": "(44) 33333-3333"
+    },
+    {
+        "nome": "Mariazinha",
+        "siape": "0000003",
+        "cargo": "Diretora Administrativa",
+        "email": "mariazinha@gmail.com",
+        "telefone": "(44) 22222-2222"
+    },
+    {
+        "nome": "Paulinho",
+        "siape": "0000004",
+        "cargo": "Diretor Financeiro",
+        "email": "paulinho@email.com",
+        "telefone": "(44) 11111-1111"
+    },
+    {
+        "nome": "Carlinhos",
+        "siape": "0000005",
+        "cargo": "Diretor de Marketing",
+        "email": "carlinhos@gmail.com",
+        "telefone": "(44) 00000-0000"
+    },
+    {
+        "nome": "Joaninha",
+        "siape": "0000006",
+        "cargo": "Diretora de Recursos Humanos",
+        "email": "joaninha@email.com",
+        "telefone": "(44) 98888-8888"
+    },
+    {
+        "nome": "Mariazinha",
+        "siape": "0000007",
+        "cargo": "Diretora de TI",
+        "email": "mariazinha01@gmail.com",
+        "telefone": "(44) 97777-7777"
+    },
+    {
+        "nome": "Paulinho",
+        "siape": "0000008",
+        "cargo": "Diretor de Compras",
+        "email": "paulinho01@email.com",
+        "telefone": "(44) 96666-6666"
+    },
+    {
+        "nome": "Carlinhos",
+        "siape": "0000009",
+        "cargo": "Diretor de Vendas",
+        "email": "carlinhos01@gmail.com",
+        "telefone": "(44) 95555-5555"
+    },
+    {
+        "nome": "Joaninha",
+        "siape": "0000010",
+        "cargo": "Diretora de Produção",
+        "email": "joaninha01@email.com",
+        "telefone": "(44) 94444-4444"
     }
 ]

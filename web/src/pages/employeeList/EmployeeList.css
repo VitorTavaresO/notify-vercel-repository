@@ -7,8 +7,25 @@
 .card-container{
     position: relative;
     border-radius: 20px;
-    width: 80%;
-    margin: 10px auto;
+    width: 90%;
+    margin: 30px auto;
+    transition: height 0.3s, transform 0.3s;
+}
+
+.card-container.expanded {
+    transform: scale(1.05);
+}
+
+.general-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 50%;
 }
 
 .employee-item {
@@ -32,6 +49,37 @@
 
 .employee-siape, .employee-cargo {
     font-size: 1rem;
+    color: #555;
+}
+
+.p-card-title{
+    text-align: center;
+}
+
+.expand-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #007ad9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.expand-button:hover {
+    background-color: #005fa3;
+}
+
+.extra-info {
+    margin-top: 15px;
+    font-size: 0.9rem;
     color: #555;
 }
 
