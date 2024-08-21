@@ -16,9 +16,10 @@ const Register = () => {
         navigate(-1);
     };
 
-    const [firstName, setFirstName] = useState("");
+    const [name, setName] = useState("");
     const [cpf, setCpf] = useState("");
     const [siape, setSiape] = useState("");
+    const [position, setPosition] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
@@ -38,9 +39,10 @@ const Register = () => {
     useEffect(() => {
         const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
         const isFormFilled =
-            firstName &&
+            name &&
             cpf &&
             siape &&
+            position &&
             email &&
             phone &&
             password &&
@@ -49,7 +51,7 @@ const Register = () => {
             password === confirmPassword;
         setIsFormValid(isFormFilled);
     }, [
-        firstName,
+        name,
         cpf,
         siape,
         email,
@@ -147,21 +149,21 @@ const Register = () => {
         <div className="register flex align-items-center justify-content-center">
             <Card title="Registro" className="container-register grid max-w-30rem align-items-center justify-content-center text-center">
                 <p className="font-bold mb-3">Ingresse no Notify IFPR:</p>
-                <div className="flex flex-column justify-content-center">
-                    <div className="">
+                <div className="grid-container grid justify-content-center">
+                    <div className="grid-item grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <InputText
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 onFocus={() => handleFieldFocus("Nome")}
-                                onBlur={() => handleFieldBlur("Nome", firstName)}
+                                onBlur={() => handleFieldBlur("Nome", name)}
                                 required
-                                className={`w-full ${fieldErrors.firstName ? "p-invalid" : ""}`}
+                                className={`w-full ${fieldErrors.name ? "p-invalid" : ""}`}
                             />
-                            <label htmlFor="first-name">Nome</label>
+                            <label htmlFor="name">Nome</label>
                         </FloatLabel>
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={cpf}
@@ -176,7 +178,7 @@ const Register = () => {
                             <label htmlFor="cpf">CPF</label>
                         </FloatLabel>
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={siape}
@@ -191,7 +193,7 @@ const Register = () => {
                             <label htmlFor="siape">SIAPE</label>
                         </FloatLabel>
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <InputMask
                                 value={phone}
@@ -206,7 +208,20 @@ const Register = () => {
                             <label htmlFor="phone">Telefone</label>
                         </FloatLabel>
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
+                        <FloatLabel className="w-full mb-5">
+                            <InputText
+                                value={position}
+                                onChange={(e) => setPosition(e.target.value)}
+                                onFocus={() => handleFieldFocus("Cargo")}
+                                onBlur={() => handleFieldBlur("Cargo", position)}
+                                required
+                                className={`w-full ${fieldErrors.position ? "p-invalid" : ""}`}
+                            />
+                            <label htmlFor="position">Cargo</label>
+                        </FloatLabel>
+                    </div>
+                    <div className="grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <InputText
                                 value={email}
@@ -220,7 +235,7 @@ const Register = () => {
                             <label htmlFor="email">Email</label>
                         </FloatLabel>
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
@@ -243,7 +258,7 @@ const Register = () => {
                             <label htmlFor="password">Senha</label>
                         </FloatLabel>
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
                         <FloatLabel className="w-full mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
@@ -262,7 +277,7 @@ const Register = () => {
                             <label htmlFor="confirm-password">Confirme a Senha</label>
                         </FloatLabel>
                     </div>
-                    <div className="col-12">
+                    <div className="sm:col-4 col-1">
                         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                     </div>
                     <div className="">
@@ -272,7 +287,7 @@ const Register = () => {
                             onClick={handleGoBack}
                         />
                     </div>
-                    <div className="">
+                    <div className="grid-item sm:col-4 col-1">
                         <Button
                             label="Criar Conta"
                             className={`mb-4 w-full ${isFormValid
