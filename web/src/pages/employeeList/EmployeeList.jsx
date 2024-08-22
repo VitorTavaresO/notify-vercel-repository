@@ -5,11 +5,13 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { Divider } from 'primereact/divider';
 import { DataView } from 'primereact/dataview';
 import { Avatar } from 'primereact/avatar';
+import { InputText } from "primereact/inputtext";
 
 function EmployeeList() {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandEmployee, setExpandEmployee] = useState(null);
+    const [filter, setFilter] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,6 +32,11 @@ function EmployeeList() {
         setExpandEmployee(expandEmployee === employee ? null : employee);
     };
 
+    const filteredEmployees = employees.filter(employee =>
+        employee.nome.toLowerCase().includes(filter.toLowerCase()) ||
+        employee.siape.includes(filter)
+    );
+
     const itemTemplate = (employee) => {
         const isExpanded = expandEmployee === employee;
         return (
@@ -49,6 +56,8 @@ function EmployeeList() {
                 <button
                     className="expand-button"
                     onClick={() => toggleExpand(employee)}
+                    aria-expanded={isExpanded}
+                    aria-label={`Expandir informações de ${employee.nome}`}
                 >
                     {isExpanded ? '-' : '+'}
                 </button>
@@ -61,17 +70,28 @@ function EmployeeList() {
     }
 
     return (
-        <div className="background-container flex flex-column justify-content-center align-items-center">
-            <Card title='Lista de Funcionários' className="general-card">
-                <Divider />
-                <DataView
-                    value={employees}
-                    layout="list"
-                    itemTemplate={itemTemplate}
-                    paginator
-                    rows={9}
+        <div className="container">
+            <div className="filter-container">
+                <h3>Filtrar Funcionários</h3>
+                <InputText
+                    placeholder="Digite o nome ou SIAPE"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    className="filter-input"
                 />
-            </Card>
+            </div>
+            <div className="employee-list flex flex-column justify-content-center align-items-center">
+                <Card title='Lista de Funcionários' className="general-card">
+                    <Divider />
+                    <DataView
+                        value={filteredEmployees}
+                        layout="list"
+                        itemTemplate={itemTemplate}
+                        paginator
+                        rows={9}
+                    />
+                </Card>
+            </div>
         </div>
     );
 }
