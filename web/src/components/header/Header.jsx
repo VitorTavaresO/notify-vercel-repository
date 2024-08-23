@@ -1,22 +1,44 @@
-import React from "react";
+import React, { useRef } from "react";
 import './Header.css';
 
+import { Menu } from 'primereact/menu';
 import { Avatar } from 'primereact/avatar';
 import { Menubar } from 'primereact/menubar';
 
 
+
 const Header = () => {
 
+    const menu = useRef(null);
     const items = [
-        {label: 'Início'},{label: 'Comunicados'},{label: 'Responsáveis'},{label: 'Servidores'}
+        {label: 'Início'},
+        {label: 'Comunicados'},
+        {label: 'Responsáveis'},
+        {label: 'Servidores'},
+    ];
+    const userMenuItems = [
+        {label: 'Perfil'},
+        {label: 'Sair'},
     ];
 
-    const start = <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="ml-2"></img>;
-    const end = <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png" className="mr-5"/>;
+    const start = (
+        <div className="flex align-items-center ml-3 mr-3">
+            <img alt="logo" src="https://ifpr.edu.br/umuarama/wp-content/uploads/sites/26/2021/06/umuarama-horizontal.png" height="46" />
+        </div>
+    );
+    const end = (
+        <div className="flex align-items-center mr-5">
+            <Avatar 
+                image="https://primefaces.org/cdn/primereact/images/avatar/asiyajavayant.png" 
+                onClick={(e) => menu.current.toggle(e)} 
+            />
+            <Menu model={userMenuItems} popup ref={menu} className="mt-1"/>
+        </div>
+    );
 
     return (
         <>
-        <Menubar model={items} start={start} end={end} />
+        <Menubar model={items} start={start} end={end} className="border-noround"/>
         </>
     );
 }; export default Header;
