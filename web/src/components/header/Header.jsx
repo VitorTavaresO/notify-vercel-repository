@@ -38,7 +38,7 @@ const Header = () => {
 
     return (
         <>
-        <Menubar model={items} start={start} end={end} className="border-noround"/>
+        <Menubar model={items} start={start} end={end} className="border-noround header"/>
         </>
     );
 }; export default Header;
