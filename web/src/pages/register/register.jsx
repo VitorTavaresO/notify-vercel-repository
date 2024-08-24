@@ -7,10 +7,8 @@ import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
+import CpfValidation from "../../validation/cpfValidation";
 import "./register.css";
-
-// npm i cpf-cnpj-validator -S
-import { cpf as cpfValidator} from 'cpf-cnpj-validator';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -21,6 +19,7 @@ const Register = () => {
 
     const [name, setName] = useState("");
     const [cpf, setCpf] = useState("");
+    const [cpfIsValid, setCpfIsValid] = useState("");
     const [siape, setSiape] = useState("");
     const [position, setPosition] = useState("");
     const [email, setEmail] = useState("");
@@ -161,7 +160,7 @@ const Register = () => {
                 align-items-center 
                 justify-content-center 
                 text-center">
-                <p className="font-bold">Ingresse no Notify IFPR:</p>
+                <p className="sub-title font-bold">Ingresse no Notify IFPR:</p>
                 <div className="
                     container-grid 
                     grid 
@@ -192,12 +191,15 @@ const Register = () => {
                             <InputMask
                                 value={cpf}
                                 mask="999.999.999-99"
-                                onChange={(e) => setCpf(e.target.value)}
+                                onChange={(e) => {
+                                    setCpf(e.target.value);   
+                                    setCpfIsValid(CpfValidation(cpf));                           
+                                }}
                                 onFocus={() => handleFieldFocus("CPF")}
                                 onBlur={() => handleFieldBlur("CPF", cpf)}
                                 keyfilter="int"
                                 required
-                                invalid={!cpfValidator.isValid(cpf)}
+                                invalid={!cpfIsValid}
                                 className={`
                                     w-full 
                                     ${fieldErrors.cpf ? "p-invalid" : ""}`}
@@ -341,6 +343,7 @@ const Register = () => {
                         col-12">
                         <Button
                             label="Criar Conta"
+                            id="register-button"
                             className={`
                                 w-18rem
                                 mb-4 
@@ -354,12 +357,13 @@ const Register = () => {
                         col-4">
                         <Button
                             label="Voltar"
+                            id="back-button"
                             className="
                                 w-full
                                 mb-4"
                             link
-                            onMouseOver={({target})=>target.style.color="rgba(46, 46, 46, 1)"}
-                            onMouseOut={({target})=>target.style.color="rgba(90, 135, 83, 1)"}
+                            onMouseOver={({target})=>target.style.color="var(--back-button-over-color)"}
+                            onMouseOut={({target})=>target.style.color="var(--back-button-out-color)"}
                             onClick={handleGoBack}
                         />
                     </div>

@@ -1,24 +1,37 @@
-.register {
-    padding: 20px 0;
-    background-color: rgb(142, 163, 138);
-    background-image: url(../../images/register/register_background.png);
+:root {
+    --register-color: rgb(142, 163, 138);
+    --register-container-color: rgba(203, 231, 199, 1);
+    --back-button-out-color :rgba(90, 135, 83, 1);
+    --back-button-over-color :rgba(46, 46, 46, 1);
+    --register-button-color: rgba(46, 46, 46, 1);
+}
+
+.register{
+    background-color: var(--register-color);
 }
 
 .register-container{
-    max-width: 900px;
-    background-color: rgba(203, 231, 199, 1);
+    background-color: var(--register-container-color);
 }
 
-.register-container p{
-    margin: 0 0 40px 0;
-}
-
-.p-card-content{
+.register-container > div > div{ /*p-card-content: tem padding padrao*/
     padding: 0;
+}
+
+.sub-title{
+    margin: 0 0 40px 0;
 }
 
 .password-area div{
     width: 100%;
+}
+
+#register-button span{
+    color: var(--register-button-color);
+}
+
+#back-button span{
+    color: var(--back-button-out-color);
 }
 
 @media screen and (max-width: 600px) {
@@ -40,5 +53,16 @@
 
     .grid-item{
         min-width: 100%;
+    }
+}
+
+@media screen and (min-width: 601px) {
+    .register {
+        padding: 20px 0;
+        background-image: url(../../images/register/register_background.png);
+    }
+
+    .register-container{
+        max-width: 900px;
     }
 }
