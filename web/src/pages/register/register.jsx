@@ -9,6 +9,9 @@ import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
 import "./register.css";
 
+// npm i cpf-cnpj-validator -S
+import { cpf as cpfValidator} from 'cpf-cnpj-validator';
+
 const Register = () => {
     const navigate = useNavigate();
 
@@ -123,7 +126,7 @@ const Register = () => {
         const confirmPassword = e.target.value;
         setConfirmPassword(confirmPassword);
         if (password !== confirmPassword) {
-            setErrorMessage("Passwords must match.");
+            setErrorMessage("As senhas devem ser iguais.");
         } else {
             setErrorMessage("");
         }
@@ -157,8 +160,7 @@ const Register = () => {
                 grid 
                 align-items-center 
                 justify-content-center 
-                text-center
-                sm: p-0">
+                text-center">
                 <p className="font-bold">Ingresse no Notify IFPR:</p>
                 <div className="
                     container-grid 
@@ -195,7 +197,10 @@ const Register = () => {
                                 onBlur={() => handleFieldBlur("CPF", cpf)}
                                 keyfilter="int"
                                 required
-                                className={`w-full ${fieldErrors.phone ? "p-invalid" : ""}`}
+                                invalid={!cpfValidator.isValid(cpf)}
+                                className={`
+                                    w-full 
+                                    ${fieldErrors.cpf ? "p-invalid" : ""}`}
                             />
                             <label htmlFor="cpf">CPF</label>
                         </FloatLabel>
@@ -275,9 +280,12 @@ const Register = () => {
                         </FloatLabel>
                     </div>
                     <div className="
+                        password-area
                         grid-item 
-                        col-6 ">
-                        <FloatLabel className="w-full mb-5">
+                        col-6">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
                                 toggleMask
@@ -295,7 +303,8 @@ const Register = () => {
                                     !Object.values(passwordCriteria).every(Boolean)
                                 }
                                 className={`
-                                    w-full ${fieldErrors.password ? "p-invalid" : ""}`}/>
+                                    w-full 
+                                    ${fieldErrors.password ? "p-invalid" : ""}`}/>
                             <label htmlFor="password">Senha</label>
                         </FloatLabel>
                     </div>
@@ -303,6 +312,7 @@ const Register = () => {
                         grid-item 
                         col-6">
                         <FloatLabel className="
+                            password-area
                             w-full 
                             mb-5">
                             <Password
@@ -317,7 +327,8 @@ const Register = () => {
                                 feedback={false}
                                 required
                                 className={`
-                                    w-full ${fieldErrors.confirmPassword ? "p-invalid" : ""}`}/>
+                                    w-full
+                                    ${fieldErrors.confirmPassword ? "p-invalid" : ""}`}/>
                             <label htmlFor="confirm-password">Confirme a Senha</label>
                         </FloatLabel>
                     </div>
@@ -327,26 +338,29 @@ const Register = () => {
                     </div>
                     <div className="
                         grid-item 
-                        col-4">
+                        col-12">
                         <Button
-                            label="Voltar"
-                            className="
-                                mb-4 w-full 
-                                bg-red-500 
-                                border-red-500"
-                            onClick={handleGoBack}
+                            label="Criar Conta"
+                            className={`
+                                w-18rem
+                                mb-4 
+                                ${isFormValid? "bg-green-600 border-green-600":"bg-gray-500 border-gray-500"}
+                            `}                                
+                            disabled={!isFormValid}
                         />
                     </div>
                     <div className="
                         grid-item 
                         col-4">
                         <Button
-                            label="Criar Conta"
-                            className={`
-                                w-full 
-                                mb-4 
-                                ${isFormValid? "bg-green-500 border-green-500":"bg-gray-500 border-gray-500"}`}
-                            disabled={!isFormValid}
+                            label="Voltar"
+                            className="
+                                w-full
+                                mb-4"
+                            link
+                            onMouseOver={({target})=>target.style.color="rgba(46, 46, 46, 1)"}
+                            onMouseOut={({target})=>target.style.color="rgba(90, 135, 83, 1)"}
+                            onClick={handleGoBack}
                         />
                     </div>
                 </div>

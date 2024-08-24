@@ -1,9 +1,12 @@
 .register {
     padding: 20px 0;
+    background-color: rgb(142, 163, 138);
+    background-image: url(../../images/register/register_background.png);
 }
 
 .register-container{
-    max-width: 1000px;
+    max-width: 900px;
+    background-color: rgba(203, 231, 199, 1);
 }
 
 .register-container p{
@@ -14,17 +17,18 @@
     padding: 0;
 }
 
-@media screen and (max-width: 600px) {
-    .register{
-        padding: 40px 10px;
-    }
+.password-area div{
+    width: 100%;
+}
 
+@media screen and (max-width: 600px) {
     .p-card-body{
         padding: 0;
     }
 
     .register-container{
         width: 100%;
+        padding: 40px 10px;
         box-shadow: none;
     }
 
