@@ -146,25 +146,47 @@ const Register = () => {
     };
 
     return (
-        <div className="register flex align-items-center justify-content-center">
-            <Card title="Registro" className="container-register grid max-w-30rem align-items-center justify-content-center text-center">
-                <p className="font-bold mb-3">Ingresse no Notify IFPR:</p>
-                <div className="grid-container grid justify-content-center">
-                    <div className="grid-item grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+        <div className="
+            register 
+            flex 
+            min-h-screen 
+            align-items-center 
+            justify-content-center">
+            <Card title="Registro" className="
+                register-container 
+                grid 
+                align-items-center 
+                justify-content-center 
+                text-center
+                sm: p-0">
+                <p className="font-bold">Ingresse no Notify IFPR:</p>
+                <div className="
+                    container-grid 
+                    grid 
+                    justify-content-center">
+                    <div className="
+                        grid-item 
+                        col-4">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <InputText
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 onFocus={() => handleFieldFocus("Nome")}
                                 onBlur={() => handleFieldBlur("Nome", name)}
                                 required
-                                className={`w-full ${fieldErrors.name ? "p-invalid" : ""}`}
-                            />
+                                className={`
+                                    w-full ${fieldErrors.name ? "p-invalid" : ""}`}/>
                             <label htmlFor="name">Nome</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+                    <div className="
+                        grid-item
+                        col-4">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <InputMask
                                 value={cpf}
                                 mask="999.999.999-99"
@@ -178,8 +200,12 @@ const Register = () => {
                             <label htmlFor="cpf">CPF</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+                    <div className="
+                        grid-item 
+                        col-4">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <InputMask
                                 value={siape}
                                 mask="99999999999"
@@ -188,13 +214,17 @@ const Register = () => {
                                 onBlur={() => handleFieldBlur("SIAPE", siape)}
                                 keyfilter="int"
                                 required
-                                className={`w-full ${fieldErrors.phone ? "p-invalid" : ""}`}
-                            />
+                                className={`
+                                    w-full ${fieldErrors.phone ? "p-invalid" : ""}`}/>
                             <label htmlFor="siape">SIAPE</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+                    <div className="
+                        grid-item 
+                        col-4">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <InputMask
                                 value={phone}
                                 mask="(99) 99999-9999"
@@ -203,26 +233,35 @@ const Register = () => {
                                 onBlur={() => handleFieldBlur("Telefone", phone)}
                                 keyfilter="int"
                                 required
-                                className={`w-full ${fieldErrors.phone ? "p-invalid" : ""}`}
-                            />
+                                className={`
+                                    w-full ${fieldErrors.phone ? "p-invalid" : ""}`}/>
                             <label htmlFor="phone">Telefone</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+                    <div className="
+                        grid-item
+                        col-4">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <InputText
                                 value={position}
                                 onChange={(e) => setPosition(e.target.value)}
                                 onFocus={() => handleFieldFocus("Cargo")}
                                 onBlur={() => handleFieldBlur("Cargo", position)}
                                 required
-                                className={`w-full ${fieldErrors.position ? "p-invalid" : ""}`}
+                                className={`
+                                    w-full ${fieldErrors.position ? "p-invalid" : ""}`}
                             />
                             <label htmlFor="position">Cargo</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+                    <div className="
+                        grid-item 
+                        col-4">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <InputText
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -230,12 +269,14 @@ const Register = () => {
                                 onBlur={() => handleFieldBlur("Email", email)}
                                 keyfilter="email"
                                 required
-                                className={`w-full ${fieldErrors.email ? "p-invalid" : ""}`}
-                            />
+                                className={`
+                                    w-full ${fieldErrors.email ? "p-invalid" : ""}`}/>
                             <label htmlFor="email">Email</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
+                    <div className="
+                        grid-item 
+                        col-6 ">
                         <FloatLabel className="w-full mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
@@ -253,13 +294,17 @@ const Register = () => {
                                     isPasswordFocused &&
                                     !Object.values(passwordCriteria).every(Boolean)
                                 }
-                                className={`w-full ${fieldErrors.password ? "p-invalid" : ""}`}
-                            />
+                                className={`
+                                    w-full ${fieldErrors.password ? "p-invalid" : ""}`}/>
                             <label htmlFor="password">Senha</label>
                         </FloatLabel>
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
-                        <FloatLabel className="w-full mb-5">
+                    <div className="
+                        grid-item 
+                        col-6">
+                        <FloatLabel className="
+                            w-full 
+                            mb-5">
                             <Password
                                 inputStyle={{ width: "100%" }}
                                 toggleMask
@@ -271,29 +316,36 @@ const Register = () => {
                                 }
                                 feedback={false}
                                 required
-                                className={`w-full ${fieldErrors.confirmPassword ? "p-invalid" : ""
-                                    }`}
-                            />
+                                className={`
+                                    w-full ${fieldErrors.confirmPassword ? "p-invalid" : ""}`}/>
                             <label htmlFor="confirm-password">Confirme a Senha</label>
                         </FloatLabel>
                     </div>
-                    <div className="sm:col-4 col-1">
+                    <div className="
+                        col-12">
                         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                     </div>
-                    <div className="">
+                    <div className="
+                        grid-item 
+                        col-4">
                         <Button
                             label="Voltar"
-                            className="mb-3 w-full bg-red-500 border-red-500"
+                            className="
+                                mb-4 w-full 
+                                bg-red-500 
+                                border-red-500"
                             onClick={handleGoBack}
                         />
                     </div>
-                    <div className="grid-item sm:col-4 col-1">
+                    <div className="
+                        grid-item 
+                        col-4">
                         <Button
                             label="Criar Conta"
-                            className={`mb-4 w-full ${isFormValid
-                                    ? "bg-green-500 border-green-500"
-                                    : "bg-gray-500 border-gray-500"
-                                }`}
+                            className={`
+                                w-full 
+                                mb-4 
+                                ${isFormValid? "bg-green-500 border-green-500":"bg-gray-500 border-gray-500"}`}
                             disabled={!isFormValid}
                         />
                     </div>
