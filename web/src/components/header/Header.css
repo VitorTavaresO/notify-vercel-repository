@@ -1,4 +1,16 @@
 
 .header{
     border-width: 0px;
+    background-color: #3E454D;
 }
+
+.p-menuitem-text {
+    color: #EEE !important;
+}
+
+.p-menuitem:hover {
+
+    .p-menuitem-text { color: #5fdb5b !important; }
+    .p-menuitem-content:hover { background: #3E454D !important; }
+}
+

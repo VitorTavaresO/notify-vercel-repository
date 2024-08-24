@@ -6,12 +6,11 @@ import { Avatar } from 'primereact/avatar';
 import { Menubar } from 'primereact/menubar';
 
 
-
 const Header = () => {
 
     const menu = useRef(null);
     const items = [
-        {label: 'Início'},
+        {label: 'Início' },
         {label: 'Comunicados'},
         {label: 'Responsáveis'},
         {label: 'Servidores'},
@@ -23,7 +22,7 @@ const Header = () => {
 
     const start = (
         <div className="flex align-items-center ml-3 mr-3">
-            <img alt="logo" src="https://ifpr.edu.br/umuarama/wp-content/uploads/sites/26/2021/06/umuarama-horizontal.png" height="46" />
+            <img alt="logo" src="/images/LOGO_IF.png" height="46" />
         </div>
     );
     const end = (
