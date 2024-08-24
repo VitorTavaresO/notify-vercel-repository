@@ -22,7 +22,7 @@ const Header = () => {
 
     const start = (
         <div className="flex align-items-center ml-3 mr-3 logo">
-            <img alt="logo" src="/images/LOGO_IF.png" height="46" />
+            <img alt="logo" src="/images/logo_ifpr.png" height="46" />
         </div>
     );
     const end = (

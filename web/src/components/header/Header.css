@@ -1,70 +1,41 @@
 
-.header{
-    border-width: 0px;
-    background-color: #3E454D;
+.header {
+
+    border-width: 0px;  /* evitar_problemas */
+    background-color: #3E454D; /* background-menubar */
 }
 
 .header .p-menuitem-text {
-    color: #EEE !important;
+
+    color: #EEEEEE !important;   /* color-text */
     font-weight: 350;
 }
 
-.header .p-menuitem:hover{
+.header .p-menuitem:hover {
 
-    .p-menuitem-text { color: #83f080 !important; }
-    .p-menuitem-content:hover { background: #3E454D !important; }
+    .p-menuitem-text { color: #83F080 !important; }  /* color-text-hover */
+    .p-menuitem-content:hover { background: #3E454D !important; } /* evitar_problemas */
 }
 
-.header .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
+.p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
 
-    background: #3E454D !important;
+    background: #3E454D !important;  /* evitar_problemas */
 }
 
 
 @media (max-width: 960px) {
-    /* Estilo para o menu dropdown */
-    .header .p-menubar-root-list {
-        background-color: #4d545e !important;
-    }
 
-    /* Estilo para os itens do menu dropdown */
-    .header .p-menubar-root-list .p-menuitem-link {
-        color: #EEE !important;
-    }
+    .header .p-menubar-root-list { background-color: #4D545E !important; }  /* background-submenubar */
+    .header .p-menubar-root-list .p-menuitem-link { color: #EEEEEE !important; }  /* color-text */
+    .header .p-menubar-root-list .p-menuitem-link:hover { color: #83F080 !important ; }  /* color-text-hover */
 
-    /* Estilo para o item do menu dropdown ao passar o mouse */
-    .header .p-menubar-root-list .p-menuitem-link:hover {
-        color: #83f080 !important;
-    }
+    .logo img{ margin-right: 20px; } /* margin-icon */
+    .p-menubar .p-menubar-button{ color: #EEEEEE !important;} /* color-icon */
+    .header .p-menubar-button { background-color: #3E454D !important; } /* background-icon */
 
-    /* Para o ícone do menu deslizante */
-    .header .p-menubar-button {
-        background-color: #3E454D !important;
-    }
+    .header .p-menubar-button .p-menubar-button-icon { color: #EEEEEE !important; } /* ??? */
 
-    /* Para o ícone de hambúrguer */
-    .header .p-menubar-button .p-menubar-button-icon {
-        color: #EEE !important;
-    }
-
-    .logo img{
-        margin-right: 20px;
-    }
-
-    .p-menubar .p-menubar-button{
-
-        color: #EEE !important;
-    }
-
-    .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content {
-
-        background: #4d545e !important;
-    }
-
-    .p-menubar .p-menubar-button:focus {
-
-        outline: 0 none;
-        outline-offset: 0;
-        box-shadow: 0 0 0 0;
-    }
+    .header .p-menuitem:hover { .p-menuitem-content:hover { background: #4D545E !important; }} /* evitar_problemas */
+    .p-menubar .p-menubar-button:focus { outline: 0 none; outline-offset: 0; box-shadow: 0 0 0 0; } /* evitar_problemas */
+    .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #4d545e !important; } /* evitar_problemas */
 }
