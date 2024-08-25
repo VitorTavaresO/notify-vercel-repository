@@ -7,10 +7,8 @@ import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
+import CpfValidation from "../../validation/cpfValidation";
 import "./register.css";
-
-// npm i cpf-cnpj-validator -S
-import { cpf as cpfValidator} from 'cpf-cnpj-validator';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -38,6 +36,8 @@ const Register = () => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({});
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+    const [isCpfValid, setIsCpfValid] = useState(false);
+    const [isCpfFocused, setIsCpfFocused] = useState(false);
 
     useEffect(() => {
         const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
@@ -132,6 +132,12 @@ const Register = () => {
         }
     };
 
+    const handleCpfChange = (e) => {
+        const novoCpf = e.target.value;
+        setCpf(novoCpf);
+        setIsCpfValid(CpfValidation(novoCpf));
+    }
+
     const handleFieldFocus = (field) => {
         setFieldErrors((prevErrors) => ({
             ...prevErrors,
@@ -150,30 +156,33 @@ const Register = () => {
 
     return (
         <div className="
-            register 
-            flex 
-            min-h-screen 
-            align-items-center 
+            register
+            flex
+            min-h-screen
+            align-items-center
             justify-content-center">
             <Card title="Registro" className="
-                register-container 
-                grid 
-                align-items-center 
-                justify-content-center 
+                register-container
+                grid
+                align-items-center
+                justify-content-center
                 text-center">
-                <p className="font-bold">Ingresse no Notify IFPR:</p>
+                <p className="sub-title font-bold">Ingresse no Notify IFPR:</p>
                 <div className="
-                    container-grid 
-                    grid 
+                    container-grid
+                    grid
                     justify-content-center">
                     <div className="
-                        grid-item 
+                        grid-item
                         col-4">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <InputText
                                 value={name}
+                                id="name"
+                                name="name"
+                                autoComplete="name"
                                 onChange={(e) => setName(e.target.value)}
                                 onFocus={() => handleFieldFocus("Nome")}
                                 onBlur={() => handleFieldBlur("Nome", name)}
@@ -187,33 +196,40 @@ const Register = () => {
                         grid-item
                         col-4">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <InputMask
                                 value={cpf}
+                                id="cpf"
+                                name="cpf"
                                 mask="999.999.999-99"
-                                onChange={(e) => setCpf(e.target.value)}
-                                onFocus={() => handleFieldFocus("CPF")}
+                                onChange={handleCpfChange}
+                                onFocus={() => {
+                                    handleFieldFocus("CPF");
+                                    setIsCpfFocused(true);
+                                }}
                                 onBlur={() => handleFieldBlur("CPF", cpf)}
                                 keyfilter="int"
                                 required
-                                invalid={!cpfValidator.isValid(cpf)}
+                                invalid={isCpfFocused && !isCpfValid}
                                 className={`
-                                    w-full 
+                                    w-full
                                     ${fieldErrors.cpf ? "p-invalid" : ""}`}
                             />
                             <label htmlFor="cpf">CPF</label>
                         </FloatLabel>
                     </div>
                     <div className="
-                        grid-item 
+                        grid-item
                         col-4">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <InputMask
                                 value={siape}
-                                mask="99999999999"
+                                id="siape"
+                                name="siape"
+                                mask="9999999"
                                 onChange={(e) => setSiape(e.target.value)}
                                 onFocus={() => handleFieldFocus("SIAPE")}
                                 onBlur={() => handleFieldBlur("SIAPE", siape)}
@@ -225,13 +241,16 @@ const Register = () => {
                         </FloatLabel>
                     </div>
                     <div className="
-                        grid-item 
+                        grid-item
                         col-4">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <InputMask
                                 value={phone}
+                                id="phone"
+                                name="phone"
+                                autoComplete="phone"
                                 mask="(99) 99999-9999"
                                 onChange={(e) => setPhone(e.target.value)}
                                 onFocus={() => handleFieldFocus("Telefone")}
@@ -247,10 +266,12 @@ const Register = () => {
                         grid-item
                         col-4">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <InputText
                                 value={position}
+                                id="position"
+                                name="position"
                                 onChange={(e) => setPosition(e.target.value)}
                                 onFocus={() => handleFieldFocus("Cargo")}
                                 onBlur={() => handleFieldBlur("Cargo", position)}
@@ -262,13 +283,16 @@ const Register = () => {
                         </FloatLabel>
                     </div>
                     <div className="
-                        grid-item 
+                        grid-item
                         col-4">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <InputText
                                 value={email}
+                                id="email"
+                                name="email"
+                                autoComplete="email"
                                 onChange={(e) => setEmail(e.target.value)}
                                 onFocus={() => handleFieldFocus("Email")}
                                 onBlur={() => handleFieldBlur("Email", email)}
@@ -281,21 +305,23 @@ const Register = () => {
                     </div>
                     <div className="
                         password-area
-                        grid-item 
+                        grid-item
                         col-6">
                         <FloatLabel className="
-                            w-full 
+                            w-full
                             mb-5">
                             <Password
-                                inputStyle={{ width: "100%" }}
-                                toggleMask
                                 value={password}
+                                id="password"
+                                name="password"
                                 onChange={handlePasswordChange}
                                 onFocus={() => {
                                     handleFieldFocus("Senha");
                                     setIsPasswordFocused(true);
                                 }}
                                 onBlur={() => handleFieldBlur("Senha", password)}
+                                inputStyle={{ width: "100%" }}
+                                toggleMask
                                 header={header}
                                 footer={footer}
                                 invalid={
@@ -303,33 +329,35 @@ const Register = () => {
                                     !Object.values(passwordCriteria).every(Boolean)
                                 }
                                 className={`
-                                    w-full 
+                                    w-full
                                     ${fieldErrors.password ? "p-invalid" : ""}`}/>
                             <label htmlFor="password">Senha</label>
                         </FloatLabel>
                     </div>
                     <div className="
-                        grid-item 
+                        grid-item
                         col-6">
                         <FloatLabel className="
                             password-area
-                            w-full 
+                            w-full
                             mb-5">
                             <Password
-                                inputStyle={{ width: "100%" }}
-                                toggleMask
                                 value={confirmPassword}
+                                id="confirmPassword"
+                                name="confirmPassword"
                                 onChange={handlePasswordConfirmation}
                                 onFocus={() => handleFieldFocus("Confirme a Senha")}
                                 onBlur={() =>
                                     handleFieldBlur("Confirme a Senha", confirmPassword)
                                 }
+                                inputStyle={{ width: "100%" }}
+                                toggleMask
                                 feedback={false}
                                 required
                                 className={`
                                     w-full
                                     ${fieldErrors.confirmPassword ? "p-invalid" : ""}`}/>
-                            <label htmlFor="confirm-password">Confirme a Senha</label>
+                            <label htmlFor="confirmPassword">Confirme a Senha</label>
                         </FloatLabel>
                     </div>
                     <div className="
@@ -337,29 +365,31 @@ const Register = () => {
                         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                     </div>
                     <div className="
-                        grid-item 
+                        grid-item
                         col-12">
                         <Button
                             label="Criar Conta"
+                            id="register-button"
                             className={`
                                 w-18rem
-                                mb-4 
+                                mb-4
                                 ${isFormValid? "bg-green-600 border-green-600":"bg-gray-500 border-gray-500"}
-                            `}                                
+                            `}
                             disabled={!isFormValid}
                         />
                     </div>
                     <div className="
-                        grid-item 
+                        grid-item
                         col-4">
                         <Button
                             label="Voltar"
+                            id="back-button"
                             className="
                                 w-full
                                 mb-4"
                             link
-                            onMouseOver={({target})=>target.style.color="rgba(46, 46, 46, 1)"}
-                            onMouseOut={({target})=>target.style.color="rgba(90, 135, 83, 1)"}
+                            onMouseOver={({target})=>target.style.color="var(--back-button-over-color)"}
+                            onMouseOut={({target})=>target.style.color="var(--back-button-out-color)"}
                             onClick={handleGoBack}
                         />
                     </div>
