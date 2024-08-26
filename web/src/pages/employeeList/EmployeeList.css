@@ -1,34 +1,26 @@
 .container {
     display: flex;
-    height: 100%;
-    width: 100%;
+    height: auto;
+    width: auto;
     background-color: #bebebe;
 }
 
 .card-container {
     position: relative;
     border-radius: 20px;
-    width: 90%;
-    min-width: 100%;
+    width: 80%;
     margin: 30px auto;
-    transition: height 0.3s, transform 0.3s;
+    
 }
 
-.card-container.expanded {
-    transform: scale(1.05);
-}
 
 .general-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     padding: 10px;
     border-radius: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    margin: 0;
+    
 }
 
 .employee-item {
@@ -101,8 +93,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    z-index: 1000; /* Garante que o filtro fique acima de outros elementos */
-    transition: width 0.3s ease; /* Transição suave para largura */
+    z-index: 1000;
+    transition: width 0.3s ease;
 }
 
 .filter-container h3 {
@@ -119,16 +111,19 @@
 }
 
 .employee-list {
-    margin-right: 250px; /* Espaço para o filtro em telas grandes */
+    margin-right: 250px;
     padding: 20px;
     overflow-y: auto;
     height: auto;
-    transition: margin-right 0.3s ease; /* Transição suave para margem */
+    transition: margin-right 0.3s ease;
+    width: 100%;
+    
 }
 
 .filter-input {
     margin-bottom: 20px;
 }
+
 
 @media (max-width: 600px) {
     .filter-container {

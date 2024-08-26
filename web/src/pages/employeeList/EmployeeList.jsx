@@ -97,10 +97,9 @@ function EmployeeList() {
                     options={permissions}
                     onChange={(e) => setSelectedPermission(e.value)}
                     placeholder="Selecione uma permissão"
-                    className="filter-dropdown"
                 />
             </div>
-            <div className="employee-list flex flex-column justify-content-center align-items-center">
+            <div className="employee-list">
                 <Card title='Lista de Funcionários' className="general-card">
                     <Divider />
                     <DataView
