@@ -5,7 +5,7 @@
     background-color: #bebebe;
 }
 
-.card-container{
+.card-container {
     position: relative;
     border-radius: 20px;
     width: 90%;
@@ -18,7 +18,7 @@
     transform: scale(1.05);
 }
 
-.general-card{
+.general-card {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -101,14 +101,15 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    z-index: 1000;
+    z-index: 1000; /* Garante que o filtro fique acima de outros elementos */
+    transition: width 0.3s ease; /* Transição suave para largura */
 }
 
 .filter-container h3 {
     margin-bottom: 10px;
 }
 
-.filter-container input {
+.filter-container input, .filter-container .filter-dropdown {
     padding: 10px;
     font-size: 1rem;
     margin-bottom: 20px;
@@ -118,16 +119,11 @@
 }
 
 .employee-list {
-    flex: 1;
-    margin-right: 250px;
+    margin-right: 250px; /* Espaço para o filtro em telas grandes */
     padding: 20px;
     overflow-y: auto;
     height: auto;
-}
-
-.general-card {
-    width: 100%;
-    margin: 0;
+    transition: margin-right 0.3s ease; /* Transição suave para margem */
 }
 
 .filter-input {
@@ -135,49 +131,21 @@
 }
 
 @media (max-width: 600px) {
-    .general-card {
-        width: 90%;
-        padding: 15px;
-    }
-
-    .employee-name {
-        font-size: 1rem;
-    }
-
-    .employee-siape, .employee-cargo {
-        font-size: 0.9rem;
-    }
-
-    .employee-avatar {
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
-    }
-
-    .card-container {
-        margin: 20px auto;
-        width: 100%;
-    }
-
-    .expand-button {
-        width: 25px;
-        height: 25px;
-        font-size: 14px;
-    }
-
-    .extra-info {
-        font-size: 0.8rem;
-    }
-
     .filter-container {
         width: 100%;
-        position: static;
-        box-shadow: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
         padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         margin-bottom: 20px;
+        height: 25%;
     }
 
     .employee-list {
-        margin-right: 0;
+        margin: 0;
+        padding: 10px;
+        margin-top: 40%;
     }
 }
