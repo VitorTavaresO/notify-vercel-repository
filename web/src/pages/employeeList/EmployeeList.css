@@ -9,6 +9,7 @@
     position: relative;
     border-radius: 20px;
     width: 90%;
+    min-width: 100%;
     margin: 30px auto;
     transition: height 0.3s, transform 0.3s;
 }
@@ -95,11 +96,12 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     right: 0;
-    top: 0;
+    top: 60px;
     bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    z-index: 1000;
 }
 
 .filter-container h3 {
@@ -126,6 +128,10 @@
 .general-card {
     width: 100%;
     margin: 0;
+}
+
+.filter-input {
+    margin-bottom: 20px;
 }
 
 @media (max-width: 600px) {

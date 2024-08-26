@@ -6,12 +6,21 @@ import { Divider } from 'primereact/divider';
 import { DataView } from 'primereact/dataview';
 import { Avatar } from 'primereact/avatar';
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 
 function EmployeeList() {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandEmployee, setExpandEmployee] = useState(null);
     const [filter, setFilter] = useState("");
+    const [selectedPermission, setSelectedPermission] = useState('Todos');
+
+    const permissions = [
+        {label: "Todos", value: "Todos"},
+        {label: "Gerenciador do Sistema", value: "Gerenciador do sistema"},
+        {label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros"},
+        {label: "Emissor de Comunicados", value: "Emissor de comunicados"},
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,11 +41,14 @@ function EmployeeList() {
         setExpandEmployee(expandEmployee === employee ? null : employee);
     };
 
-    const filteredEmployees = employees.filter(employee =>
-        employee.nome.toLowerCase().includes(filter.toLowerCase()) ||
-        employee.siape.includes(filter)
-    );
+    const filteredEmployees = employees.filter(employee => {
+        const matchesNameOrSiape = employee.nome.toLowerCase().includes(filter.toLowerCase()) || employee.siape.includes(filter);
+        const matchesPermission = selectedPermission === "Todos" || employee.permissao === selectedPermission;
 
+        return matchesNameOrSiape && matchesPermission;
+    });
+
+    
     const itemTemplate = (employee) => {
         const isExpanded = expandEmployee === employee;
         return (
@@ -51,6 +63,7 @@ function EmployeeList() {
                     <div className="extra-info">
                         <div className="employee-number">Telefone: {employee.telefone}</div>
                         <div className="employee-email">Email: {employee.email}</div>
+                        <div className="employee-permission">Permissão: {employee.permissao}</div>
                     </div>
                 )}
                 <button
@@ -78,6 +91,13 @@ function EmployeeList() {
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                     className="filter-input"
+                />
+                <Dropdown
+                    value={selectedPermission}
+                    options={permissions}
+                    onChange={(e) => setSelectedPermission(e.value)}
+                    placeholder="Selecione uma permissão"
+                    className="filter-dropdown"
                 />
             </div>
             <div className="employee-list flex flex-column justify-content-center align-items-center">
