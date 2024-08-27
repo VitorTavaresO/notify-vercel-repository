@@ -6,6 +6,7 @@
     border-width: 0px;  /* evitar_problemas */
     background-color: #3E454D;  /* background-menubar */
     position: fixed; width: 100%;  /* menubar-fixed */
+    z-index: 10000;  /* evitar_problemas */
 }
 
 .header .p-menuitem-text {
