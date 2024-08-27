@@ -1,0 +1,123 @@
+[
+    {
+        "nome": "Maria Oliveira",
+        "siape": "7654321",
+        "cargo": "Coordenadora",
+        "email": "mariaoliveira@email.com",
+        "telefone": "(11) 98888-8888",
+        "permissao": "Gerenciador do sistema"
+    },
+    {
+        "nome": "Carlos Santos",
+        "siape": "2345678",
+        "cargo": "Assistente Administrativo",
+        "email": "carlossantos@email.com",
+        "telefone": "(21) 97777-7777",
+        "permissao": "Gerenciador de cadastros"
+    },
+    {
+        "nome": "Ana Paula",
+        "siape": "3456789",
+        "cargo": "Secretária",
+        "email": "anapaula@email.com",
+        "telefone": "(31) 96666-6666",
+        "permissao": "Emissor de comunicados"
+    },
+    {
+        "nome": "Roberto Almeida",
+        "siape": "4567890",
+        "cargo": "Diretor",
+        "email": "robertoalmeida@email.com",
+        "telefone": "(41) 95555-5555",
+        "permissao": "Gerenciador do sistema"
+    },
+    {
+        "nome": "Fernanda Costa",
+        "siape": "5678901",
+        "cargo": "Docente",
+        "email": "fernandacosta@email.com",
+        "telefone": "(51) 94444-4444",
+        "permissao": "Gerenciador de cadastros"
+    },
+    {
+        "nome": "Luiz Pereira",
+        "siape": "6789012",
+        "cargo": "Técnico de Informática",
+        "email": "luizpereira@email.com",
+        "telefone": "(61) 93333-3333",
+        "permissao": "Gerenciador do sistema"
+    },
+    {
+        "nome": "Juliana Mendes",
+        "siape": "7890123",
+        "cargo": "Docente",
+        "email": "julianamendes@email.com",
+        "telefone": "(71) 92222-2222",
+        "permissao": "Emissor de comunicados"
+    },
+    {
+        "nome": "Pedro Sousa",
+        "siape": "8901234",
+        "cargo": "Assistente Social",
+        "email": "pedrosousa@email.com",
+        "telefone": "(81) 91111-1111",
+        "permissao": "Gerenciador de cadastros"
+    },
+    {
+        "nome": "Camila Rocha",
+        "siape": "9012345",
+        "cargo": "Psicóloga",
+        "email": "camilarocha@email.com",
+        "telefone": "(91) 90000-0000",
+        "permissao": "Emissor de comunicados"
+    },
+    {
+        "nome": "Ricardo Lima",
+        "siape": "1230987",
+        "cargo": "Engenheiro",
+        "email": "ricardolima@email.com",
+        "telefone": "(41) 98888-1234",
+        "permissao": "Gerenciador do sistema"
+    },
+    {
+        "nome": "Sônia Martins",
+        "siape": "4567891",
+        "cargo": "Pedagoga",
+        "email": "soniamartins@email.com",
+        "telefone": "(51) 97777-5678",
+        "permissao": "Emissor de comunicados"
+    },
+    {
+        "nome": "Marcos Silva",
+        "siape": "2345679",
+        "cargo": "Bibliotecário",
+        "email": "marcossilva@email.com",
+        "telefone": "(61) 96666-6789",
+        "permissao": "Gerenciador de cadastros"
+    },
+    {
+        "nome": "Paula Freitas",
+        "siape": "3456780",
+        "cargo": "Assistente de Coordenação",
+        "email": "paulafreitas@email.com",
+        "telefone": "(71) 95555-7890",
+        "permissao": "Gerenciador do sistema"
+    },
+    {
+        "nome": "Henrique Lopes",
+        "siape": "4567892",
+        "cargo": "Orientador Educacional",
+        "email": "henriquelopes@email.com",
+        "telefone": "(81) 94444-8901",
+        "permissao": "Emissor de comunicados"
+    },
+    {
+        "nome": "Daniela Souza",
+        "siape": "5678902",
+        "cargo": "Secretária Acadêmica",
+        "email": "danielasouza@email.com",
+        "telefone": "(91) 93333-9012",
+        "permissao": "Gerenciador de cadastros"
+    }
+    
+]

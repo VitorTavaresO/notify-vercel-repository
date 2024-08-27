@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import './Header.css';
-
+import { useNavigate } from "react-router-dom";
 import { Avatar } from 'primereact/avatar';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 
 
 const Header = () => {
+    const navigate = useNavigate();
 
     const items = [
         {label: 'Início' },
         {label: 'Comunicados'},
         {label: 'Responsáveis'},
-        {label: 'Servidores'},
+        {label: 'Servidores',
+            command: () => { navigate('/employee-list'); }
+        },
     ];
 
     const [isUserMenuVisible, setIsUserMenuVisible] = useState(false);
