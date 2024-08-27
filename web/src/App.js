@@ -1,4 +1,7 @@
 import './App.css';
+import Register from './pages/register/register.jsx';
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -14,7 +17,7 @@ function App() {
         <Routes>
           <Route path='/' element={<DefaultLayout><Home/></DefaultLayout>} />
           <Route path='/page1' element={<DefaultLayout><Home/></DefaultLayout>} />
-          <Route path='/page2' element={<SimpleLayout><Home/></SimpleLayout>} />
+          <Route path='/register' element={<SimpleLayout><Register/></SimpleLayout>} />
         </Routes>
       </BrowserRouter>
     </>
