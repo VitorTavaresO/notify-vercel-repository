@@ -8,6 +8,7 @@ import SimpleLayout from "./components/SimpleLayout";
 
 import Home from "./pages/home/Home";
 import EmployeeList from './pages/employeeList/EmployeeList';
+import Profile from "./pages/profile/Profile";
 
 function App() {
   return (
@@ -38,7 +39,22 @@ function App() {
               </SimpleLayout>
             }
           />
-          <Route path='/employee-list' element={<DefaultLayout><EmployeeList/></DefaultLayout>} />
+          <Route 
+          path='/employee-list'
+          element={
+            <DefaultLayout>
+                <EmployeeList/>
+            </DefaultLayout>
+          }
+          />
+          <Route
+            path="/profile"
+            element={
+              <DefaultLayout>
+                <Profile/>
+              </DefaultLayout>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>
