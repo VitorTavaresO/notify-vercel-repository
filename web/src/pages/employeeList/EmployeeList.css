@@ -54,25 +54,34 @@
     margin-bottom: 10px;
 }
 
-.expand-button {
+.edit-button {
     position: absolute;
     bottom: 10px;
-    right: 10px;
-    background-color: #007ad9;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    font-size: 16px;
+    right: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #747474;
+    border: 0px;
+}
+
+.edit-button:hover {
+    background-color: #838383;
+}
+
+.expand-button {
+    position: absolute;
+    bottom: 10px;
+    right: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #16d9f3;
+    border: 0px;
 }
 
 .expand-button:hover {
-    background-color: #005fa3;
+    background-color: #04cde7;
 }
 
 .extra-info {

@@ -3,6 +3,7 @@ import "./EmployeeList.css";
 import { Card } from "primereact/card";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Divider } from "primereact/divider";
+import { Button } from 'primereact/button';
 import { DataView } from "primereact/dataview";
 import { Avatar } from "primereact/avatar";
 import { InputText } from "primereact/inputtext";
@@ -78,6 +79,18 @@ function EmployeeList() {
             </div>
           </div>
         )}
+
+        <Button
+          className="edit-button"
+          icon="pi pi-pencil" 
+          onClick={() => toggleExpand()}
+        />
+        <Button
+          className="expand-button"
+          icon={`${isExpanded ? "pi pi-chevron-up" : "pi pi-chevron-down"}`}
+          onClick={() => toggleExpand(employee)}
+        />
+        {/*
         <button
           className="expand-button"
           onClick={() => toggleExpand(employee)}
@@ -86,6 +99,7 @@ function EmployeeList() {
         >
           {isExpanded ? "-" : "+"}
         </button>
+        */}
       </Card>
     );
   };
