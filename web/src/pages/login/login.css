@@ -1,0 +1,49 @@
+:root {
+    --login-page-color: rgb(142, 163, 138);
+    --login-container-color: rgba(203, 231, 199, 1);
+    --register-button-out-color: rgba(90, 135, 83, 1);
+    --register-button-over-color: rgba(46, 46, 46, 1);
+    --acess-button-color: rgba(46, 46, 46, 1);
+}
+
+#login-button span {
+    color: var(--acess-button-color);
+}
+
+#register-button span {
+    color: var(--register-button-out-color);
+}
+
+.password-area div {
+    width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .p-card-body {
+        padding: 0;
+    }
+
+    .login-container {
+        width: 100%;
+        padding: 40px 10px;
+        box-shadow: none;
+    }
+
+    .container-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .grid-item {
+        min-width: 100%;
+    }
+}
+
+@media screen and (min-width: 601px) {
+    /* background-image: url(../../images/register/image.png); */
+
+    .login-container {
+        max-width: 700px;
+    }
+}
