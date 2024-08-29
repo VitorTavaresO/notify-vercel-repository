@@ -41,8 +41,6 @@
 }
 
 @media screen and (min-width: 601px) {
-    /* background-image: url(../../images/register/image.png); */
-
     .login-container {
         max-width: 700px;
     }

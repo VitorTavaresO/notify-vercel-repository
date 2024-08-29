@@ -4,7 +4,8 @@ import { Card } from "primereact/card";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
-import { Button } from "primereact/button";
+import { Button } from "primereact/button"; 
+import { Image } from 'primereact/image';
 import "./login.css";
 
 const Login = () => {
@@ -16,7 +17,8 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({});
-    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+    const header = <div className="font-bold mb-3">Informe a Senha</div>;
 
     useEffect(() => {
         const isFormFilled =
@@ -27,8 +29,6 @@ const Login = () => {
         siape,
         password
     ]);
-
-    const header = <div className="font-bold mb-3">Informe a Senha</div>;
 
     const handleFieldFocus = (field) => {
         setFieldErrors((prevErrors) => ({
@@ -61,6 +61,11 @@ const Login = () => {
             min-h-screen
             align-items-center
             justify-content-center">
+            <div className="additional-content">
+                <img src="/images/login/logo-ifpr.png" alt="Logo IFPR" width="300" />
+                <p>— “Mantendo os responsáveis sempre informados”</p>
+                <img src="/images/login/login-background-image.png" alt="Imagem de fundo" width="500" />
+            </div>
             <Card title="Login" className="
                 login-container
                 grid
@@ -89,7 +94,9 @@ const Login = () => {
                                 onBlur={() => handleFieldBlur("SIAPE", siape)}
                                 keyfilter="int"
                                 required
-                                className={`w-full`} />
+                                className={`
+                                    w-full 
+                                    ${fieldErrors.siape ? "p-invalid" : ""}`} />
                             <label htmlFor="siape">SIAPE</label>
                         </FloatLabel>
                     </div>
@@ -107,7 +114,6 @@ const Login = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 onFocus={() => {
                                     handleFieldFocus("Senha");
-                                    setIsPasswordFocused(true);
                                 }}
                                 onBlur={() => handleFieldBlur("Senha", password)}
                                 feedback={false}
