@@ -84,6 +84,11 @@
     background-color: #04cde7;
 }
 
+.confirm-button {
+    background-color: #00c0da;
+    border: 0px;
+}
+
 .extra-info {
     margin-top: 15px;
     font-size: 0.9rem;

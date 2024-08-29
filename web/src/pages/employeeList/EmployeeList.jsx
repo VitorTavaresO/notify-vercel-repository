@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./EmployeeList.css";
 import { Card } from "primereact/card";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -8,6 +8,7 @@ import { DataView } from "primereact/dataview";
 import { Avatar } from "primereact/avatar";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import { Dialog } from 'primereact/dialog';
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -53,6 +54,15 @@ function EmployeeList() {
     return matchesNameOrSiape && matchesPermission;
   });
 
+  const [visible, setVisible] = useState(false);
+
+  const footerEditPermission = (
+    <div>
+      <Button label="Cancelar" severity="danger" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
+      <Button label="Salvar" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus className="confirm-button"/>
+    </div>
+  );
+
   const itemTemplate = (employee) => {
     const isExpanded = expandEmployee === employee;
     return (
@@ -83,7 +93,7 @@ function EmployeeList() {
         <Button
           className="edit-button"
           icon="pi pi-pencil" 
-          onClick={() => toggleExpand()}
+          onClick={() => setVisible(true)}
         />
         <Button
           className="expand-button"
@@ -114,6 +124,10 @@ function EmployeeList() {
 
   return (
     <div className="container">
+
+      <Dialog header="Editar Permissões" visible={visible} style={{ width: '25vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
+
+      </Dialog>
       <div className="filter-container">
         <h3>Filtrar Funcionários</h3>
         <InputText
