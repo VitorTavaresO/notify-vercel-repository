@@ -9,6 +9,7 @@ import { Avatar } from "primereact/avatar";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from 'primereact/dialog';
+import { Helmet } from 'react-helmet';
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -124,7 +125,9 @@ function EmployeeList() {
 
   return (
     <div className="container">
-
+    <Helmet>
+      <title>Servidores</title>
+    </Helmet>
       <Dialog header="Editar Permissões" visible={visible} style={{ width: '25vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
 
       </Dialog>
