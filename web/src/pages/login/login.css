@@ -18,13 +18,17 @@
     width: 100%;
 }
 
+/* --------------- MOBILE --------------- */
 @media screen and (max-width: 600px) {
     .p-card-body {
         padding: 0;
     }
 
+    .additional-content-background{
+        display: none;
+    }
+
     .login-container {
-        width: 100%;
         padding: 40px 10px;
         box-shadow: none;
     }
@@ -40,8 +44,27 @@
     }
 }
 
+
+/* --------------- WEB --------------- */
 @media screen and (min-width: 601px) {
+    .additional-content{
+        margin-right: min(50px, 5vw);
+    }
+
+    .login-background{
+        padding-left: min(50px, 5vw);
+    }
+    
     .login-container {
         max-width: 700px;
     }
+
+    #first-image{
+        max-width: 300px;
+    }
+
+    #second-image{
+        max-width: 500px;
+    }
+
 }
