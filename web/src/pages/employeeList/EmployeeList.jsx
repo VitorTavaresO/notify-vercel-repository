@@ -91,9 +91,16 @@ function EmployeeList() {
           </div>
         )}
 
+        <div className="icon_role_area">
+          <img alt="logo" src="/images/icon_role1_marked.png" height="35" className="icon_role"/>
+          <img alt="logo" src="/images/icon_role2_marked.png" height="35" className="icon_role"/>
+          <img alt="logo" src="/images/icon_role3_marked.png" height="35" className="icon_role"/>
+          <img alt="logo" src="/images/icon_role4_marked.png" height="35" className="icon_role"/>
+        </div>
+
         <Button
           className="edit-button"
-          icon="pi pi-pencil" 
+          icon="pi pi-pencil"
           onClick={() => setVisible(true)}
         />
         <Button

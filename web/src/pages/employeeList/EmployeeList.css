@@ -54,6 +54,17 @@
     margin-bottom: 10px;
 }
 
+.icon_role_area{
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    padding: 0 20px;
+}
+
+.icon_role{
+    padding-right: 20px;
+}
+
 .edit-button {
     position: absolute;
     bottom: 10px;
