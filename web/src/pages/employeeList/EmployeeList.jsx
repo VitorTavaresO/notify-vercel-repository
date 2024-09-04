@@ -20,9 +20,9 @@ function EmployeeList() {
 
   const permissions = [
     { label: "Todos", value: "Todos" },
-    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema" },
-    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros" },
     { label: "Emissor de Comunicados", value: "Emissor de comunicados" },
+    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros" },
+    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema" },
   ];
 
   useEffect(() => {
@@ -90,12 +90,26 @@ function EmployeeList() {
             </div>
           </div>
         )}
-
         <div className="icon_role_area">
-          <img alt="logo" src="/images/icon_role1_marked.png" height="35" className="icon_role"/>
-          <img alt="logo" src="/images/icon_role2_marked.png" height="35" className="icon_role"/>
-          <img alt="logo" src="/images/icon_role3_marked.png" height="35" className="icon_role"/>
-          <img alt="logo" src="/images/icon_role4_marked.png" height="35" className="icon_role"/>
+          <img
+            alt="logo"
+            src="/images/icon_role1_marked.png"
+            height={`${employee.permissao == "Emissor de comunicados" ? "35" : "0"}`}
+            style={{ padding: `${employee.permissao == "Emissor de comunicados" ? '0 20px 0 0' : "0 0 0 0"}` }}
+            className="icon_role" />
+            {/* style necessário apenas caso usuário tiver mais de uma role*/}
+          <img
+            alt="logo"
+            src="/images/icon_role3_marked.png"
+            height={`${employee.permissao == "Gerenciador de cadastros" ? "35" : "0"}`}
+            style={{ padding: `${employee.permissao == "Gerenciador de cadastros" ? '0 20px 0 0' : "0 0 0 0"}` }}
+            className="icon_role" />
+          <img
+            alt="logo"
+            src="/images/icon_role4_marked.png"
+            height={`${employee.permissao == "Gerenciador do sistema" ? "35" : "0"}`}
+            style={{ padding: `${employee.permissao == "Gerenciador do sistema" ? '0 20px 0 0' : "0 0 0 0"}` }}
+            className="icon_role"/>
         </div>
 
         <Button
@@ -139,7 +153,7 @@ function EmployeeList() {
 
       </Dialog>
       <div className="filter-container">
-        <h3>Filtrar Funcionários</h3>
+        <h3>Filtrar Servidor</h3>
         <InputText
           placeholder="Digite o nome ou SIAPE"
           value={filter}
@@ -154,7 +168,7 @@ function EmployeeList() {
         />
       </div>
       <div className="employee-list">
-        <Card title="Lista de Funcionários" className="general-card">
+        <Card title="Lista de Servidores" className="general-card">
           <Divider />
           <DataView
             value={filteredEmployees}
