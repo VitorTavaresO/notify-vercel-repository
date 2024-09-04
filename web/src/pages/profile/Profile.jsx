@@ -28,6 +28,19 @@ const ProfileCard = () => {
         fetchData();
     }, []);
 
+    const renderPermissionTag = () => {
+        switch (employee.permissao) {
+            case "Gerenciador do sistema":
+                return <Tag className="function-tag" severity="info" value="Gerenciador do Sistema" />;
+            case "Gerenciador de cadastros":
+                return <Tag className="function-tag" severity="success" value="Gerenciador de Cadastros" />;
+            case "Emissor de comunicados":
+                return <Tag className="function-tag" severity="warning" value="Emissor de Comunicados" />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="container">
             <Card className="profile-card">
@@ -37,10 +50,7 @@ const ProfileCard = () => {
                         <h2>{employee.nome}</h2>
                         <p>SIAPE: {employee.siape}</p>
                         <div className="functions">
-                            <Tag className="function-tag" severity="info" value="Função 1" />
-                            <Tag className="function-tag" severity="success" value="Função 2" />
-                            <Tag className="function-tag" severity="warning" value="Função 3" />
-                            <Tag className="function-tag" severity="danger" value="Função 4" />
+                            {renderPermissionTag()}
                         </div>
                     </div>
                 </div>
