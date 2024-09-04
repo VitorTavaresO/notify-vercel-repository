@@ -68,32 +68,32 @@
 
 .edit-button {
     position: absolute;
-    bottom: 10px;
+    bottom: 15px;
     right: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #747474;
     border: 0px;
+    color: #555555;
 }
 
 .edit-button:hover {
-    background-color: #838383;
+    color: #818181;
 }
 
 .expand-button {
     position: absolute;
-    bottom: 10px;
-    right: 25px;
+    bottom: 15px;
+    right: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #16d9f3;
     border: 0px;
+    color: #555555;
 }
 
 .expand-button:hover {
-    background-color: #04cde7;
+    color: #818181;
 }
 
 .confirm-button {

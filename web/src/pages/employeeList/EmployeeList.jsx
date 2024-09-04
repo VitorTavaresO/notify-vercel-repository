@@ -113,11 +113,13 @@ function EmployeeList() {
         </div>
 
         <Button
+          link
           className="edit-button"
           icon="pi pi-pencil"
           onClick={() => setVisible(true)}
         />
         <Button
+          link
           className="expand-button"
           icon={`${isExpanded ? "pi pi-chevron-up" : "pi pi-chevron-down"}`}
           onClick={() => toggleExpand(employee)}
