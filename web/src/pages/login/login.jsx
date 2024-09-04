@@ -62,14 +62,22 @@ const Login = () => {
             justify-content-center">
             <div className="
                 additional-content-background
-                w-full">
+                flex
+                justify-content-end
+                w-full
+                min-h-screen
+                py-8
+                pl-8">
                 <div className="
                     additional-content 
                     flex
                     flex-column
                     max-w-30rem
-                    ml-auto
-                    max-w-xs">
+                    min-h-full
+                    border-left-3
+                    py-8
+                    pl-5
+                    justify-content-between">
                     <img id="first-image" src="/images/login/logo-ifpr.png" alt="Logo IFPR" className="w-full"/>
                     <p>— “Mantendo os responsáveis sempre informados”</p>
                     <img id="second-image" src="/images/login/login-background-image.png" alt="Imagem de fundo" className="w-full"/>

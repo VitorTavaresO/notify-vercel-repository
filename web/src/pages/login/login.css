@@ -1,9 +1,10 @@
 :root {
-    --login-page-color: rgb(142, 163, 138);
-    --login-container-color: rgba(203, 231, 199, 1);
-    --register-button-out-color: rgba(90, 135, 83, 1);
-    --register-button-over-color: rgba(46, 46, 46, 1);
-    --acess-button-color: rgba(46, 46, 46, 1);
+    --login-page-color: rgb(174, 204, 169);
+    --login-container-color: rgb(203, 231, 199);
+    --register-button-out-color: rgb(90, 135, 83);
+    --register-button-over-color: rgb(46, 46, 46);
+    --acess-button-color: rgb(46, 46, 46);
+    --additional-content-border-color: rgb(64, 153, 41);
 }
 
 .login-page{
@@ -63,6 +64,7 @@
 @media screen and (min-width: 601px) {
     .additional-content{
         margin-right: min(50px, 5vw);
+        border-color: var(--additional-content-border-color);
     }
 
     .login-background{
