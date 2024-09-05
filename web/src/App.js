@@ -24,14 +24,6 @@ function App() {
             }
           />
           <Route
-            path="/page1"
-            element={
-              <DefaultLayout>
-                <Home />
-              </DefaultLayout>
-            }
-          />
-          <Route
             path="/register"
             element={
               <SimpleLayout>

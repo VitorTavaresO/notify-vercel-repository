@@ -10,7 +10,9 @@ const Header = () => {
     const navigate = useNavigate();
 
     const items = [
-        {label: 'Início' },
+        {label: 'Início',
+            command: () => { navigate('/'); }
+         },
         {label: 'Comunicados'},
         {label: 'Responsáveis'},
         {label: 'Servidores',
