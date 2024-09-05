@@ -61,7 +61,7 @@
     min-width: 200px;
     margin: 10px;
     padding: 15px;
-    max-width: min-content;
+    max-width: 60%;
     align-items: flex-start;
 }
 

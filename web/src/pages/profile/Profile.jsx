@@ -6,20 +6,26 @@ import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
-
-
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { InputMask } from 'primereact/inputmask';
+        
 
 
 const ProfileCard = () => {
     const [employee, setEmployee] = useState({});
+    const [editedEmail, setEditedEmail] = useState('');
+    const [editedPhone, setEditedPhone] = useState('');
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch("/archives/employeeList.json");
                 const data = await response.json();
-                if(data.length > 0){
-                    setEmployee(data[0]);
+                if (data.length > 0) {
+                    setEmployee(data[4]);
+                    setEditedEmail(data[4].email);
+                    setEditedPhone(data[4].telefone);
                 }
             } catch (error) {
                 console.error('Error fetching the employee data:', error);
@@ -41,8 +47,39 @@ const ProfileCard = () => {
         }
     };
 
+    const confirmEdit = () => {
+        confirmDialog({
+            message: 'Tem certeza de que deseja alterar o perfil?',
+            header: 'Confirmação',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Cancelar',
+            accept: () => handleProfileEdit(),
+            reject: () => console.log('Alteração cancelada')
+        });
+    };
+
+    const changePassword = () => {
+        confirmDialog({
+            message: 'Foi enviado um email com link para alteralçaõ de senha.',
+            header: 'Confirmação',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Cancelar',
+            accept: () => console.log('Senha alterada'),
+            reject: () => console.log('Alteração cancelada')
+        });
+    };
+
+    const handleProfileEdit = () => {
+        const updatedEmployee = { ...employee, email: editedEmail, telefone: editedPhone };
+        setEmployee(updatedEmployee);
+        console.log('Perfil atualizado:', updatedEmployee);
+    };
+
     return (
         <div className="container">
+            <ConfirmDialog visible={visible} onHide={() => setVisible(false)} />             
             <Card className="profile-card">
                 <div className="profile-header">
                     <Avatar image="/images/profile-picture.png" size="xlarge" shape="circle" className="profile-avatar" />
@@ -65,19 +102,19 @@ const ProfileCard = () => {
                         </div>
                         <div className="detail-item">
                             <strong>CPF</strong>
-                            <InputText value="000.000.000-00" disabled className="itemText" />
-                        </div>
-                        <div className="detail-item">
-                            <strong>Telefone</strong>
-                            <InputText value={employee.telefone} disabled className="itemText" />
+                            <InputText value={employee.cpf} disabled className="itemText" />
                         </div>
                         <div className="detail-item">
                             <strong>E-Mail</strong>
-                            <InputText value={employee.email} disabled className="itemText" />
+                            <InputText value={editedEmail} onChange={(e) => setEditedEmail(e.target.value)} className="itemText" />
+                        </div>
+                        <div className="detail-item">
+                            <strong>Telefone</strong>
+                            <InputMask mask="(99) 99999-9999" value={editedPhone} onChange={(e) => setEditedPhone(e.value)} className="itemText" />
                         </div>
                         <div className="profile-footer">
-                            <Button label="Alterar Senha" className="p-button-danger" text />
-                            <Button label="Editar Perfil" className="p-button-primary" text />
+                            <Button label="Alterar Senha" className="p-button-danger" text onClick={changePassword} />
+                            <Button label="Editar Perfil" className="p-button-primary" text onClick={confirmEdit} />
                         </div>
                     </div>
                     <Divider layout='vertical' />
@@ -100,7 +137,6 @@ const ProfileCard = () => {
                 </div>
             </Card>
         </div>
-
     );
 };
 
