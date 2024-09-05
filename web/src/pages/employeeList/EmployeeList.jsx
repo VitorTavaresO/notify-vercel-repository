@@ -151,8 +151,37 @@ function EmployeeList() {
     <Helmet>
       <title>Servidores</title>
     </Helmet>
-      <Dialog header="Editar Permissões" visible={visible} style={{ width: '25vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
+      <Dialog header="Editar Permissões" visible={visible} style={{ minWidth: '40vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
 
+        <h3>Permissão atual: [permissão atual]</h3>
+        <h3 className="-mt-3">Nova permissão: [permissão selecionada]</h3>
+
+        <div className="grid my-5">
+          <div class="col-6 md:col-3 lg:col-2">
+            <div class="text-center p-1">
+              <img alt="logo" height="35" className="icon_role" 
+              src="/images/icon_role1.png"/>
+            </div>
+          </div>
+          <div class="col-6 md:col-3 lg:col-2">
+            <div class="text-center p-1">
+              <img alt="logo" height="35" className="icon_role"
+                src="/images/icon_role2.png" />
+            </div>
+          </div>
+          <div class="col-6 md:col-3 lg:col-2">
+            <div class="text-center p-1">
+              <img alt="logo" height="35" className="icon_role"
+              src="/images/icon_role3.png" />
+            </div>
+          </div>
+          <div class="col-6 md:col-3 lg:col-2">
+            <div class="text-center p-1">
+              <img alt="logo" height="35" className="icon_role"
+              src="/images/icon_role4.png" />
+            </div>
+          </div>
+        </div>
       </Dialog>
       <div className="filter-container">
         <h3>Filtrar Servidor</h3>
