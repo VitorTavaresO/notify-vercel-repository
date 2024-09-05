@@ -10,23 +10,36 @@ import "./login.css";
 const Login = () => {
     const navigate = useNavigate();
 
-    const [siape, setSiape] = useState("");
-    const [password, setPassword] = useState("");
+    // const [siape, setSiape] = useState("");
+    // const [password, setPassword] = useState("");
 
     const [errorMessage, setErrorMessage] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({});
 
-    const header = <div className="font-bold mb-3">Informe a Senha</div>;
+
+    const [user, setUser] = useState({ siape: "", password: "" });
+
+    const login = () => {
+        //DEVERA CHAMAR O BACKEND PARA VALIDAR OS DADOS DE LOGIN.
+        if (user.siape === "1111111" && user.password === "1234") {
+            let token = "token to backend";
+            localStorage.setItem("token", token);
+            localStorage.setItem("siape", user.siape);
+            navigate("/home");
+        } else {
+            alert("Usuário ou senha incorreto!");
+        }
+    }
 
     useEffect(() => {
         const isFormFilled =
-            siape &&
-            password;
+            user.siape &&
+            user.password;
         setIsFormValid(isFormFilled);
     }, [
-        siape,
-        password
+        user.siape,
+        user.password
     ]);
 
     const handleFieldFocus = (field) => {
@@ -45,13 +58,19 @@ const Login = () => {
         }
     };
 
+    const handleChange = (input) => {
+        setUser({ ...user, [input.target.name]: input.target.value });
+    }
+
     const handleLoginButton = () => {
-        navigate('/home');
+        login();
     };
 
     const handleRegisterButton = () => {
         navigate('/register');
     };
+
+    const header = <div className="font-bold mb-3">Informe a Senha</div>;
 
     return (
         <div className="
@@ -65,7 +84,7 @@ const Login = () => {
                 additional-content-background
                 justify-content-end
                 w-full
-                min-h-screen
+                h-screen
                 py-8">
                 <div className="
                     additional-content 
@@ -74,12 +93,18 @@ const Login = () => {
                     max-w-30rem
                     min-h-full
                     border-left-3
-                    py-8
                     pl-5
-                    justify-content-between">
-                    <img id="first-image" src="/images/login/logo-ifpr.png" alt="Logo IFPR" className="w-full"/>
-                    <p>— “Mantendo os responsáveis sempre informados”</p>
-                    <img id="second-image" src="/images/login/login-background-image.png" alt="Imagem de fundo" className="w-full"/>
+                    justify-content-evenly">
+                    <img id="first-image" src="/images/login/logo-ifpr.png" alt="Logo IFPR" className="
+                        w-full 
+                        my-5"/>
+                    <p className="
+                        my-5">
+                        — “Mantendo os responsáveis sempre informados”
+                    </p>
+                    <img id="second-image" src="/images/login/login-background-image.png" alt="Imagem de fundo" className="
+                        w-full 
+                        my-5"/>
                 </div>
             </div>
             <div className="
@@ -105,17 +130,13 @@ const Login = () => {
                                 w-full
                                 mb-5">
                                 <InputMask
-                                    value={siape}
+                                    value={user.siape}
                                     id="siape"
                                     name="siape"
                                     mask="9999999"
-                                    maskChar={null}
-                                    alwaysShowMask={false}
-                                    placeholder="0000000"
-                                    onChange={(e) => setSiape(e.target.value)}
+                                    onChange={handleChange}
                                     onFocus={() => handleFieldFocus("SIAPE")}
-                                    onBlur={() => handleFieldBlur("SIAPE", siape)}
-                                    keyfilter="int"
+                                    onBlur={() => handleFieldBlur("SIAPE", user.siape)}
                                     required
                                     className={`
                                         w-full 
@@ -131,15 +152,14 @@ const Login = () => {
                                 w-full
                                 mb-5">
                                 <Password
-                                    value={password}
+                                    value={user.password}
                                     id="password"
                                     name="password"
-                                    placeholder=""
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={handleChange}
                                     onFocus={() => {
                                         handleFieldFocus("Senha");
                                     }}
-                                    onBlur={() => handleFieldBlur("Senha", password)}
+                                    onBlur={() => handleFieldBlur("Senha", user.password)}
                                     feedback={false}
                                     toggleMask
                                     header={header}
