@@ -15,6 +15,10 @@
     background-color: var(--login-container-color);
 }
 
+.sub-title {
+    margin: 0 0 40px 0;
+}
+
 #login-button span {
     color: var(--acess-button-color);
 }
@@ -62,6 +66,11 @@
 
 /* --------------- WEB --------------- */
 @media screen and (min-width: 601px) {
+    .additional-content-background {
+        display: flex;
+        padding-left: min(40px, 5vw);
+    }
+
     .additional-content{
         margin-right: min(50px, 5vw);
         border-color: var(--additional-content-border-color);

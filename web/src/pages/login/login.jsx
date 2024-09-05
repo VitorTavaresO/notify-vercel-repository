@@ -57,17 +57,16 @@ const Login = () => {
         <div className="
             login-page
             flex
+            min-w-screen
             min-h-screen
             align-items-center
             justify-content-center">
             <div className="
                 additional-content-background
-                flex
                 justify-content-end
                 w-full
                 min-h-screen
-                py-8
-                pl-8">
+                py-8">
                 <div className="
                     additional-content 
                     flex
@@ -110,6 +109,8 @@ const Login = () => {
                                     id="siape"
                                     name="siape"
                                     mask="9999999"
+                                    maskChar={null}
+                                    alwaysShowMask={false}
                                     placeholder="0000000"
                                     onChange={(e) => setSiape(e.target.value)}
                                     onFocus={() => handleFieldFocus("SIAPE")}
@@ -133,6 +134,7 @@ const Login = () => {
                                     value={password}
                                     id="password"
                                     name="password"
+                                    placeholder=""
                                     onChange={(e) => setPassword(e.target.value)}
                                     onFocus={() => {
                                         handleFieldFocus("Senha");
