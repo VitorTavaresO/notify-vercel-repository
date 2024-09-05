@@ -72,22 +72,18 @@ function EmployeeList() {
           icon="pi pi-user"
           size="large"
           shape="square"
-          className="employee-avatar m-2"
+          className="employee-avatar my-1 ml-3"
         />
         <div className="employee-details">
-          <div className="employee-name m-2">{employee.nome}</div>
-          <div className="employee-siape m-2">SIAPE: {employee.siape}</div>
-          <div className="employee-cargo m-2">{employee.cargo}</div>
+          <div className="employee-name mb-1 mt-3 ml-3">{employee.nome}</div>
+          <div className="employee-cargo my-1 ml-3">{employee.cargo}</div>
+          <div className="employee-siape my-1 ml-3">SIAPE: {employee.siape}</div>
         </div>
         {isExpanded && (
           <div className="extra-info">
-            <div className="employee-number m-2">
-              Telefone: {employee.telefone}
-            </div>
-            <div className="employee-email m-2">Email: {employee.email}</div>
-            <div className="employee-permission m-2">
-              Permissão: {employee.permissao}
-            </div>
+            <div className="employee-number my-1 ml-3">Telefone: {employee.telefone}</div>
+            <div className="employee-email my-1 ml-3">Email: {employee.email}</div>
+            <div className="employee-permission my-1 ml-3">Permissão de Sistema: {employee.permissao}</div>
           </div>
         )}
         <div className="icon_role_area">
@@ -183,6 +179,7 @@ function EmployeeList() {
           </div>
         </div>
       </Dialog>
+      
       <div className="filter-container">
         <h3>Filtrar Servidor</h3>
         <InputText
