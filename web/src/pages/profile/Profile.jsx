@@ -8,14 +8,14 @@ import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { InputMask } from 'primereact/inputmask';
-        
-
 
 const ProfileCard = () => {
     const [employee, setEmployee] = useState({});
     const [editedEmail, setEditedEmail] = useState('');
     const [editedPhone, setEditedPhone] = useState('');
     const [visible, setVisible] = useState(false);
+    const [memos, setMemos] = useState([]);
+    const [showAllMemos, setShowAllMemos] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +31,19 @@ const ProfileCard = () => {
                 console.error('Error fetching the employee data:', error);
             }
         };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("/archives/memoEmployees.json");
+                const data = await response.json();
+                setMemos(data);
+            } catch (error) {
+                console.error('Error fetching the memo data:', error);
+            }
+        }
         fetchData();
     }, []);
 
@@ -61,7 +74,7 @@ const ProfileCard = () => {
 
     const changePassword = () => {
         confirmDialog({
-            message: 'Foi enviado um email com link para alteralçaõ de senha.',
+            message: 'Foi enviado um email com link para alteração de senha.',
             header: 'Confirmação',
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: 'Sim',
@@ -76,6 +89,10 @@ const ProfileCard = () => {
         setEmployee(updatedEmployee);
         console.log('Perfil atualizado:', updatedEmployee);
     };
+
+    // Limitar a exibição a 2 itens
+    const limit = 2;
+    const memosLimitados = showAllMemos ? memos : memos.slice(0, limit);
 
     return (
         <div className="container">
@@ -119,20 +136,21 @@ const ProfileCard = () => {
                     </div>
                     <Divider layout='vertical' />
                     <div className="communications p-mr-3">
-                        <h3>Últimos Comunicados:</h3>
-                        <div className="communication-item">
-                            <h4>Título do Comunicado nº1</h4>
-                            <p>Para: Todos</p>
-                            <p>Data: 08/08/2024</p>
-                            <p>DescriçãoDoComunicado...</p>
-                        </div>
-                        <div className="communication-item">
-                            <h4>Título do Comunicado nº2</h4>
-                            <p>Para: 1º Ano</p>
-                            <p>Data: 22/08/2024</p>
-                            <p>DescriçãoDoComunicado...</p>
-                        </div>
-                        <Button label="Ver Todos" className="p-button-link" />
+                        {memosLimitados.map((memo, index) => (
+                            <Card key={index} className="communication-item">
+                                <h4>{memo.titulo}</h4>
+                                <p>Para: {memo.para}</p>
+                                <p>Data: {memo.data}</p>
+                                <p>{memo.descricao}</p> 
+                            </Card>
+                        ))}
+                        {memos.length > limit && (
+                            <Button 
+                                label={showAllMemos ? "Ver Menos" : "Ver Todos"} 
+                                className="p-button-link" 
+                                onClick={() => setShowAllMemos(!showAllMemos)}
+                            />
+                        )}
                     </div>
                 </div>
             </Card>
