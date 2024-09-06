@@ -88,6 +88,12 @@
     margin-bottom: 20px;
 }
 
+.dialogComs{
+    position: relative;
+    top: 30px;
+    width: 50vw;
+}
+
 @media (max-width: 768px) {
     .p-d-flex {
         flex-direction: column;
@@ -96,5 +102,10 @@
     .profile-details, .communications {
         margin-right: 0;
         margin-bottom: 20px;
+    }
+
+    .dialogComs {
+        top: 20px;
+        width: 80vw;
     }
 }

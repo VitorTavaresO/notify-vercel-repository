@@ -8,6 +8,8 @@ import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { InputMask } from 'primereact/inputmask';
+import { Dialog } from 'primereact/dialog';
+import { Paginator } from 'primereact/paginator';
 
 const ProfileCard = () => {
     const [employee, setEmployee] = useState({});
@@ -15,7 +17,9 @@ const ProfileCard = () => {
     const [editedPhone, setEditedPhone] = useState('');
     const [visible, setVisible] = useState(false);
     const [memos, setMemos] = useState([]);
-    const [showAllMemos, setShowAllMemos] = useState(false);
+    const [showAllMemos, setShowAllMemos] = useState(false);  
+    const [first, setFirst] = useState(0);                    
+    const [rows, setRows] = useState(2);                     
 
     useEffect(() => {
         const fetchData = async () => {
@@ -90,16 +94,22 @@ const ProfileCard = () => {
         console.log('Perfil atualizado:', updatedEmployee);
     };
 
-    // Limitar a exibição a 2 itens
-    const limit = 2;
-    const memosLimitados = showAllMemos ? memos : memos.slice(0, limit);
+    const onPageChange = (event) => {
+        setFirst(event.first);
+        setRows(event.rows);
+    };
+
+    const memosPaginated = memos.slice(first, first + rows);
 
     return (
         <div className="container">
             <ConfirmDialog visible={visible} onHide={() => setVisible(false)} />             
             <Card className="profile-card">
                 <div className="profile-header">
-                    <Avatar image="/images/profile-picture.png" size="xlarge" shape="circle" className="profile-avatar" />
+                    <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/asiyajavayant.png" 
+                    size="xlarge" 
+                    shape="circle" 
+                    className="profile-avatar" />
                     <div className="profile-info">
                         <h2>{employee.nome}</h2>
                         <p>SIAPE: {employee.siape}</p>
@@ -136,7 +146,7 @@ const ProfileCard = () => {
                     </div>
                     <Divider layout='vertical' />
                     <div className="communications p-mr-3">
-                        {memosLimitados.map((memo, index) => (
+                        {memos.slice(0, 2).map((memo, index) => (
                             <Card key={index} className="communication-item">
                                 <h4>{memo.titulo}</h4>
                                 <p>Para: {memo.para}</p>
@@ -144,16 +154,29 @@ const ProfileCard = () => {
                                 <p>{memo.descricao}</p> 
                             </Card>
                         ))}
-                        {memos.length > limit && (
+                        {memos.length > 2 && (
                             <Button 
-                                label={showAllMemos ? "Ver Menos" : "Ver Todos"} 
+                                label="Ver Todos" 
                                 className="p-button-link" 
-                                onClick={() => setShowAllMemos(!showAllMemos)}
+                                onClick={() => setShowAllMemos(true)}
                             />
                         )}
                     </div>
                 </div>
             </Card>
+            <Dialog header="Comunicados" className='dialogComs' visible={showAllMemos} onHide={() => setShowAllMemos(false)}>
+                <div>
+                    {memosPaginated.map((memo, index) => (
+                        <Card key={index} className="communication-item">
+                            <h4>{memo.titulo}</h4>
+                            <p>Para: {memo.para}</p>
+                            <p>Data: {memo.data}</p>
+                            <p>{memo.descricao}</p> 
+                        </Card>
+                    ))}
+                    <Paginator first={first} rows={rows} totalRecords={memos.length} onPageChange={onPageChange}></Paginator>
+                </div>
+            </Dialog>
         </div>
     );
 };
