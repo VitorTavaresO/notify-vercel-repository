@@ -73,6 +73,7 @@ function EmployeeList() {
               Telefone: {employee.telefone}
             </div>
             <div className="employee-email m-2">Email: {employee.email}</div>
+            <div className="employee-email m-2">CPF: {employee.cpf}</div>
             <div className="employee-permission m-2">
               Permissão: {employee.permissao}
             </div>
