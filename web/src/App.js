@@ -1,14 +1,13 @@
 import "./App.css";
+import Login from "./pages/login/login.jsx";
 import Register from "./pages/register/register.jsx";
-
+import Home from "./pages/home/Home";
+import EmployeeList from "./pages/employeeList/EmployeeList";
+import Profile from "./pages/profile/Profile";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
 import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
-
-import Home from "./pages/home/Home";
-import EmployeeList from './pages/employeeList/EmployeeList';
-import Profile from "./pages/profile/Profile";
+import PrivateRouter from "./components/PrivateRouter.jsx";
 
 function App() {
   return (
@@ -16,11 +15,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/"
+            path="/login"
             element={
-              <DefaultLayout>
-                <Home />
-              </DefaultLayout>
+              <SimpleLayout>
+                <Login />
+              </SimpleLayout>
             }
           />
           <Route
@@ -31,22 +30,36 @@ function App() {
               </SimpleLayout>
             }
           />
-          <Route 
-          path='/employee-list'
-          element={
-            <DefaultLayout>
-                <EmployeeList/>
-            </DefaultLayout>
-          }
-          />
-          <Route
-            path="/profile"
-            element={
-              <DefaultLayout>
-                <Profile/>
-              </DefaultLayout>
-            }
-          />
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/"
+              element={
+                <DefaultLayout>
+                  <Home />
+                </DefaultLayout>
+              }
+            />
+          </Route>
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/employee-list"
+              element={
+                <DefaultLayout>
+                  <EmployeeList />
+                </DefaultLayout>
+              }
+            />
+          </Route>
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/profile"
+              element={
+                <DefaultLayout>
+                  <Profile />
+                </DefaultLayout>
+              }
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
