@@ -46,6 +46,7 @@
     }
 
     .login-container {
+        margin: 0 !important;
         min-width: 100vw;
         min-height: 100vh;
         padding: 40px 10px;
