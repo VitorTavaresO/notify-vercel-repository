@@ -1,0 +1,32 @@
+[
+    {
+        "titulo": "Título do Comunicado nº1",
+        "para": "Todos",
+        "data": "08/08/2024",
+        "descricao": "DescriçãoDoComunicado..."
+    },
+    {
+        "titulo": "Título do Comunicado nº2",
+        "para": "1º Ano",
+        "data": "22/08/2024",
+        "descricao": "DescriçãoDoComunicado..."
+    },
+    {
+        "titulo": "Título do Comunicado nº3",
+        "para": "Equipe de TI",
+        "data": "30/08/2024",
+        "descricao": "DescriçãoDoComunicado..."
+    },
+    {
+        "titulo": "Título do Comunicado nº4",
+        "para": "Coordenação",
+        "data": "05/09/2024",
+        "descricao": "DescriçãoDoComunicado..."
+    },
+    {
+        "titulo": "Título do Comunicado nº5",
+        "para": "Todos os Funcionários",
+        "data": "12/09/2024",
+        "descricao": "DescriçãoDoComunicado..."
+    }
+]

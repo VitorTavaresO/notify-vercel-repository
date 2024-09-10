@@ -1,0 +1,72 @@
+
+    /* MenuBar */
+
+.header {
+
+    border-width: 0px;  /* evitar_problemas */
+    background-color: #3E454D;  /* background-menubar */
+    position: fixed; width: 100%;  /* menubar-fixed */
+    z-index: 10000;  /* evitar_problemas */
+}
+
+.header .p-menuitem-text {
+
+    color: #EEEEEE !important; /* color-text */
+    font-weight: 350;
+}
+
+.header .p-menuitem:hover {
+
+    .p-menuitem-text { color: #83F080 !important; }  /* color-text-hover */
+    .p-menuitem-content:hover { background: #3E454D !important; } /* evitar_problemas */
+}
+
+.p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #3E454D !important; }  /* evitar_problemas */
+
+
+    /* DropDown Icon */
+
+.user-menu {
+    
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 9999;
+    padding: 8px 0;
+    border-radius: 8px; overflow: hidden;
+    background-color: #FFFFFF; box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
+}
+
+.user-menu-item {
+
+    cursor: pointer;
+    white-space: nowrap;
+    padding: 11px 145px 11px 20px;
+}
+
+.user-menu-item:hover { background-color: #ECECEC;}  /* background-hover */
+
+
+.dropdown-icon { color: #E0E0E0 !important; }  /* color-icon */
+.dropdown-icon:hover{ background-color: #3E454D !important; }  /* evitar_problemas */
+.p-button:focus { box-shadow: 0 0 0 0px #3e454d00, 0 0 0 0px #3e454d00 !important; }  /* evitar_problemas */
+
+
+    /* Mobile Config */
+
+@media (max-width: 960px) {
+
+    .header .p-menubar-root-list { background-color: #4D545E !important; }  /* background-submenubar */
+    .header .p-menubar-root-list .p-menuitem-link { color: #EEEEEE !important; }  /* color-text */
+    .header .p-menubar-root-list .p-menuitem-link:hover { color: #83F080 !important ; }  /* color-text-hover */
+
+    .logo img{ margin-right: 20px; } /* margin-icon */
+    .p-menubar .p-menubar-button{ color: #EEEEEE !important;} /* color-icon */
+    .header .p-menubar-button { background-color: #3E454D !important; } /* background-icon */
+
+    .header .p-menubar-button .p-menubar-button-icon { color: #EEEEEE !important; } /* ??? */
+
+    .header .p-menuitem:hover { .p-menuitem-content:hover { background: #4D545E !important; }} /* evitar_problemas */
+    .p-menubar .p-menubar-button:focus { outline: 0 none; outline-offset: 0; box-shadow: 0 0 0 0; } /* evitar_problemas */
+    .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #4d545e !important; } /* evitar_problemas */
+}
