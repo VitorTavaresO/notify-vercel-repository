@@ -19,11 +19,22 @@ function EmployeeList() {
   const [selectedPermission, setSelectedPermission] = useState("Todos");
 
   const permissions = [
-    { label: "Todos", value: "Todos" },
-    { label: "Emissor de Comunicados", value: "Emissor de comunicados" },
-    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros" },
-    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema" },
+    { label: "Todos", value: "Todos", flag: '/images/icon_role0_marked.png' },
+    { label: "Emissor de Comunicados", value: "Emissor de comunicados", flag: '/images/icon_role1_marked.png' },
+    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros", flag: '/images/icon_role3_marked.png' },
+    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", flag: '/images/icon_role4_marked.png' },
   ];
+
+  const permissionsFilterTemplate = (option) => {
+    return (
+      <div className="p-d-flex p-ai-center">
+        <img alt={option.label} src={option.flag}
+          width="20" className="mr-3"
+        />
+        <span>{option.label}</span>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -191,13 +202,14 @@ function EmployeeList() {
         <Dropdown
           value={selectedPermission}
           options={permissions}
+          itemTemplate={permissionsFilterTemplate}
           onChange={(e) => setSelectedPermission(e.value)}
           placeholder="Selecione uma permissão"
         />
       </div>
       <div className="employee-list">
         <Card title="Lista de Servidores" className="general-card">
-          <Divider />
+          <Divider className="-mt-2 mb-4"/>
           <DataView
             value={filteredEmployees}
             layout="list"
