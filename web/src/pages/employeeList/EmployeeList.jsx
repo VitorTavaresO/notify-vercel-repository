@@ -25,6 +25,8 @@ function EmployeeList() {
     { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", icon: '/images/icon_role4_marked.png' },
   ];
 
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
   const permissionsFilterTemplate = (option) => {
     return (
       <div className="p-d-flex p-ai-center">
@@ -123,7 +125,8 @@ function EmployeeList() {
           link
           className="edit-button"
           icon="pi pi-pencil"
-          onClick={() => setVisible(true)}
+          onClick={() => { setVisible(true); setSelectedEmployee(employee)}}
+          
         />
         <Button
           link
@@ -162,7 +165,7 @@ function EmployeeList() {
 
         <div className="testse">
           <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
-          <h2 className="-mt-3 mb-4">Vitor Tavares de Oliveira</h2>
+          <h2 className="-mt-3 mb-4">{selectedEmployee ? selectedEmployee.nome : ''}</h2>
         </div>
 
         <Dropdown
