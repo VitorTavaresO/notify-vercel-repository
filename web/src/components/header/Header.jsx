@@ -10,7 +10,9 @@ const Header = () => {
     const navigate = useNavigate();
 
     const items = [
-        {label: 'Início' },
+        {label: 'Início',
+            command: () => { navigate('/'); }
+         },
         {label: 'Comunicados'},
         {label: 'Responsáveis'},
         {label: 'Servidores',
@@ -21,7 +23,9 @@ const Header = () => {
     const [isUserMenuVisible, setIsUserMenuVisible] = useState(false);
     const userMenuRef = useRef(null);
     const userMenuItems = [
-        {label: 'Perfil'},
+        {label: 'Perfil',
+            command: () => { navigate('/profile'); }
+        },
         {label: 'Sair'},
     ];
 
@@ -53,7 +57,7 @@ const Header = () => {
             <Button icon="pi pi-chevron-down" className="p-button-text -ml-2 dropdown-icon" onClick={toggleUserMenu} />
             {isUserMenuVisible && ( <div className="user-menu">
                 {userMenuItems.map((item, index) => (
-                    <div key={index} className="user-menu-item"> {item.label} </div>
+                    <div key={index} className="user-menu-item" onClick={item.command}> {item.label} </div>
                 ))}
             </div> )}
         </div>

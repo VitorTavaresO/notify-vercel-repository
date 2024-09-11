@@ -2,25 +2,24 @@
     display: flex;
     height: auto;
     width: auto;
-    background-color: #bebebe;
+    background-color: #EEEEEE;
 }
 
 .card-container {
     position: relative;
     border-radius: 20px;
-    width: 80%;
-    margin: 30px auto;
-    
+    width: 100%;
+    margin: 7px auto;
+    border: solid 1px #D1D1D1;
+    box-shadow: 0 0 0 0;
 }
 
-
 .general-card {
-    padding: 10px;
+    padding: 45px;
     border-radius: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    
+    width: 80%;
 }
 
 .employee-item {
@@ -38,7 +37,7 @@
 }
 
 .employee-name {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
@@ -51,39 +50,60 @@
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.icon_role_area{
+    position: absolute;
+    top: 0px;
+    right: 10px; /*usuário com apenas 1 role, right: 30px*/
+    padding: 0 20px;
+}
+
+
+/*
+.icon_role{ padding-right: 20px;}
+*/
+
+.edit-button {
+    position: absolute;
+    bottom: 15px;
+    right: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0px;
+    color: #555555;
+}
+
+.edit-button:hover {
+    color: #818181;
 }
 
 .expand-button {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #007ad9;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    font-size: 16px;
+    bottom: 15px;
+    right: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 0px;
+    color: #555555;
 }
 
 .expand-button:hover {
-    background-color: #005fa3;
+    color: #818181;
 }
 
 .extra-info {
-    margin-top: 15px;
-    font-size: 0.9rem;
+    margin-top: 10px;
+    font-size: 1rem;
     color: #555;
 }
 
 .filter-container {
-    width: 250px;
-    background-color: #f5f5f5;
+    width: 325px;
+    background-color: #FFFFFF;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: fixed;
@@ -96,6 +116,10 @@
     z-index: 1000;
     transition: width 0.3s ease;
 }
+
+/* adequação footer ao filtro
+.footer { width: calc(100% - 325px);}
+*/
 
 .filter-container h3 {
     margin-bottom: 10px;
@@ -111,13 +135,15 @@
 }
 
 .employee-list {
-    margin-right: 250px;
+    margin: 50px 0;
+    margin-right: 325px;
     padding: 20px;
     overflow-y: auto;
     height: auto;
     transition: margin-right 0.3s ease;
     width: 100%;
-    
+    display: flex;
+    justify-content: center;
 }
 
 .filter-input {
