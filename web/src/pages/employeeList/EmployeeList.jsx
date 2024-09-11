@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./EmployeeList.css";
 import { Card } from "primereact/card";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Divider } from "primereact/divider";
+import { Button } from 'primereact/button';
 import { DataView } from "primereact/dataview";
 import { Avatar } from "primereact/avatar";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import { Dialog } from 'primereact/dialog';
+import { Helmet } from 'react-helmet';
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -16,11 +19,32 @@ function EmployeeList() {
   const [selectedPermission, setSelectedPermission] = useState("Todos");
 
   const permissions = [
-    { label: "Todos", value: "Todos" },
-    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema" },
-    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros" },
-    { label: "Emissor de Comunicados", value: "Emissor de comunicados" },
+    { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
+    { label: "Emissor de Comunicados", value: "Emissor de comunicados", icon: '/images/icon_role1_marked.png' },
+    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros", icon: '/images/icon_role3_marked.png' },
+    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", icon: '/images/icon_role4_marked.png' },
   ];
+
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [dialogPermission, setDialogPermission] = useState(null);
+
+  const permissionsFilterTemplate = (option) => {
+    return (
+      <div className="p-d-flex p-ai-center">
+        <img alt={option.label} src={option.icon}
+          width="20" className="mr-3"
+        />
+        <span>{option.label}</span>
+      </div>
+    );
+  };
+
+  const handleDialogOpen = (employee) => {
+    
+    setSelectedEmployee(employee);
+    setDialogPermission(employee.permissao);
+    setVisible(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +76,15 @@ function EmployeeList() {
     return matchesNameOrSiape && matchesPermission;
   });
 
+  const [visible, setVisible] = useState(false);
+
+  const footerEditPermission = (
+    <div>
+      <Button link label="Salvar" severity="info" onClick={() => setVisible(false)} className="p-button-text" autoFocus/>
+      <Button link label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text"/>
+    </div>
+  );
+
   const itemTemplate = (employee) => {
     const isExpanded = expandEmployee === employee;
     return (
@@ -60,33 +93,55 @@ function EmployeeList() {
           icon="pi pi-user"
           size="large"
           shape="square"
-          className="employee-avatar m-2"
+          className="employee-avatar my-1 ml-3"
         />
         <div className="employee-details">
-          <div className="employee-name m-2">{employee.nome}</div>
-          <div className="employee-siape m-2">SIAPE: {employee.siape}</div>
-          <div className="employee-cargo m-2">{employee.cargo}</div>
+          <div className="employee-name mb-1 mt-3 ml-3">{employee.nome}</div>
+          <div className="employee-cargo my-1 ml-3">{employee.cargo}</div>
+          <div className="employee-siape my-1 ml-3">SIAPE: {employee.siape}</div>
         </div>
         {isExpanded && (
           <div className="extra-info">
-            <div className="employee-number m-2">
-              Telefone: {employee.telefone}
-            </div>
-            <div className="employee-email m-2">Email: {employee.email}</div>
-            <div className="employee-email m-2">CPF: {employee.cpf}</div>
-            <div className="employee-permission m-2">
-              Permissão: {employee.permissao}
-            </div>
+            <div className="employee-number my-1 ml-3">Telefone: {employee.telefone}</div>
+            <div className="employee-email my-1 ml-3">Email: {employee.email}</div>
+            <div className="employee-permission my-1 ml-3">Permissão de Sistema: {employee.permissao}</div>
           </div>
         )}
-        <button
+        <div className="icon_role_area">
+          <img
+            alt="logo"
+            src="/images/icon_role1_marked.png"
+            height={`${employee.permissao == "Emissor de comunicados" ? "35" : "0"}`}
+            style={{ padding: `${employee.permissao == "Emissor de comunicados" ? '0 20px 0 0' : "0 0 0 0"}` }}
+            className="icon_role" />
+            {/* style necessário apenas caso usuário tiver mais de uma role*/}
+          <img
+            alt="logo"
+            src="/images/icon_role3_marked.png"
+            height={`${employee.permissao == "Gerenciador de cadastros" ? "35" : "0"}`}
+            style={{ padding: `${employee.permissao == "Gerenciador de cadastros" ? '0 20px 0 0' : "0 0 0 0"}` }}
+            className="icon_role" />
+          <img
+            alt="logo"
+            src="/images/icon_role4_marked.png"
+            height={`${employee.permissao == "Gerenciador do sistema" ? "35" : "0"}`}
+            style={{ padding: `${employee.permissao == "Gerenciador do sistema" ? '0 20px 0 0' : "0 0 0 0"}` }}
+            className="icon_role"/>
+        </div>
+
+        <Button
+          link
+          className="edit-button"
+          icon="pi pi-pencil"
+          onClick={() => handleDialogOpen(employee)}
+          
+        />
+        <Button
+          link
           className="expand-button"
+          icon={`${isExpanded ? "pi pi-chevron-up" : "pi pi-chevron-down"}`}
           onClick={() => toggleExpand(employee)}
-          aria-expanded={isExpanded}
-          aria-label={`Expandir informações de ${employee.nome}`}
-        >
-          {isExpanded ? "-" : "+"}
-        </button>
+        />
       </Card>
     );
   };
@@ -101,8 +156,27 @@ function EmployeeList() {
 
   return (
     <div className="container">
+    <Helmet>
+      <title>Servidores - NOTIFY</title>
+    </Helmet>
+      <Dialog draggable={false} header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
+
+        <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
+        <h2 className="-mt-3 mb-4">{selectedEmployee ? selectedEmployee.nome : ''}</h2>
+
+        <Dropdown
+        value={dialogPermission}
+        options={permissions.filter(permission => permission.value !== "Todos")}
+        itemTemplate={permissionsFilterTemplate}
+        onChange={(e) => setDialogPermission(e.value)}
+        placeholder="Selecione uma permissão"
+        className="w-full"
+        />
+
+      </Dialog>
+      
       <div className="filter-container">
-        <h3>Filtrar Funcionários</h3>
+        <h3>Filtrar Servidor</h3>
         <InputText
           placeholder="Digite o nome ou SIAPE"
           value={filter}
@@ -112,13 +186,14 @@ function EmployeeList() {
         <Dropdown
           value={selectedPermission}
           options={permissions}
+          itemTemplate={permissionsFilterTemplate}
           onChange={(e) => setSelectedPermission(e.value)}
           placeholder="Selecione uma permissão"
         />
       </div>
       <div className="employee-list">
-        <Card title="Lista de Funcionários" className="general-card">
-          <Divider />
+        <Card title="Lista de Servidores" className="general-card">
+          <Divider className="-mt-2 mb-4"/>
           <DataView
             value={filteredEmployees}
             layout="list"
