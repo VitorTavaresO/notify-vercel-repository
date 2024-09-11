@@ -26,6 +26,7 @@ function EmployeeList() {
   ];
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [dialogPermission, setDialogPermission] = useState(null);
 
   const permissionsFilterTemplate = (option) => {
     return (
@@ -36,6 +37,13 @@ function EmployeeList() {
         <span>{option.label}</span>
       </div>
     );
+  };
+
+  const handleDialogOpen = (employee) => {
+    
+    setSelectedEmployee(employee);
+    setDialogPermission(employee.permissao);
+    setVisible(true);
   };
 
   useEffect(() => {
@@ -125,7 +133,7 @@ function EmployeeList() {
           link
           className="edit-button"
           icon="pi pi-pencil"
-          onClick={() => { setVisible(true); setSelectedEmployee(employee)}}
+          onClick={() => handleDialogOpen(employee)}
           
         />
         <Button
@@ -134,16 +142,6 @@ function EmployeeList() {
           icon={`${isExpanded ? "pi pi-chevron-up" : "pi pi-chevron-down"}`}
           onClick={() => toggleExpand(employee)}
         />
-        {/*
-        <button
-          className="expand-button"
-          onClick={() => toggleExpand(employee)}
-          aria-expanded={isExpanded}
-          aria-label={`Expandir informações de ${employee.nome}`}
-        >
-          {isExpanded ? "-" : "+"}
-        </button>
-        */}
       </Card>
     );
   };
@@ -159,22 +157,20 @@ function EmployeeList() {
   return (
     <div className="container">
     <Helmet>
-      <title>Servidores</title>
+      <title>Servidores - NOTIFY</title>
     </Helmet>
-      <Dialog header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
+      <Dialog draggable={false} header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
 
-        <div className="testse">
-          <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
-          <h2 className="-mt-3 mb-4">{selectedEmployee ? selectedEmployee.nome : ''}</h2>
-        </div>
+        <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
+        <h2 className="-mt-3 mb-4">{selectedEmployee ? selectedEmployee.nome : ''}</h2>
 
         <Dropdown
-          value={selectedPermission}
-          options={permissions}
-          itemTemplate={permissionsFilterTemplate}
-          onChange={(e) => setSelectedPermission(e.value)}
-          placeholder="Selecione uma permissão"
-          className="w-full"
+        value={dialogPermission}
+        options={permissions.filter(permission => permission.value !== "Todos")}
+        itemTemplate={permissionsFilterTemplate}
+        onChange={(e) => setDialogPermission(e.value)}
+        placeholder="Selecione uma permissão"
+        className="w-full"
         />
 
       </Dialog>
