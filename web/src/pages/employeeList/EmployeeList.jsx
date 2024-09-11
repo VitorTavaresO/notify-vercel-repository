@@ -19,16 +19,16 @@ function EmployeeList() {
   const [selectedPermission, setSelectedPermission] = useState("Todos");
 
   const permissions = [
-    { label: "Todos", value: "Todos", flag: '/images/icon_role0_marked.png' },
-    { label: "Emissor de Comunicados", value: "Emissor de comunicados", flag: '/images/icon_role1_marked.png' },
-    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros", flag: '/images/icon_role3_marked.png' },
-    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", flag: '/images/icon_role4_marked.png' },
+    { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
+    { label: "Emissor de Comunicados", value: "Emissor de comunicados", icon: '/images/icon_role1_marked.png' },
+    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros", icon: '/images/icon_role3_marked.png' },
+    { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", icon: '/images/icon_role4_marked.png' },
   ];
 
   const permissionsFilterTemplate = (option) => {
     return (
       <div className="p-d-flex p-ai-center">
-        <img alt={option.label} src={option.flag}
+        <img alt={option.label} src={option.icon}
           width="20" className="mr-3"
         />
         <span>{option.label}</span>
@@ -70,8 +70,8 @@ function EmployeeList() {
 
   const footerEditPermission = (
     <div>
-      <Button label="Cancelar" severity="danger" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
-      <Button label="Salvar" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus className="confirm-button"/>
+      <Button link label="Salvar" severity="info" onClick={() => setVisible(false)} className="p-button-text" autoFocus/>
+      <Button link label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text"/>
     </div>
   );
 
@@ -158,37 +158,22 @@ function EmployeeList() {
     <Helmet>
       <title>Servidores</title>
     </Helmet>
-      <Dialog header="Editar Permissões" visible={visible} style={{ minWidth: '40vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
+      <Dialog header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
 
-        <h3>Permissão atual: [permissão atual]</h3>
-        <h3 className="-mt-3">Nova permissão: [permissão selecionada]</h3>
-
-        <div className="grid my-5">
-          <div class="col-6 md:col-3 lg:col-2">
-            <div class="text-center p-1">
-              <img alt="logo" height="35" className="icon_role" 
-              src="/images/icon_role1.png"/>
-            </div>
-          </div>
-          <div class="col-6 md:col-3 lg:col-2">
-            <div class="text-center p-1">
-              <img alt="logo" height="35" className="icon_role"
-                src="/images/icon_role2.png" />
-            </div>
-          </div>
-          <div class="col-6 md:col-3 lg:col-2">
-            <div class="text-center p-1">
-              <img alt="logo" height="35" className="icon_role"
-              src="/images/icon_role3.png" />
-            </div>
-          </div>
-          <div class="col-6 md:col-3 lg:col-2">
-            <div class="text-center p-1">
-              <img alt="logo" height="35" className="icon_role"
-              src="/images/icon_role4.png" />
-            </div>
-          </div>
+        <div className="testse">
+          <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
+          <h2 className="-mt-3 mb-4">Vitor Tavares de Oliveira</h2>
         </div>
+
+        <Dropdown
+          value={selectedPermission}
+          options={permissions}
+          itemTemplate={permissionsFilterTemplate}
+          onChange={(e) => setSelectedPermission(e.value)}
+          placeholder="Selecione uma permissão"
+          className="w-full"
+        />
+
       </Dialog>
       
       <div className="filter-container">
