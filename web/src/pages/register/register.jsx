@@ -64,6 +64,29 @@ const Register = () => {
         passwordCriteria,
     ]);
 
+    const handleRegister = () => {
+        console.log("Oi");
+        // eslint-disable-next-line no-unused-expressions
+        fetch("http://localhost:8080/api/user", {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                name: name,
+                cpf: cpf,
+                siape: siape,
+                position: position,
+                email: email,
+                phone: phone,
+                password: password
+            })
+        })
+        .then(function (res) { console.log(res) })
+        .catch(function (res) { console.log(res) })
+    };
+
     const header = <div className="font-bold mb-3">Informe a Senha</div>;
     const footer = (
         <>
@@ -376,6 +399,7 @@ const Register = () => {
                                 ${isFormValid? "bg-green-600 border-green-600":"bg-gray-500 border-gray-500"}
                             `}
                             disabled={!isFormValid}
+                            onClick={handleRegister}
                         />
                     </div>
                     <div className="

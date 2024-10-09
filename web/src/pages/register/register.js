@@ -8,7 +8,7 @@ const iphone = document.querySelector("phone");
 const ipassword = document.querySelector("password");
 
 function register() {
-    fetch("http://localhost:3304/api/user"), {
+    fetch("http://localhost:8080/api/user"), {
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
