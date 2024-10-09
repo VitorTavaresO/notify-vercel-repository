@@ -1,19 +1,13 @@
 package com.auction.backend.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.auction.backend.model.Message;
 import com.auction.backend.service.MessageService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -23,13 +17,17 @@ public class MessageController {
     private MessageService messageService;
 
     @PostMapping
-    public Message create(@RequestBody Message message) {
-        return messageService.create(message);
+    public Message create(
+            @RequestPart("message") Message message,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+        return messageService.create(message, files != null ? files : List.of());
     }
     
     @PutMapping
-    public Message update(@RequestBody Message message) {
-        return messageService.update(message);
+    public Message update(
+            @RequestPart("message") Message message,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+        return messageService.update(message, files != null ? files : List.of());
     }
 
     @DeleteMapping("/{id}")

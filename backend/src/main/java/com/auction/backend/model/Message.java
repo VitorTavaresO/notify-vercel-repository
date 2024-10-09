@@ -1,12 +1,15 @@
 package com.auction.backend.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -34,13 +37,20 @@ public class Message {
     @Column(nullable = false, name = "message")
     private String message;
 
-    @Column(name = "link")
-    private String link;
-
     @Column(nullable = false, name = "date")
     private LocalDateTime date;
 
-    @Column(name = "URLImagem")
-    private String URLImagem;
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Annex> annexes;
+
+    public void addAnnex(Annex annex) {
+        annexes.add(annex);
+        annex.setMessage(this);
+    }
+
+    public void removeAnnex(Annex annex) {
+        annexes.remove(annex);
+        annex.setMessage(null);
+    }
 
 }
