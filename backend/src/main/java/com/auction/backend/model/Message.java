@@ -22,6 +22,15 @@ public class Message {
     @Column(nullable = false, name = "title", length = 100)
     private String title;
 
+    @Column(nullable = false, name = "author")
+    private String author;
+
+    @Column(nullable = false, name = "category")
+    private String category;
+
+    @Column(nullable = false, name = "recipient")
+    private String recipient;
+
     @Column(nullable = false, name = "message")
     private String message;
 

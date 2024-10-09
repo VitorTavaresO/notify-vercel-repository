@@ -20,6 +20,9 @@ public class MessageService {
         Message messageSaved = messageRepository.findById(message.getId())
             .orElseThrow(() -> new RuntimeException("Message not found"));
         messageSaved.setTitle(message.getTitle());
+        messageSaved.setAuthor(message.getAuthor());
+        messageSaved.setCategory(message.getCategory());
+        messageSaved.setRecipient(message.getRecipient());
         messageSaved.setMessage(message.getMessage());
         messageSaved.setLink(message.getLink());
         messageSaved.setDate(message.getDate());
