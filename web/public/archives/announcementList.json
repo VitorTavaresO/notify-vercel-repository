@@ -8,23 +8,72 @@
     },
     {
         "titulo": "Título do Comunicado #2",
+        "curso": "Téc. Informática",
+        "turma": "2° ano",
+        "data": "14/02/2026",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #3",
         "curso": "Todas as Turmas",
         "turma": "",
         "data": "25/12/2025",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
-        "titulo": "Título do Comunicado #3",
+        "titulo": "Título do Comunicado #4",
         "curso": "Téc. Mecatrônica",
-        "turma": "4° ano",
+        "turma": "1° ano",
+        "data": "22/08/2024",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #5",
+        "curso": "Téc. Agroindústria",
+        "turma": "2° ano",
+        "data": "25/07/2024",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #6",
+        "curso": "Téc. Mecatrônica",
+        "turma": "",
+        "data": "12/06/2024",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #7",
+        "curso": "Téc. Informática",
+        "turma": "3° ano",
         "data": "08/05/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
-        "titulo": "Título do Comunicado #4",
-        "curso": "Téc. Informática",
+        "titulo": "Título do Comunicado #8",
+        "curso": "Todas as Turmas",
+        "turma": "",
+        "data": "24/03/2024",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #9",
+        "curso": "Todas as Turmas",
+        "turma": "",
+        "data": "29/02/2024",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #10",
+        "curso": "Téc. Agroindústria",
+        "turma": "4° ano",
+        "data": "12/01/2024",
+        "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
+    },
+    {
+        "titulo": "Título do Comunicado #11",
+        "curso": "Téc. Mecatrônica",
         "turma": "2° ano",
-        "data": "22/08/2024",
+        "data": "09/10/2023",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     }
 ]
