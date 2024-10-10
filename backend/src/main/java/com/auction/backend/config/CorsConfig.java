@@ -1,4 +1,4 @@
-package com.auction.backend.exception;
+package com.auction.backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "primereact/card";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
@@ -8,6 +8,7 @@ import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
 import CpfValidation from "../../validation/cpfValidation";
+import EmailValidation from "../../validation/emailValidation";
 import "./register.css";
 
 const Register = () => {
@@ -38,6 +39,8 @@ const Register = () => {
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
     const [isCpfValid, setIsCpfValid] = useState(false);
     const [isCpfFocused, setIsCpfFocused] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [isEmailFocused, setIsEmailFocused] = useState(false);
 
     useEffect(() => {
         const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
@@ -156,9 +159,15 @@ const Register = () => {
     };
 
     const handleCpfChange = (e) => {
-        const novoCpf = e.target.value;
-        setCpf(novoCpf);
-        setIsCpfValid(CpfValidation(novoCpf));
+        const newCpf = e.target.value;
+        setCpf(newCpf);
+        setIsCpfValid(CpfValidation(newCpf));
+    }
+
+    const handleEmailChange = (e) => {
+        const newEmail = e.target.value;
+        setEmail(newEmail);
+        setIsEmailValid(EmailValidation(newEmail));
     }
 
     const handleFieldFocus = (field) => {
@@ -316,11 +325,15 @@ const Register = () => {
                                 id="email"
                                 name="email"
                                 autoComplete="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                onFocus={() => handleFieldFocus("Email")}
+                                onChange={handleEmailChange}
+                                onFocus={() => {
+                                    handleFieldFocus("Email");
+                                    setIsEmailFocused(true);
+                                }}
                                 onBlur={() => handleFieldBlur("Email", email)}
                                 keyfilter="email"
                                 required
+                                invalid={isEmailFocused && !isEmailValid}
                                 className={`
                                     w-full ${fieldErrors.email ? "p-invalid" : ""}`}/>
                             <label htmlFor="email">Email</label>

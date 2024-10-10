@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import com.auction.backend.model.User;
 import com.auction.backend.repository.UserRepository;
@@ -16,7 +17,11 @@ public class UserService {
     private UserRepository userRepository;
 
     public User create(User user) {
-        return userRepository.save(user);
+        User userSaved = userRepository.save(user);
+        Context context = new Context();
+        context.setVariable("name", userSaved.getName());
+
+        return userSaved;
     }
 
     public User read(Long id) {
