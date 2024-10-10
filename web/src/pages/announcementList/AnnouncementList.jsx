@@ -85,7 +85,7 @@ function AnnouncementList() {
         return (
             <Card className={"card-container"}>
                 <Avatar
-                    icon="pi pi-user"
+                    icon="pi pi-file-edit"
                     size="large"
                     shape="square"
                     className="announcement-avatar my-1 ml-3"
@@ -107,29 +107,29 @@ function AnnouncementList() {
                         <div className="announcement-cargo my-1 ml-2">em {announcement.data}</div>
                     </div>
 
-                    <div className="announcement-cargo my-1 ml-3 mr-6">{announcement.mensagem}</div>
+                    <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.mensagem}</div>
 
                 </div>
                 <div className="icon_role_area">
                     <img
                         alt="logo"
+                        src="/images/icon_role0_marked.png"
+                        height={`${announcement.curso == "Todas as Turmas" ? "35" : "0"}`}
+                        className="icon_role" />
+                    <img
+                        alt="logo"
                         src="/images/icon_role1_marked.png"
-                        height={`${announcement.categoria == "Reunião de Responsáveis" ? "35" : "0"}`}
+                        height={`${announcement.curso == "Téc. Informática" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
                         src="/images/icon_role2_marked.png"
-                        height={`${announcement.categoria == "Evento" ? "35" : "0"}`}
+                        height={`${announcement.curso == "Téc. Mecatrônica" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
                         src="/images/icon_role3_marked.png"
-                        height={`${announcement.categoria == "Categoria 3" ? "35" : "0"}`}
-                        className="icon_role" />
-                    <img
-                        alt="logo"
-                        src="/images/icon_role4_marked.png"
-                        height={`${announcement.categoria == "Categoria 4" ? "35" : "0"}`}
+                        height={`${announcement.curso == "Téc. Agroindústria" ? "35" : "0"}`}
                         className="icon_role" />
                 </div>
 
