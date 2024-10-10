@@ -93,22 +93,17 @@ function AnnouncementList() {
                 <div className="announcement-details">
                     <div className="announcement-name mb-1 mt-3 ml-3">{announcement.titulo}</div>
 
-                    <div className={`flex flex-row${announcement.curso == null ? "bg-white" : "bg-white"}`}>
-
+                    <div className="flex flex-row">
                         <div className="announcement-cargo my-1 ml-3">{announcement.curso}</div>
 
-                        <div>
-                            <div className="announcement-siape my-1 ml-2 ">- {announcement.turma}</div>
-                        </div>
-
+                        <div className={`${announcement.turma == "" ? "hidden" : "block"}`}>
+                            <div className="announcement-siape my-1 ml-2 ">- {announcement.turma}</div></div>
 
                         <div className="announcement-siape my-1">,</div>
-
                         <div className="announcement-cargo my-1 ml-2">em {announcement.data}</div>
                     </div>
 
                     <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.mensagem}</div>
-
                 </div>
                 <div className="icon_role_area">
                     <img
