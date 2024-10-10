@@ -1,6 +1,8 @@
 package com.auction.backend.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -38,10 +40,10 @@ public class Message {
     private String message;
 
     @Column(nullable = false, name = "date")
-    private LocalDateTime date;
+    private Date date;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Annex> annexes;
+    private List<Annex> annexes = new ArrayList<>();
 
     public void addAnnex(Annex annex) {
         annexes.add(annex);

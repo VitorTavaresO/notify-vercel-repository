@@ -15,6 +15,7 @@ import com.auction.backend.repository.MessageRepository;
 @Service
 public class MessageService {
 
+    private final String uploadDir = System.getProperty("user.dir") + "/uploads";
     @Autowired
     private MessageRepository messageRepository;
 
@@ -28,7 +29,7 @@ public class MessageService {
 
     public Message update(Message message, List<MultipartFile> newFiles) {
         Message messageSaved = messageRepository.findById(message.getId())
-            .orElseThrow(() -> new RuntimeException("Message not found"));
+                .orElseThrow(() -> new RuntimeException("Message not found"));
 
         messageSaved.setTitle(message.getTitle());
         messageSaved.setAuthor(message.getAuthor());
@@ -54,7 +55,7 @@ public class MessageService {
 
     public Message findById(Long id) {
         return messageRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Message not found"));
+                .orElseThrow(() -> new RuntimeException("Message not found"));
     }
 
     public Iterable<Message> findAll() {
@@ -62,21 +63,23 @@ public class MessageService {
     }
 
     private Annex createAnnex(MultipartFile file) {
-        String uploadDir = "/uploads/";
-        String filePath = uploadDir + file.getOriginalFilename();
-        
-        File destinationFile = new File(filePath);
-        try {
-            file.transferTo(destinationFile);
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar arquivo", e);
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs(); 
         }
 
         Annex annex = new Annex();
         annex.setName(file.getOriginalFilename());
-        annex.setPath(filePath); 
         annex.setType(file.getContentType());
         annex.setSize(file.getSize());
+
+        File targetFile = new File(directory, file.getOriginalFilename());
+        try {
+            file.transferTo(targetFile);
+            annex.setPath(targetFile.getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar arquivo", e);
+        }
 
         return annex;
     }

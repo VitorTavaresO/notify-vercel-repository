@@ -19,10 +19,9 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    // Para requisições JSON simples, sem arquivos
     @PostMapping(consumes = "application/json")
     public Message createJson(@RequestBody Message message) {
-        return messageService.create(message, List.of()); // Lista vazia para arquivos
+        return messageService.create(message, List.of()); 
     }
 
     @PostMapping(consumes = "multipart/form-data")
@@ -30,26 +29,17 @@ public class MessageController {
             @RequestPart("message") String messageJson,
             @RequestParam(value = "files", required = false) List<MultipartFile> files)
             throws JsonMappingException, JsonProcessingException {
-        // Converter o JSON recebido como String para um objeto Message
         ObjectMapper objectMapper = new ObjectMapper();
         Message message = objectMapper.readValue(messageJson, Message.class);
 
-        for (MultipartFile file : files) {
-            System.out.println("Nome do Arquivo: " + file.getOriginalFilename());
-            System.out.println("Tipo MIME: " + file.getContentType());
-        }
-
-        // Chamar o serviço com a mensagem e os arquivos
         return messageService.create(message, files != null ? files : List.of());
     }
 
-    // Para requisições JSON simples, sem arquivos
     @PutMapping(consumes = "application/json")
     public Message updateJson(@RequestBody Message message) {
-        return messageService.update(message, List.of()); // Lista vazia para arquivos
+        return messageService.update(message, List.of());
     }
 
-    // Para requisições multipart/form-data, com arquivos
     @PutMapping(consumes = "multipart/form-data")
     public Message updateMultipart(
             @RequestPart("message") Message message,
