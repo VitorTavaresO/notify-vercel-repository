@@ -6,25 +6,52 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.auction.backend.model.Message;
 import com.auction.backend.service.MessageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
-    
+
     @Autowired
     private MessageService messageService;
 
-    @PostMapping
-    public Message create(
-            @RequestPart("message") Message message,
-            @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+    // Para requisições JSON simples, sem arquivos
+    @PostMapping(consumes = "application/json")
+    public Message createJson(@RequestBody Message message) {
+        return messageService.create(message, List.of()); // Lista vazia para arquivos
+    }
+
+    @PostMapping(consumes = "multipart/form-data")
+    public Message createMultipart(
+            @RequestPart("message") String messageJson,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files)
+            throws JsonMappingException, JsonProcessingException {
+        // Converter o JSON recebido como String para um objeto Message
+        ObjectMapper objectMapper = new ObjectMapper();
+        Message message = objectMapper.readValue(messageJson, Message.class);
+
+        for (MultipartFile file : files) {
+            System.out.println("Nome do Arquivo: " + file.getOriginalFilename());
+            System.out.println("Tipo MIME: " + file.getContentType());
+        }
+
+        // Chamar o serviço com a mensagem e os arquivos
         return messageService.create(message, files != null ? files : List.of());
     }
-    
-    @PutMapping
-    public Message update(
+
+    // Para requisições JSON simples, sem arquivos
+    @PutMapping(consumes = "application/json")
+    public Message updateJson(@RequestBody Message message) {
+        return messageService.update(message, List.of()); // Lista vazia para arquivos
+    }
+
+    // Para requisições multipart/form-data, com arquivos
+    @PutMapping(consumes = "multipart/form-data")
+    public Message updateMultipart(
             @RequestPart("message") Message message,
             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
         return messageService.update(message, files != null ? files : List.of());
