@@ -16,19 +16,29 @@ function AnnouncementList() {
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("");
-    const [selectedPermission, setSelectedPermission] = useState("Todos");
-
-    const permissions = [
+    
+    const [selectedProgram, setSelectedProgram] = useState("Todos");
+    const programs = [
         { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
-        { label: "Emissor de Comunicados", value: "Emissor de comunicados", icon: '/images/icon_role1_marked.png' },
-        { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros", icon: '/images/icon_role3_marked.png' },
-        { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", icon: '/images/icon_role4_marked.png' },
+        { label: "Téc. Agroindústria", value: "Téc. Agroindústria", icon: '/images/flag_agro.png' },
+        { label: "Téc. Informática", value: "Téc. Informática", icon: '/images/flag_info.png' },
+        { label: "Téc. Mecatrônica", value: "Téc. Mecatrônica", icon: '/images/flag_meca.png' },
+        { label: "Todos os Cursos", value: "Todos os Cursos", icon: '/images/flag_todosCursos.png' },
+    ];
+
+    const [selectedClass, setSelectedClass] = useState("Todas");
+    const classes = [
+        { label: "1° Ano", value: "1"},
+        { label: "2° Ano", value: "2"},
+        { label: "3° Ano", value: "3"},
+        { label: "4° Ano", value: "4"},
+        { label: "Todas as Turmas", value: "Todas"},
     ];
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-    const [dialogPermission, setDialogPermission] = useState(null);
+    const [dialogProgram, setDialogProgram] = useState(null);
 
-    const permissionsFilterTemplate = (option) => {
+    const programsFilterTemplate = (option) => {
         return (
             <div className="p-d-flex p-ai-center">
                 <img alt={option.label} src={option.icon}
@@ -39,10 +49,18 @@ function AnnouncementList() {
         );
     };
 
+    const classesFilterTemplate = (option) => {
+        return (
+            <div className="p-d-flex p-ai-center">
+                <span>{option.label}</span>
+            </div>
+        );
+    };
+
     const handleDialogOpen = (announcement) => {
 
         setSelectedAnnouncement(announcement);
-        setDialogPermission(announcement.categoria);
+        setDialogProgram(announcement.categoria);
         setVisible(true);
     };
 
@@ -65,16 +83,19 @@ function AnnouncementList() {
         const matchesNameOrSiape =
             announcement.titulo.toLowerCase().includes(filter.toLowerCase()) ||
             announcement.siape.includes(filter);
-        const matchesPermission =
-            selectedPermission === "Todos" ||
-            announcement.categoria === selectedPermission;
+        const matchesProgram =
+            selectedProgram === "Todos" ||
+            announcement.curso === selectedProgram;
+        const matchesClass = 
+            selectedClass === "Todas" ||
+            announcement.turma === selectedClass;
 
-        return matchesNameOrSiape && matchesPermission;
+        return matchesNameOrSiape && matchesProgram && matchesClass;
     });
 
     const [visible, setVisible] = useState(false);
 
-    const footerEditPermission = (
+    const footerEditProgram = (
         <div>
             <Button link label="Salvar" severity="info" onClick={() => setVisible(false)} className="p-button-text" autoFocus />
             <Button link label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text" />
@@ -97,7 +118,7 @@ function AnnouncementList() {
                         <div className="announcement-cargo my-1 ml-3">{announcement.curso}</div>
 
                         <div className={`${announcement.turma == "" ? "hidden" : "block"}`}>
-                            <div className="announcement-siape my-1 ml-2 ">- {announcement.turma}</div></div>
+                            <div className="announcement-siape my-1 ml-2 ">- {announcement.turma}° ano</div></div>
 
                         <div className="announcement-siape my-1">,</div>
                         <div className="announcement-cargo my-1 ml-2">em {announcement.data}</div>
@@ -108,22 +129,22 @@ function AnnouncementList() {
                 <div className="icon_role_area">
                     <img
                         alt="logo"
-                        src="/images/icon_role0_marked.png"
-                        height={`${announcement.curso == "Todas as Turmas" ? "35" : "0"}`}
+                        src="/images/flag_todosCursos.png"
+                        height={`${announcement.curso == "Todos os Cursos" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
-                        src="/images/icon_role1_marked.png"
+                        src="/images/flag_info.png"
                         height={`${announcement.curso == "Téc. Informática" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
-                        src="/images/icon_role2_marked.png"
+                        src="/images/flag_meca.png"
                         height={`${announcement.curso == "Téc. Mecatrônica" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
-                        src="/images/icon_role3_marked.png"
+                        src="/images/flag_agro.png"
                         height={`${announcement.curso == "Téc. Agroindústria" ? "35" : "0"}`}
                         className="icon_role" />
                 </div>
@@ -152,16 +173,16 @@ function AnnouncementList() {
             <Helmet>
                 <title>Servidores - NOTIFY</title>
             </Helmet>
-            <Dialog draggable={false} header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
+            <Dialog draggable={false} header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditProgram}>
 
                 <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
                 <h2 className="-mt-3 mb-4">{selectedAnnouncement ? selectedAnnouncement.titulo : ''}</h2>
 
                 <Dropdown
-                    value={dialogPermission}
-                    options={permissions.filter(permission => permission.value !== "Todos")}
-                    itemTemplate={permissionsFilterTemplate}
-                    onChange={(e) => setDialogPermission(e.value)}
+                    value={dialogProgram}
+                    options={programs.filter(program => program.value !== "Todos")}
+                    itemTemplate={programsFilterTemplate}
+                    onChange={(e) => setDialogProgram(e.value)}
                     placeholder="Selecione uma permissão"
                     className="w-full"
                 />
@@ -177,11 +198,20 @@ function AnnouncementList() {
                     className="filter-input"
                 />
                 <Dropdown
-                    value={selectedPermission}
-                    options={permissions}
-                    itemTemplate={permissionsFilterTemplate}
-                    onChange={(e) => setSelectedPermission(e.value)}
-                    placeholder="Selecione uma permissão"
+                    value={selectedProgram}
+                    options={programs}
+                    itemTemplate={programsFilterTemplate}
+                    onChange={(e) => setSelectedProgram(e.value)}
+                    placeholder="Selecione o curso"
+                />
+
+                <Dropdown
+                    value={selectedClass}
+                    options={classes}
+                    itemTemplate={classesFilterTemplate}
+                    onChange={(e) => setSelectedClass(e.value)}
+                    placeholder="Selecione a turma"
+                    className="mt-3"
                 />
             </div>
             <div className="announcement-list">

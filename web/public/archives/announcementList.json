@@ -9,13 +9,13 @@
     {
         "titulo": "Título do Comunicado #2",
         "curso": "Téc. Informática",
-        "turma": "2° ano",
+        "turma": "2",
         "data": "14/02/2026",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
         "titulo": "Título do Comunicado #3",
-        "curso": "Todas as Turmas",
+        "curso": "Todos os Cursos",
         "turma": "",
         "data": "25/12/2025",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
@@ -23,14 +23,14 @@
     {
         "titulo": "Título do Comunicado #4",
         "curso": "Téc. Mecatrônica",
-        "turma": "1° ano",
+        "turma": "1",
         "data": "22/08/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
         "titulo": "Título do Comunicado #5",
         "curso": "Téc. Agroindústria",
-        "turma": "2° ano",
+        "turma": "2",
         "data": "25/07/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
@@ -44,20 +44,20 @@
     {
         "titulo": "Título do Comunicado #7",
         "curso": "Téc. Informática",
-        "turma": "3° ano",
+        "turma": "3",
         "data": "08/05/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
         "titulo": "Título do Comunicado #8",
-        "curso": "Todas as Turmas",
+        "curso": "Todos os Cursos",
         "turma": "",
         "data": "24/03/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
         "titulo": "Título do Comunicado #9",
-        "curso": "Todas as Turmas",
+        "curso": "Todos os Cursos",
         "turma": "",
         "data": "29/02/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
@@ -65,14 +65,14 @@
     {
         "titulo": "Título do Comunicado #10",
         "curso": "Téc. Agroindústria",
-        "turma": "4° ano",
+        "turma": "4",
         "data": "12/01/2024",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     },
     {
         "titulo": "Título do Comunicado #11",
         "curso": "Téc. Mecatrônica",
-        "turma": "2° ano",
+        "turma": "2",
         "data": "09/10/2023",
         "mensagem": "Descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, descrição do comunicado, [...]"
     }
