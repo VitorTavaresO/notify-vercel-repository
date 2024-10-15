@@ -33,6 +33,7 @@ public class MessageService {
                 .orElseThrow(() -> new RuntimeException("Message not found"));
 
         messageSaved.setTitulo(message.getTitulo());
+        messageSaved.setAutor(message.getAutor());
         messageSaved.setCurso(message.getCurso());
         messageSaved.setTurma(message.getTurma());
         messageSaved.setData(message.getData());

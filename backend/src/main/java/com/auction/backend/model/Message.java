@@ -29,6 +29,9 @@ public class Message {
     @Column(nullable = false, name = "titulo", length = 100)
     private String titulo;
 
+    @Column(nullable = false, name = "autor")
+    private String autor;
+
     @Column(nullable = false, name = "curso")
     private String curso;
 
