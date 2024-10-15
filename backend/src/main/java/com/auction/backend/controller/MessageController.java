@@ -21,7 +21,7 @@ public class MessageController {
 
     @PostMapping(consumes = "application/json")
     public Message createJson(@RequestBody Message message) {
-        return messageService.create(message, List.of()); 
+        return messageService.create(message, List.of());
     }
 
     @PostMapping(consumes = "multipart/form-data")
@@ -31,7 +31,6 @@ public class MessageController {
             throws JsonMappingException, JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Message message = objectMapper.readValue(messageJson, Message.class);
-
         return messageService.create(message, files != null ? files : List.of());
     }
 
@@ -62,3 +61,4 @@ public class MessageController {
         return messageService.findAll();
     }
 }
+

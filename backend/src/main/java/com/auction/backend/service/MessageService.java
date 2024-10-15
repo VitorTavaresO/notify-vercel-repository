@@ -16,6 +16,7 @@ import com.auction.backend.repository.MessageRepository;
 public class MessageService {
 
     private final String uploadDir = System.getProperty("user.dir") + "/uploads";
+
     @Autowired
     private MessageRepository messageRepository;
 
@@ -31,21 +32,18 @@ public class MessageService {
         Message messageSaved = messageRepository.findById(message.getId())
                 .orElseThrow(() -> new RuntimeException("Message not found"));
 
-        messageSaved.setTitle(message.getTitle());
-        messageSaved.setAuthor(message.getAuthor());
-        messageSaved.setCategory(message.getCategory());
-        messageSaved.setRecipient(message.getRecipient());
-        messageSaved.setMessage(message.getMessage());
-        messageSaved.setDate(message.getDate());
+        messageSaved.setTitulo(message.getTitulo());
+        messageSaved.setCurso(message.getCurso());
+        messageSaved.setTurma(message.getTurma());
+        messageSaved.setData(message.getData());
+        messageSaved.setMensagem(message.getMensagem());
 
         if (newFiles != null && !newFiles.isEmpty()) {
-
             for (MultipartFile file : newFiles) {
                 Annex annex = createAnnex(file);
                 messageSaved.addAnnex(annex);
             }
         }
-
         return messageRepository.save(messageSaved);
     }
 
@@ -65,7 +63,7 @@ public class MessageService {
     private Annex createAnnex(MultipartFile file) {
         File directory = new File(uploadDir);
         if (!directory.exists()) {
-            directory.mkdirs(); 
+            directory.mkdirs();
         }
 
         Annex annex = new Annex();
@@ -84,3 +82,4 @@ public class MessageService {
         return annex;
     }
 }
+

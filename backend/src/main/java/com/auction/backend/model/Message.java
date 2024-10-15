@@ -26,24 +26,21 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "title", length = 100)
-    private String title;
+    @Column(nullable = false, name = "titulo", length = 100)
+    private String titulo;
 
-    @Column(nullable = false, name = "author")
-    private String author;
+    @Column(nullable = false, name = "curso")
+    private String curso;
 
-    @Column(nullable = false, name = "category")
-    private String category;
-
-    @Column(nullable = false, name = "recipient")
-    private String recipient;
-
-    @Column(nullable = false, name = "message")
-    private String message;
+    @Column(nullable = false, name = "turma")
+    private String turma;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Column(nullable = false, name = "date")
-    private LocalDateTime date;
+    @Column(nullable = false, name = "data")
+    private LocalDateTime data;
+
+    @Column(nullable = false, name = "mensagem")
+    private String mensagem;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Annex> annexes = new ArrayList<>();
@@ -60,7 +57,7 @@ public class Message {
 
     @PrePersist
     protected void onCreateTimestamp() {
-        this.date = LocalDateTime.now();
+        this.data = LocalDateTime.now();
     }
-
 }
+
