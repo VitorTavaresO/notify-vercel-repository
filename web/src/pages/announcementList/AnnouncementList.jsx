@@ -16,7 +16,7 @@ function AnnouncementList() {
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("");
-    
+
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
         { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
@@ -28,11 +28,11 @@ function AnnouncementList() {
 
     const [selectedClass, setSelectedClass] = useState("Todas");
     const classes = [
-        { label: "1° Ano", value: "1"},
-        { label: "2° Ano", value: "2"},
-        { label: "3° Ano", value: "3"},
-        { label: "4° Ano", value: "4"},
-        { label: "Todas as Turmas", value: "Todas"},
+        { label: "1° Ano", value: "1" },
+        { label: "2° Ano", value: "2" },
+        { label: "3° Ano", value: "3" },
+        { label: "4° Ano", value: "4" },
+        { label: "Todas as Turmas", value: "Todas" },
     ];
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
@@ -67,8 +67,9 @@ function AnnouncementList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/archives/announcementList.json");
+                const response = await fetch("http://localhost:8080/api/messages");
                 const data = await response.json();
+                console.log(data);
                 setAnnouncements(data);
             } catch (error) {
                 console.error("Error fetching the announcement data:", error);
@@ -80,18 +81,16 @@ function AnnouncementList() {
     }, []);
 
     const filteredAnnouncements = announcements.filter((announcement) => {
-        const matchesNameOrSiape =
-            announcement.titulo.toLowerCase().includes(filter.toLowerCase()) ||
-            announcement.siape.includes(filter);
+        const matchesTitle =
+            announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
         const matchesProgram =
-            selectedProgram === "Todos" ||
-            announcement.curso === selectedProgram;
-        const matchesClass = 
-            selectedClass === "Todas" ||
-            announcement.turma === selectedClass;
+            selectedProgram === "Todos" || announcement.course === selectedProgram;
+        const matchesClass =
+            selectedClass === "Todas" || announcement.className === selectedClass;
 
-        return matchesNameOrSiape && matchesProgram && matchesClass;
+        return matchesTitle && matchesProgram && matchesClass;
     });
+
 
     const [visible, setVisible] = useState(false);
 
@@ -112,40 +111,41 @@ function AnnouncementList() {
                     className="announcement-avatar my-1 ml-3"
                 />
                 <div className="announcement-details">
-                    <div className="announcement-name mb-1 mt-3 ml-3">{announcement.titulo}</div>
+                    <div className="announcement-name mb-1 mt-3 ml-3">{announcement.title}</div>
 
                     <div className="flex flex-row">
-                        <div className="announcement-cargo my-1 ml-3">{announcement.curso}</div>
+                        <div className="announcement-cargo my-1 ml-3">{announcement.course}</div>
 
-                        <div className={`${announcement.turma == "" ? "hidden" : "block"}`}>
-                            <div className="announcement-siape my-1 ml-2 ">- {announcement.turma}° ano</div></div>
+                        <div className={`${announcement.className === "" ? "hidden" : "block"}`}>
+                            <div className="announcement-siape my-1 ml-2 ">- {announcement.className}° ano</div>
+                        </div>
 
                         <div className="announcement-siape my-1">,</div>
                         <div className="announcement-cargo my-1 ml-2">em {announcement.data}</div>
                     </div>
 
-                    <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.mensagem}</div>
+                    <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.mensage}</div>
                 </div>
                 <div className="icon_role_area">
                     <img
                         alt="logo"
                         src="/images/flag_todosCursos.png"
-                        height={`${announcement.curso == "Todos os Cursos" ? "35" : "0"}`}
+                        height={`${announcement.course === "Todos os Cursos" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
                         src="/images/flag_info.png"
-                        height={`${announcement.curso == "Téc. Informática" ? "35" : "0"}`}
+                        height={`${announcement.course === "Téc. Informática" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
                         src="/images/flag_meca.png"
-                        height={`${announcement.curso == "Téc. Mecatrônica" ? "35" : "0"}`}
+                        height={`${announcement.course === "Téc. Mecatrônica" ? "35" : "0"}`}
                         className="icon_role" />
                     <img
                         alt="logo"
                         src="/images/flag_agro.png"
-                        height={`${announcement.curso == "Téc. Agroindústria" ? "35" : "0"}`}
+                        height={`${announcement.course === "Téc. Agroindústria" ? "35" : "0"}`}
                         className="icon_role" />
                 </div>
 
@@ -154,11 +154,11 @@ function AnnouncementList() {
                     className="view-button"
                     icon="pi pi-eye"
                     onClick={() => handleDialogOpen(announcement)}
-
                 />
             </Card>
         );
     };
+
 
     if (loading) {
         return (
@@ -192,7 +192,7 @@ function AnnouncementList() {
             <div className="filter-container">
                 <h3>Filtrar Servidor</h3>
                 <InputText
-                    placeholder="Digite o nome ou SIAPE"
+                    placeholder="Digite o título"
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                     className="filter-input"
