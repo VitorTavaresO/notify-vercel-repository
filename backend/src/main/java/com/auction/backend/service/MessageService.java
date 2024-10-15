@@ -32,12 +32,12 @@ public class MessageService {
         Message messageSaved = messageRepository.findById(message.getId())
                 .orElseThrow(() -> new RuntimeException("Message not found"));
 
-        messageSaved.setTitulo(message.getTitulo());
-        messageSaved.setAutor(message.getAutor());
-        messageSaved.setCurso(message.getCurso());
-        messageSaved.setTurma(message.getTurma());
+        messageSaved.setTitle(message.getTitle());
+        messageSaved.setAuthor(message.getAuthor());
+        messageSaved.setCourse(message.getCourse());
+        messageSaved.setClassName(message.getClassName());
         messageSaved.setData(message.getData());
-        messageSaved.setMensagem(message.getMensagem());
+        messageSaved.setMensage(message.getMensage());
 
         if (newFiles != null && !newFiles.isEmpty()) {
             for (MultipartFile file : newFiles) {
@@ -55,6 +55,10 @@ public class MessageService {
     public Message findById(Long id) {
         return messageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Message not found"));
+    }
+    
+    public Message findByAuthor(String author) {
+        return messageRepository.findByAuthor(author);
     }
 
     public Iterable<Message> findAll() {

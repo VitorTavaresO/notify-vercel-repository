@@ -56,6 +56,11 @@ public class MessageController {
         return messageService.findById(id);
     }
 
+    @GetMapping("/author/{author}")
+    public Message findByAuthor(@PathVariable String author) {
+        return messageService.findByAuthor(author);
+    }
+
     @GetMapping
     public Iterable<Message> findAll() {
         return messageService.findAll();
