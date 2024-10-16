@@ -2,6 +2,7 @@ package com.auction.backend.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +84,8 @@ public class UserService {
     }
 
     void cpfValidation(String cpf) {
+        cpf = cpf.replaceAll("\\D", "");
+    
         if (cpf == null || !cpf.matches("\\d{11}")) {
             throw new IllegalArgumentException("CPF deve conter 11 dígitos.");
         }
@@ -96,4 +99,17 @@ public class UserService {
         }
     }
 
+    // --------------- EMAIL VALIDATION ---------------
+    private static final String EMAIL_REGEX = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
+    public void emailValidation(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email não pode ser nulo ou vazio.");
+        }
+
+        if (!EMAIL_PATTERN.matcher(email).matches()) {
+            throw new IllegalArgumentException("Email inválido.");
+        }
+    }
 }

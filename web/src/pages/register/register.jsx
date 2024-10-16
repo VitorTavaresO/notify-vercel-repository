@@ -68,8 +68,6 @@ const Register = () => {
     ]);
 
     const handleRegister = () => {
-        console.log("Oi");
-        // eslint-disable-next-line no-unused-expressions
         fetch("http://localhost:8080/api/user", {
             headers: {
                 "Accept": "application/json",
@@ -88,6 +86,7 @@ const Register = () => {
         })
         .then(function (res) { console.log(res) })
         .catch(function (res) { console.log(res) })
+        console.log("Oi");
     };
 
     const header = <div className="font-bold mb-3">Informe a Senha</div>;
