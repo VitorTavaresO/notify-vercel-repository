@@ -9,6 +9,9 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from 'primereact/dialog';
 import { Helmet } from 'react-helmet';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { FileUpload } from "primereact/fileupload";
+
 
 import './AnnouncementList.css';
 
@@ -16,6 +19,12 @@ function AnnouncementList() {
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("");
+    const [showDialog, setShowDialog] = useState(false);
+    const [title, setTitle] = useState("");
+    const [message, setMessage] = useState("");
+    const [attachments, setAttachments] = useState([]);
+    const [selectedProgramNew, setSelectedProgramNew] = useState("Todos");
+    const [selectedClassNew, setSelectedClassNew] = useState("Todas");
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
@@ -37,6 +46,34 @@ function AnnouncementList() {
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
     const [dialogProgram, setDialogProgram] = useState(null);
+
+    const openDialog = () => {
+        setShowDialog(true);
+    };
+
+    const closeDialog = () => {
+        setShowDialog(false);
+        setTitle("");
+        setMessage("");
+        setAttachments([]);
+        setSelectedProgramNew("Todos");
+        setSelectedClassNew("Todas");
+    };
+
+    const handleSubmit = () => {
+        const newAnnouncement = {
+            title,
+            message,
+            attachments,
+            course: selectedProgramNew,
+            className: selectedClassNew,
+        };
+
+        // Aqui você pode implementar o envio ao backend, utilizando fetch ou axios
+        console.log("Enviando comunicado:", newAnnouncement);
+
+        closeDialog();
+    };
 
     const programsFilterTemplate = (option) => {
         return (
@@ -173,11 +210,18 @@ function AnnouncementList() {
             <Helmet>
                 <title>Servidores - NOTIFY</title>
             </Helmet>
-            <Dialog draggable={false} header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditProgram}>
 
+            {/* Dialog para Editar Permissões */}
+            <Dialog
+                draggable={false}
+                header="Editar Permissões"
+                visible={visible}
+                style={{ minWidth: '35vw' }}
+                onHide={() => setVisible(false)}
+                footer={footerEditProgram}
+            >
                 <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
                 <h2 className="-mt-3 mb-4">{selectedAnnouncement ? selectedAnnouncement.titulo : ''}</h2>
-
                 <Dropdown
                     value={dialogProgram}
                     options={programs.filter(program => program.value !== "Todos")}
@@ -186,11 +230,78 @@ function AnnouncementList() {
                     placeholder="Selecione uma permissão"
                     className="w-full"
                 />
-
             </Dialog>
 
+            {/* Dialog para Novo Comunicado */}
+            <Dialog
+                className="new-announcement"
+                header="Novo Comunicado"
+                visible={showDialog}
+                style={{ width: '50vw' }}
+                modal
+                onHide={closeDialog}
+                footer={
+                    <div>
+                        <Button label="Cancelar" icon="pi pi-times" onClick={closeDialog} className="p-button-text" />
+                        <Button label="Enviar" icon="pi pi-check" onClick={handleSubmit} autoFocus />
+                    </div>
+                }
+            >
+                <div className="p-fluid">
+                    <div className="field">
+                        <label htmlFor="title">Título</label>
+                        <InputText
+                            id="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Digite o título do comunicado"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="message">Comunicado</label>
+                        <InputTextarea
+                            id="message"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            rows={5}
+                            placeholder="Digite o conteúdo do comunicado"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="program">Curso</label>
+                        <Dropdown
+                            value={selectedProgram}
+                            options={programs}
+                            onChange={(e) => setSelectedProgramNew(e.value)}
+                            placeholder="Selecione o curso"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="class">Turma</label>
+                        <Dropdown
+                            value={selectedClass}
+                            options={classes}
+                            onChange={(e) => setSelectedClassNew(e.value)}
+                            placeholder="Selecione a turma"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="attachments">Anexos</label>
+                        <FileUpload
+                            name="attachments"
+                            mode="advanced"
+                            multiple
+                            customUpload
+                            uploadHandler={(e) => setAttachments([...attachments, ...e.files])}
+                            chooseLabel="Escolher Arquivos"
+                        />
+                    </div>
+                </div>
+            </Dialog>
+
+            {/* Filtros */}
             <div className="filter-container">
-                <h3>Filtrar Servidor</h3>
+                <h3>Filtrar Comunicado</h3>
                 <InputText
                     placeholder="Digite o título"
                     value={filter}
@@ -204,7 +315,6 @@ function AnnouncementList() {
                     onChange={(e) => setSelectedProgram(e.value)}
                     placeholder="Selecione o curso"
                 />
-
                 <Dropdown
                     value={selectedClass}
                     options={classes}
@@ -213,7 +323,10 @@ function AnnouncementList() {
                     placeholder="Selecione a turma"
                     className="mt-3"
                 />
+                <Button className="button-new" label="Novo Comunicado" icon="pi pi-plus" onClick={openDialog} />
             </div>
+
+            {/* Lista de Comunicados */}
             <div className="announcement-list">
                 <Card title="Lista de Comunicados" className="general-card">
                     <Divider className="-mt-2 mb-4" />
@@ -228,6 +341,7 @@ function AnnouncementList() {
             </div>
         </div>
     );
+
 }
 
 export default AnnouncementList;
