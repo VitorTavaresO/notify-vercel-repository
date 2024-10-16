@@ -37,7 +37,7 @@ public class MessageService {
         messageSaved.setCourse(message.getCourse());
         messageSaved.setClassName(message.getClassName());
         messageSaved.setData(message.getData());
-        messageSaved.setMensage(message.getMensage());
+        messageSaved.setMessage(message.getMessage());
 
         if (newFiles != null && !newFiles.isEmpty()) {
             for (MultipartFile file : newFiles) {

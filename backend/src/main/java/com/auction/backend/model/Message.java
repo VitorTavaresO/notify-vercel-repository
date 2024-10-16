@@ -43,7 +43,7 @@ public class Message {
     private LocalDateTime data;
 
     @Column(nullable = false, name = "mensage")
-    private String mensage;
+    private String message;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Annex> annexes = new ArrayList<>();

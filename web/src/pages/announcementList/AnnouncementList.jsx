@@ -23,8 +23,8 @@ function AnnouncementList() {
     const [title, setTitle] = useState("");
     const [message, setMessage] = useState("");
     const [attachments, setAttachments] = useState([]);
-    const [selectedProgramNew, setSelectedProgramNew] = useState("Todos");
-    const [selectedClassNew, setSelectedClassNew] = useState("Todas");
+    const [course, setCourse] = useState("Todos");
+    const [className, setClassName] = useState("Todas");
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
@@ -56,23 +56,39 @@ function AnnouncementList() {
         setTitle("");
         setMessage("");
         setAttachments([]);
-        setSelectedProgramNew("Todos");
-        setSelectedClassNew("Todas");
+        setCourse("Todos");
+        setClassName("Todas");
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const newAnnouncement = {
             title,
-            message,
-            attachments,
-            course: selectedProgramNew,
-            className: selectedClassNew,
+            author: "Nome do Autor",  //Adicionar lógica para persistência de usuário logado
+            course,
+            className,
+            message
         };
 
-        // Aqui você pode implementar o envio ao backend, utilizando fetch ou axios
-        console.log("Enviando comunicado:", newAnnouncement);
+        try {
+            const response = await fetch("http://localhost:8080/api/messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newAnnouncement),
+            });
 
-        closeDialog();
+            if (response) {
+                console.log("Mensagem enviada com sucesso!");
+                console.log(newAnnouncement);
+                setShowDialog(false);
+                fetchData();
+            } else {
+                console.error("Erro ao enviar a mensagem.");
+            }
+        } catch (error) {
+            console.error("Erro ao enviar a mensagem:", error);
+        }
     };
 
     const programsFilterTemplate = (option) => {
@@ -101,23 +117,24 @@ function AnnouncementList() {
         setVisible(true);
     };
 
+    const fetchData = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/messages");
+            const data = await response.json();
+            setAnnouncements(data);
+        } catch (error) {
+            console.error("Error fetching the announcement data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("http://localhost:8080/api/messages");
-                const data = await response.json();
-                console.log(data);
-                setAnnouncements(data);
-            } catch (error) {
-                console.error("Error fetching the announcement data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchData();
     }, []);
 
-    const filteredAnnouncements = announcements.filter((announcement) => {
+    const filteredAnnouncements = announcements
+    .filter((announcement) => {
         const matchesTitle =
             announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
         const matchesProgram =
@@ -126,7 +143,8 @@ function AnnouncementList() {
             selectedClass === "Todas" || announcement.className === selectedClass;
 
         return matchesTitle && matchesProgram && matchesClass;
-    });
+    })
+    .sort((a, b) => new Date(b.data) - new Date(a.data));
 
 
     const [visible, setVisible] = useState(false);
@@ -139,6 +157,13 @@ function AnnouncementList() {
     );
 
     const itemTemplate = (announcement) => {
+        const date = new Date(announcement.data);
+        const formattedDate = date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+
         return (
             <Card className={"card-container"}>
                 <Avatar
@@ -158,7 +183,7 @@ function AnnouncementList() {
                         </div>
 
                         <div className="announcement-siape my-1">,</div>
-                        <div className="announcement-cargo my-1 ml-2">em {announcement.data}</div>
+                        <div className="announcement-cargo my-1 ml-2">em {formattedDate}</div>
                     </div>
 
                     <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.mensage}</div>
@@ -208,7 +233,7 @@ function AnnouncementList() {
     return (
         <div className="container">
             <Helmet>
-                <title>Servidores - NOTIFY</title>
+                <title>Comunicados - NOTIFY</title>
             </Helmet>
 
             {/* Dialog para Editar Permissões */}
@@ -270,18 +295,18 @@ function AnnouncementList() {
                     <div className="field">
                         <label htmlFor="program">Curso</label>
                         <Dropdown
-                            value={selectedProgram}
+                            value={course}
                             options={programs}
-                            onChange={(e) => setSelectedProgramNew(e.value)}
+                            onChange={(e) => setCourse(e.value)}
                             placeholder="Selecione o curso"
                         />
                     </div>
                     <div className="field">
                         <label htmlFor="class">Turma</label>
                         <Dropdown
-                            value={selectedClass}
+                            value={className}
                             options={classes}
-                            onChange={(e) => setSelectedClassNew(e.value)}
+                            onChange={(e) => setClassName(e.value)}
                             placeholder="Selecione a turma"
                         />
                     </div>
