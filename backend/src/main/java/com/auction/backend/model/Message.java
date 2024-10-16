@@ -42,7 +42,7 @@ public class Message {
     @Column(nullable = false, name = "data")
     private LocalDateTime data;
 
-    @Column(nullable = false, name = "mensage")
+    @Column(nullable = false, name = "message")
     private String message;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -186,7 +186,7 @@ function AnnouncementList() {
                         <div className="announcement-cargo my-1 ml-2">em {formattedDate}</div>
                     </div>
 
-                    <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.mensage}</div>
+                    <div className="announcement-cargo my-1 ml-3 mr-8 text-justify">{announcement.message}</div>
                 </div>
                 <div className="icon_role_area">
                     <img
@@ -366,7 +366,5 @@ function AnnouncementList() {
             </div>
         </div>
     );
-
 }
-
 export default AnnouncementList;
