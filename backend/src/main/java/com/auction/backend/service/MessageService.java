@@ -15,7 +15,7 @@ import com.auction.backend.repository.MessageRepository;
 @Service
 public class MessageService {
 
-    private final String uploadDir = System.getProperty("user.dir") + "/uploads";
+    private static final String uploadDir = "uploads";
 
     @Autowired
     private MessageRepository messageRepository;
@@ -66,25 +66,25 @@ public class MessageService {
     }
 
     private Annex createAnnex(MultipartFile file) {
-        File directory = new File(uploadDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        Annex annex = new Annex();
-        annex.setName(file.getOriginalFilename());
-        annex.setType(file.getContentType());
-        annex.setSize(file.getSize());
-
-        File targetFile = new File(directory, file.getOriginalFilename());
-        try {
-            file.transferTo(targetFile);
-            annex.setPath(targetFile.getAbsolutePath());
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar arquivo", e);
-        }
-
-        return annex;
+    File directory = new File(uploadDir);
+    if (!directory.exists()) {
+        directory.mkdirs();
     }
+
+    Annex annex = new Annex();
+    annex.setFileName(file.getOriginalFilename());
+    annex.setMimeType(file.getContentType());
+    annex.setSize(file.getSize());
+
+    File targetFile = new File(directory, file.getOriginalFilename());
+    try {
+        file.transferTo(targetFile);
+        annex.setPath(targetFile.getAbsolutePath());
+    } catch (IOException e) {
+        throw new RuntimeException("Erro ao salvar arquivo", e);
+    }
+
+    return annex;
+}
 }
 
