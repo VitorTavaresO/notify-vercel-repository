@@ -33,6 +33,11 @@ public class UserController {
     public User read(@PathVariable("id") Long id) {
         return userService.read(id);
     }
+    
+    @GetMapping("/{cpf}")
+    public User readCpf(@PathVariable("cpf") String cpf) {
+        return userService.readCpf(cpf);
+    }
 
     @PutMapping
     public User update(@RequestBody User user) {
@@ -47,6 +52,21 @@ public class UserController {
     @GetMapping
     public List<User> list() {
         return userService.list();
+    }
+
+    @PostMapping("/validate-cpf")
+    public UserService.CpfCriteria cpfValidation(@RequestBody String cpf) {
+        return userService.cpfValidation(cpf);
+    }
+
+    @PostMapping("/validate-email")
+    public UserService.EmailCriteria emailValidation(@RequestBody String email) {
+        return userService.emailValidation(email);
+    }
+
+    @PostMapping("/validate-password")
+    public UserService.PasswordCriteria passwordValidation(@RequestBody String password) {
+        return userService.passwordValidation(password);
     }
 
 }

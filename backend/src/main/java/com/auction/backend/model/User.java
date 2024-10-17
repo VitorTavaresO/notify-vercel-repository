@@ -35,8 +35,9 @@ public class User {
     @Email(message = "{email.invalid}")
     private String email;
 
+    @NotBlank(message = "{name.required}")
     private String phone;
 
-    @JsonIgnore
+    @NotBlank(message = "{name.required}")
     private String password;
 }
