@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,10 +32,13 @@ public class Message {
     @Column(nullable = false, name = "author")
     private String author;
 
-    @Column(nullable = false, name = "course")
+    @Column(nullable = true, name = "email")
+    private String email;
+
+    @Column(nullable = true, name = "course")
     private String course;
 
-    @Column(nullable = false, name = "class")
+    @Column(nullable = true, name = "class")
     private String className;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

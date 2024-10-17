@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "primereact/card";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Divider } from "primereact/divider";
@@ -11,6 +11,7 @@ import { Dialog } from 'primereact/dialog';
 import { Helmet } from 'react-helmet';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from "primereact/fileupload";
+import { Chips } from "primereact/chips";
 
 
 import './AnnouncementList.css';
@@ -25,10 +26,13 @@ function AnnouncementList() {
     const [attachments, setAttachments] = useState([]);
     const [course, setCourse] = useState("Todos");
     const [className, setClassName] = useState("Todas");
+    const [email, setEmail] = useState([]);
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
         { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
+        { label: "Individual", value: "Individual" },
+        { label: "Institucional", value: "Institucional" },
         { label: "Téc. Agroindústria", value: "Téc. Agroindústria", icon: '/images/flag_agro.png' },
         { label: "Téc. Informática", value: "Téc. Informática", icon: '/images/flag_info.png' },
         { label: "Téc. Mecatrônica", value: "Téc. Mecatrônica", icon: '/images/flag_meca.png' },
@@ -62,27 +66,28 @@ function AnnouncementList() {
 
     const handleSubmit = async () => {
         const formData = new FormData();
-    
+
         const messageData = {
             title: title,
             author: "Nome do Autor",
+            email: email,
             course: course,
             className: className,
             message: message
         };
-    
+
         formData.append("message", JSON.stringify(messageData));
-    
+
         attachments.forEach(file => {
             formData.append("files", file);
         });
-    
+
         try {
             const response = await fetch("http://localhost:8080/api/messages", {
                 method: "POST",
                 body: formData,
             });
-        
+
             if (response.ok) {
                 console.log("Mensagem enviada com sucesso!");
                 setShowDialog(false);
@@ -95,8 +100,8 @@ function AnnouncementList() {
             console.error("Erro ao enviar a mensagem:", error);
         }
     };
-    
-    
+
+
 
 
     const programsFilterTemplate = (option) => {
@@ -291,6 +296,43 @@ function AnnouncementList() {
                         />
                     </div>
                     <div className="field">
+                        <label htmlFor="program">Destinatário</label>
+                        <Dropdown
+                            value={course}
+                            options={programs}
+                            onChange={(e) => {
+                                setCourse(e.value);
+                                if (e.value === "Institucional" || e.value === "Individual") {
+                                    setClassName("Todas");
+                                }
+                            }}
+                            placeholder="Selecione o curso"
+                        />
+                    </div>
+                    {/* Campo de E-mails para o Nível Individual */}
+                    {course === "Individual" && (
+                        <div className="field">
+                            <label htmlFor="email">E-mails</label>
+                            <Chips
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.value)}
+                                placeholder="Digite e pressione Enter para adicionar e-mails"
+                                separator=","
+                            />
+                        </div>
+                    )}
+                    <div className="field">
+                        <label htmlFor="class">Turma</label>
+                        <Dropdown
+                            value={className}
+                            options={classes}
+                            onChange={(e) => setClassName(e.value)}
+                            placeholder="Selecione a turma"
+                            disabled={course === "Institucional" || course === "Individual"}
+                        />
+                    </div>
+                    <div className="field">
                         <label htmlFor="message">Comunicado</label>
                         <InputTextarea
                             id="message"
@@ -301,31 +343,13 @@ function AnnouncementList() {
                         />
                     </div>
                     <div className="field">
-                        <label htmlFor="program">Curso</label>
-                        <Dropdown
-                            value={course}
-                            options={programs}
-                            onChange={(e) => setCourse(e.value)}
-                            placeholder="Selecione o curso"
-                        />
-                    </div>
-                    <div className="field">
-                        <label htmlFor="class">Turma</label>
-                        <Dropdown
-                            value={className}
-                            options={classes}
-                            onChange={(e) => setClassName(e.value)}
-                            placeholder="Selecione a turma"
-                        />
-                    </div>
-                    <div className="field">
                         <label htmlFor="attachments">Anexos</label>
                         <FileUpload
                             name="attachments"
                             mode="basic"
                             multiple
                             customUpload
-                            onSelect={(e) => setAttachments(prevAttachments => [...prevAttachments, ...e.files])} // Acumula arquivos no estado
+                            onSelect={(e) => setAttachments(prevAttachments => [...prevAttachments, ...e.files])}
                             chooseLabel="Escolher Arquivos"
                         />
 
