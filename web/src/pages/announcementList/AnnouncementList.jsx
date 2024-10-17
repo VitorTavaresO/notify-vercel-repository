@@ -24,7 +24,7 @@ function AnnouncementList() {
     const [message, setMessage] = useState("");
     const [attachments, setAttachments] = useState([]);
     const [course, setCourse] = useState("Todos");
-    const [className, setClassName] = useState("Todas");
+    const [className, setClassName] = useState("Todos");
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
@@ -35,13 +35,14 @@ function AnnouncementList() {
         { label: "Todos os Cursos", value: "Todos os Cursos", icon: '/images/flag_todosCursos.png' },
     ];
 
-    const [selectedClass, setSelectedClass] = useState("Todas");
+    const [selectedClass, setSelectedClass] = useState("Todos");
     const classes = [
+        { label: "Todos", value: "Todos" },
         { label: "1° Ano", value: "1" },
         { label: "2° Ano", value: "2" },
         { label: "3° Ano", value: "3" },
         { label: "4° Ano", value: "4" },
-        { label: "Todas as Turmas", value: "Todas" },
+        { label: "1° - 4° Ano", value: "Todas as Turmas" },
     ];
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
@@ -57,7 +58,7 @@ function AnnouncementList() {
         setMessage("");
         setAttachments([]);
         setCourse("Todos");
-        setClassName("Todas");
+        setClassName("Todos");
     };
 
     const handleSubmit = async () => {
@@ -148,7 +149,7 @@ function AnnouncementList() {
             const matchesProgram =
                 selectedProgram === "Todos" || announcement.course === selectedProgram;
             const matchesClass =
-                selectedClass === "Todas" || announcement.className === selectedClass;
+                selectedClass === "Todos" || announcement.className === selectedClass;
 
             return matchesTitle && matchesProgram && matchesClass;
         })
@@ -188,7 +189,7 @@ function AnnouncementList() {
                     <div className="flex flex-row">
                         <div className="announcement-cargo my-1 ml-3">{announcement.course}</div>
 
-                        <div className={`${announcement.className === "" ? "hidden" : "block"}`}>
+                        <div className={`${announcement.className === "Todas as Turmas" ? "hidden" : "block"}`}>
                             <div className="announcement-siape my-1 ml-2 ">- {announcement.className}° ano</div>
                         </div>
 
