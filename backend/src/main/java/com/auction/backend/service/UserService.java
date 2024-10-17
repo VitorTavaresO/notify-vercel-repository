@@ -97,6 +97,10 @@ public class UserService {
     public CpfCriteria cpfValidation(String cpf) {
         cpf = cpf.replaceAll("\\D", "");
 
+        if (userRepository.findByCpf(cpf).isPresent()) {
+            throw new IllegalArgumentException("CPF já está cadastrado.");
+        }
+
         CpfCriteria criteria = new CpfCriteria();
 
         if (cpf == null || !cpf.matches("\\d{11}")) {
@@ -197,16 +201,16 @@ public class UserService {
     public PasswordCriteria passwordValidation(String password) {
         PasswordCriteria criteria = new PasswordCriteria();
 
-        if (!isValidPassword(criteria)) {
-            throw new IllegalArgumentException("Senha inválida. Certifique-se de que atende a todos os critérios.");
-        }
-
         criteria.setMinLength(password.length() >= 6);
         criteria.setHasUpperCase(Pattern.compile("[A-Z]").matcher(password).find());
         criteria.setHasLowerCase(Pattern.compile("[a-z]").matcher(password).find());
         criteria.setHasNumber(Pattern.compile("[0-9]").matcher(password).find());
         criteria.setHasSpecialChar(Pattern.compile("[!@#$%^&*(),.?\":{}|<>_\\-\\\\]").matcher(password).find());
 
+        if (!isValidPassword(criteria)) {
+            throw new IllegalArgumentException("Senha inválida. Certifique-se de que atende a todos os critérios.");
+        }
+        
         return criteria;
     }
 }
