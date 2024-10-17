@@ -183,6 +183,8 @@ function AnnouncementList() {
                 <div className="announcement-details">
                     <div className="announcement-name mb-1 mt-3 ml-3">{announcement.title}</div>
 
+                    <div className="announcement-cargo mt-1 ml-3">~{announcement.author}</div>
+
                     <div className="flex flex-row">
                         <div className="announcement-cargo my-1 ml-3">{announcement.course}</div>
 
