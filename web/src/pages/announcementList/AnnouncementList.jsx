@@ -231,7 +231,6 @@ function AnnouncementList() {
         );
     };
 
-
     if (loading) {
         return (
             <div className="spinner-container">
