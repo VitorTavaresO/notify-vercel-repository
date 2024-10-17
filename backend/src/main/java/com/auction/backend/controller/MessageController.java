@@ -83,6 +83,14 @@ public class MessageController {
 
     @GetMapping
     public Iterable<Message> findAll() {
-        return messageService.findAll();
+        Iterable<Message> messages = messageService.findAll();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String json = objectMapper.writeValueAsString(messages);
+            System.out.println("JSON de resposta: " + json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return messages;
     }
 }

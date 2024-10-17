@@ -82,7 +82,7 @@ function AnnouncementList() {
                 method: "POST",
                 body: formData,
             });
-    
+        
             if (response.ok) {
                 console.log("Mensagem enviada com sucesso!");
                 setShowDialog(false);

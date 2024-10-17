@@ -15,7 +15,8 @@ import com.auction.backend.repository.MessageRepository;
 @Service
 public class MessageService {
 
-    private static final String uploadDir = "uploads";
+    
+    private final String uploadDir = "C:/Codes/Mythos/notify/uploads";
 
     @Autowired
     private MessageRepository messageRepository;
@@ -56,35 +57,38 @@ public class MessageService {
         return messageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Message not found"));
     }
-    
+
     public Message findByAuthor(String author) {
         return messageRepository.findByAuthor(author);
     }
 
-    public Iterable<Message> findAll() {
+    public List<Message> findAll() {
         return messageRepository.findAll();
     }
 
     private Annex createAnnex(MultipartFile file) {
-    File directory = new File(uploadDir);
-    if (!directory.exists()) {
-        directory.mkdirs();
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs(); 
+            System.out.println("Diretório criado: " + directory.getAbsolutePath());
+        }
+    
+        Annex annex = new Annex();
+        annex.setFileName(file.getOriginalFilename());
+        annex.setMimeType(file.getContentType());
+        annex.setSize(file.getSize());
+    
+        File targetFile = new File(directory, file.getOriginalFilename());
+        try {
+            System.out.println("Salvando arquivo: " + targetFile.getAbsolutePath());
+            file.transferTo(targetFile);
+            annex.setPath(targetFile.getAbsolutePath()); 
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar arquivo: " + e.getMessage());
+            throw new RuntimeException("Erro ao salvar arquivo", e);
+        }
+    
+        return annex;
     }
-
-    Annex annex = new Annex();
-    annex.setFileName(file.getOriginalFilename());
-    annex.setMimeType(file.getContentType());
-    annex.setSize(file.getSize());
-
-    File targetFile = new File(directory, file.getOriginalFilename());
-    try {
-        file.transferTo(targetFile);
-        annex.setPath(targetFile.getAbsolutePath());
-    } catch (IOException e) {
-        throw new RuntimeException("Erro ao salvar arquivo", e);
-    }
-
-    return annex;
+    
 }
-}
-
