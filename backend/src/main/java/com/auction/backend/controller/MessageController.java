@@ -41,8 +41,11 @@ public class MessageController {
 
     @PutMapping(consumes = "multipart/form-data")
     public Message updateMultipart(
-            @RequestPart("message") Message message,
-            @RequestParam(value = "files", required = false) List<MultipartFile> files) {
+            @RequestPart("message") String messageJson,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files)
+            throws JsonMappingException, JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Message message = objectMapper.readValue(messageJson, Message.class);
         return messageService.update(message, files != null ? files : List.of());
     }
 
@@ -66,4 +69,3 @@ public class MessageController {
         return messageService.findAll();
     }
 }
-
