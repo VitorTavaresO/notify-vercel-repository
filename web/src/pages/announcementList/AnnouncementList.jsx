@@ -61,35 +61,43 @@ function AnnouncementList() {
     };
 
     const handleSubmit = async () => {
-        const newAnnouncement = {
-            title,
-            author: "Nome do Autor",  //Adicionar lógica para persistência de usuário logado
-            course,
-            className,
-            message
+        const formData = new FormData();
+    
+        const messageData = {
+            title: title,
+            author: "Nome do Autor",
+            course: course,
+            className: className,
+            message: message
         };
-
+    
+        formData.append("message", JSON.stringify(messageData));
+    
+        attachments.forEach(file => {
+            formData.append("files", file);
+        });
+    
         try {
             const response = await fetch("http://localhost:8080/api/messages", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newAnnouncement),
+                body: formData,
             });
-
-            if (response) {
+    
+            if (response.ok) {
                 console.log("Mensagem enviada com sucesso!");
-                console.log(newAnnouncement);
                 setShowDialog(false);
                 fetchData();
             } else {
-                console.error("Erro ao enviar a mensagem.");
+                const errorText = await response.text();
+                console.error("Erro ao enviar a mensagem:", errorText);
             }
         } catch (error) {
             console.error("Erro ao enviar a mensagem:", error);
         }
     };
+    
+    
+
 
     const programsFilterTemplate = (option) => {
         return (
@@ -134,17 +142,17 @@ function AnnouncementList() {
     }, []);
 
     const filteredAnnouncements = announcements
-    .filter((announcement) => {
-        const matchesTitle =
-            announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
-        const matchesProgram =
-            selectedProgram === "Todos" || announcement.course === selectedProgram;
-        const matchesClass =
-            selectedClass === "Todas" || announcement.className === selectedClass;
+        .filter((announcement) => {
+            const matchesTitle =
+                announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
+            const matchesProgram =
+                selectedProgram === "Todos" || announcement.course === selectedProgram;
+            const matchesClass =
+                selectedClass === "Todas" || announcement.className === selectedClass;
 
-        return matchesTitle && matchesProgram && matchesClass;
-    })
-    .sort((a, b) => new Date(b.data) - new Date(a.data));
+            return matchesTitle && matchesProgram && matchesClass;
+        })
+        .sort((a, b) => new Date(b.data) - new Date(a.data));
 
 
     const [visible, setVisible] = useState(false);
@@ -314,12 +322,13 @@ function AnnouncementList() {
                         <label htmlFor="attachments">Anexos</label>
                         <FileUpload
                             name="attachments"
-                            mode="advanced"
+                            mode="basic"
                             multiple
                             customUpload
-                            uploadHandler={(e) => setAttachments([...attachments, ...e.files])}
+                            onSelect={(e) => setAttachments(prevAttachments => [...prevAttachments, ...e.files])} // Acumula arquivos no estado
                             chooseLabel="Escolher Arquivos"
                         />
+
                     </div>
                 </div>
             </Dialog>
