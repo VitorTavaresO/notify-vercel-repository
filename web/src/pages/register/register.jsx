@@ -34,6 +34,7 @@ const Register = () => {
         hasSpecialChar: false,
     });
     const [errorMessage, setErrorMessage] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({});
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
@@ -68,6 +69,7 @@ const Register = () => {
     ]);
 
     const handleRegister = () => {
+        setIsRegistering(true);
         fetch("http://localhost:8080/api/user", {
             headers: {
                 "Accept": "application/json",
@@ -84,9 +86,24 @@ const Register = () => {
                 password: password
             })
         })
-        .then(function (res) { console.log(res) })
-        .catch(function (res) { console.log(res) })
-        console.log("Oi");
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {throw new Error(err.message);});
+        }
+        return response.json(); 
+        })
+        .then(data => {
+            console.log('Usuário cadastrado com sucesso:', data);
+            navigate('/login');
+        })
+        .catch(error => {
+            console.error('Erro ao cadastrar usuário:', error.message);
+            setErrorMessage(error.message);
+            alert(`Erro: ${error.message}`);
+        })
+        .finally(() => {
+            setIsRegistering(false);
+        });
     };
 
     const header = <div className="font-bold mb-3">Informe a Senha</div>;
@@ -410,7 +427,7 @@ const Register = () => {
                                 mb-4
                                 ${isFormValid? "bg-green-600 border-green-600":"bg-gray-500 border-gray-500"}
                             `}
-                            disabled={!isFormValid}
+                            disabled={!isFormValid || isRegistering}
                             onClick={handleRegister}
                         />
                     </div>
