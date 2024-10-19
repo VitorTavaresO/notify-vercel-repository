@@ -70,6 +70,8 @@ const Register = () => {
 
     const handleRegister = () => {
         setIsRegistering(true);
+        const formattedCpf = cpf.replace(/[^\d]/g, '');
+
         fetch("http://localhost:8080/api/user", {
             headers: {
                 "Accept": "application/json",
@@ -78,7 +80,7 @@ const Register = () => {
             method: "POST",
             body: JSON.stringify({
                 name: name,
-                cpf: cpf,
+                cpf: formattedCpf,
                 siape: siape,
                 position: position,
                 email: email,
