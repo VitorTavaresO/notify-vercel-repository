@@ -8,4 +8,5 @@ import com.auction.backend.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByCpf(String cpf);
+    Optional<User> findBySiape(String siape);
 }

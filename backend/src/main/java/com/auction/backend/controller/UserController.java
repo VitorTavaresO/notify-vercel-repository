@@ -3,6 +3,8 @@ package com.auction.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auction.backend.exception.LoginException;
+import com.auction.backend.model.LoginRequest;
 import com.auction.backend.model.User;
 import com.auction.backend.service.UserService;
 
@@ -29,14 +33,19 @@ public class UserController {
         return userService.create(user);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public User read(@PathVariable("id") Long id) {
         return userService.read(id);
     }
     
-    @GetMapping("/{cpf}")
+    @GetMapping("/cpf/{cpf}")
     public User readCpf(@PathVariable("cpf") String cpf) {
         return userService.readCpf(cpf);
+    }
+
+    @GetMapping("/siape/{siape}")
+    public User readSiape(@PathVariable("siape") String siape) {
+        return userService.readSiape(siape);
     }
 
     @PutMapping
@@ -69,4 +78,14 @@ public class UserController {
         return userService.passwordValidation(password);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            User authenticatedUser = userService.authenticate(loginRequest.getSiape(), loginRequest.getPassword());
+            return ResponseEntity.ok(authenticatedUser);
+
+        } catch (LoginException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
 }
