@@ -140,7 +140,6 @@ public class UserService {
 
         EmailCriteria criteria = new EmailCriteria();
 
-        // Verifica se o email é válido
         if (!criteria.isValidEmail(email)) {
             throw new IllegalArgumentException("Email inválido.");
         }
@@ -219,11 +218,16 @@ public class UserService {
         return criteria;
     }
 
+    // --------------- LOGIN VALIDATION ---------------
     public User authenticate(String siape, String password) throws LoginException {
         User user = userRepository.findBySiape(siape)
             .orElseThrow(() -> new LoginException("Siape não cadastrado"));
+
+        if (user == null) {
+            throw new LoginException("Usuario nulo");
+        }
     
-        if (password != user.getPassword()) {
+        if (!user.getPassword().equals(password)) {
             throw new LoginException("Credenciais inválidas");
         }
     

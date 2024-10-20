@@ -11,9 +11,6 @@ import "./login.css";
 const Login = () => {
   const navigate = useNavigate();
 
-  // const [siape, setSiape] = useState("");
-  // const [password, setPassword] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
@@ -23,7 +20,7 @@ const Login = () => {
   const login = async () => {
     try {
       const response = await axios.post('http://localhost:8080/api/user/login', {
-          email: user.siape,
+          siape: user.siape,
           password: user.password,
       });
 
@@ -33,7 +30,7 @@ const Login = () => {
       navigate("/");
   } catch (error) {
       if (error.response) {
-          setErrorMessage(error.response.data.message);
+          setErrorMessage(error.response.data || "Erro ao fazer login");
       } else {
           setErrorMessage("Erro ao conectar ao servidor");
       }
