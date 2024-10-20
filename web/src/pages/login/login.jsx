@@ -24,8 +24,8 @@ const Login = () => {
           password: user.password,
       });
 
-      const token = response.data.token; 
-      localStorage.setItem("token", token);
+      const id = response.data.id; 
+      localStorage.setItem("id", id);
       localStorage.setItem("siape", user.siape);
       navigate("/");
   } catch (error) {
