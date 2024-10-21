@@ -29,16 +29,17 @@ function AnnouncementList() {
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
+    const [ordem, setOrdem] = useState('recente');
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
         { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
-        { label: "Individual", value: "Individual" },
-        { label: "Institucional", value: "Institucional" },
+        { label: "Institucional", value: "Institucional", icon: '/images/flag_if.png' },
+        { label: "Todos os Cursos", value: "Todos os Cursos", icon: '/images/flag_todosCursos.png' },
+        { label: "Individual", value: "Individual", icon: '/images/flag_individual.png' },
         { label: "Téc. Agroindústria", value: "Téc. Agroindústria", icon: '/images/flag_agro.png' },
         { label: "Téc. Informática", value: "Téc. Informática", icon: '/images/flag_info.png' },
         { label: "Téc. Mecatrônica", value: "Téc. Mecatrônica", icon: '/images/flag_meca.png' },
-        { label: "Todos os Cursos", value: "Todos os Cursos", icon: '/images/flag_todosCursos.png' },
     ];
 
     const [selectedClass, setSelectedClass] = useState("Todas");
@@ -51,7 +52,9 @@ function AnnouncementList() {
     ];
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-    const [dialogProgram, setDialogProgram] = useState(null);
+    const [dialogTitle, setDialogTitle] = useState(null);
+    const [dialogDate, setDialogDate] = useState(null);
+    const [dialogClasses, setDialogClasses] = useState(null);
 
     const openDialog = () => {
         setTitle("");
@@ -172,11 +175,38 @@ function AnnouncementList() {
         );
     };
 
+    const alternarOrdem = () => {
+        setOrdem((prev) => (prev === 'recente' ? 'antigo' : 'recente'));
+    };
+
     const handleDialogOpen = (announcement) => {
 
         setSelectedAnnouncement(announcement);
-        setDialogProgram(announcement.categoria);
+        setDialogTitle(announcement.title);
+
+        setDialogDate(formatDate(announcement.data));
+        setDialogClasses(formatClasses(announcement.className));
+
         setVisible(true);
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+    };
+
+    const formatClasses = (classes) => {
+
+        if (classes == "Todas") return "Todos as Turmas";
+
+        return classes
+            .sort((a, b) => a - b) 
+            .map(classNumber => `${classNumber}º Ano`)
+            .join(", ");
     };
 
     const fetchData = async () => {
@@ -206,17 +236,14 @@ function AnnouncementList() {
 
             return matchesTitle && matchesProgram && matchesClass;
         })
-        .sort((a, b) => new Date(b.data) - new Date(a.data));
+        .sort((a, b) => {
+            return ordem === "recente"
+                ? new Date(b.data) - new Date(a.data)
+                : new Date(a.data) - new Date(b.data);
+        });
 
 
     const [visible, setVisible] = useState(false);
-
-    const footerEditProgram = (
-        <div>
-            <Button link label="Salvar" severity="info" onClick={() => setVisible(false)} className="p-button-text" autoFocus />
-            <Button link label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text" />
-        </div>
-    );
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -234,7 +261,6 @@ function AnnouncementList() {
         }
     };
 
-
     const itemTemplate = (announcement) => {
         const date = new Date(announcement.data);
         const formattedDate = date.toLocaleDateString("pt-BR", {
@@ -244,6 +270,9 @@ function AnnouncementList() {
         });
     
         const formatClasses = (classes) => {
+
+            if (classes == "Todas") return "Todos as Turmas";
+
             return classes
                 .sort((a, b) => a - b) 
                 .map(classNumber => `${classNumber}º Ano`)
@@ -253,25 +282,83 @@ function AnnouncementList() {
         const formattedClasses = announcement.className ? formatClasses(announcement.className) : "Sem turma definida";
         const courses = announcement.course ? announcement.course.join(", ") : "Sem curso definido";
     
+        const renderFlags = (course) => {
+            const flags = [];
+            
+            if (course.includes("Téc. Agroindústria")) {
+                flags.push(
+                    <img alt="Téc. Agroindústria" src="/images/flag_agro.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Téc. Informática")) {
+                flags.push(
+                    <img alt="Téc. Informática" src="/images/flag_info.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Téc. Mecatrônica")) {
+                flags.push(
+                    <img alt="Téc. Mecatrônica" src="/images/flag_meca.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Individual")) {
+                flags.push(
+                    <img alt="Individual" src="/images/flag_individual.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Institucional")) {
+                flags.push(
+                    <img alt="Institucional" src="/images/flag_if.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Todos os Cursos")) {
+                flags.push(
+                    <img alt="Todos os Cursos" src="/images/flag_todosCursos.png" height="35" className="icon_role" />
+                );
+            }
+
+            return flags;
+        };
+
+        function formatMessage(announcement) {
+            const maxLength = 380;
+            return announcement.message.length > maxLength
+                ? announcement.message.slice(0, maxLength) + '...'
+                : announcement.message;
+        }
+
+        const formattedMessage = formatMessage(announcement);
+
         return (
             <Card className="card-container">
-                <Avatar
-                    icon="pi pi-file-edit"
-                    size="large"
-                    shape="square"
-                    className="announcement-avatar"
-                />
+
+                <div className="icon_role_area">
+                    {renderFlags(courses)}
+                </div>
+
+                <div className="flex align-items-center flex-colum mb-3">
+
+                    <Avatar
+                        icon="pi pi-file-edit"
+                        size="large"
+                        shape="square"
+                        className="announcement-avatar mr-2"
+                    />
+
+                    <div>
+                        <div className="announcement-name ml-1">{announcement.title}</div>
+                        <div className="announcement-date ml-1">Em {formattedDate}</div>
+                    </div>
+                </div>
     
                 <div className="announcement-details">
-                    <div className="announcement-name">{announcement.title}</div>
+                    
     
                     <div className="announcement-meta">
                         <div className="announcement-course">{courses}</div>
                         <div className="announcement-classes">{formattedClasses}</div>
-                        <div className="announcement-date">Publicado em {formattedDate}</div>
                     </div>
     
-                    <div className="announcement-message">{announcement.message}</div>
+                    <div className="announcement-message mt-2">{formattedMessage}</div>
 
                     {announcement.annexes && announcement.annexes.length > 0 && (
                         <div className="announcement-attachments">
@@ -318,25 +405,40 @@ function AnnouncementList() {
                 <title>Comunicados - NOTIFY</title>
             </Helmet>
 
-            {/* Dialog para Editar Permissões */}
             <Dialog
-                draggable={false}
-                header="Editar Permissões"
-                visible={visible}
-                style={{ minWidth: '35vw' }}
-                onHide={() => setVisible(false)}
-                footer={footerEditProgram}
-            >
-                <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
-                <h2 className="-mt-3 mb-4">{selectedAnnouncement ? selectedAnnouncement.titulo : ''}</h2>
-                <Dropdown
-                    value={dialogProgram}
-                    options={programs.filter(program => program.value !== "Todos")}
-                    itemTemplate={programsFilterTemplate}
-                    onChange={(e) => setDialogProgram(e.value)}
-                    placeholder="Selecione uma permissão"
-                    className="w-full"
-                />
+            header={dialogTitle}
+            visible={visible}
+            style={{ width: '47vw', maxHeight: '80vh', marginTop: '7vh' }}
+            onHide={() => setVisible(false)}>
+                {selectedAnnouncement ? (
+                    <div>
+                        <p className="-mt-1">{selectedAnnouncement.course.join(", ")}</p>
+                        <p className="-mt-3">{`${dialogClasses}`}</p>
+
+                        <p className="">{`Publicado em: ${dialogDate}`}</p>
+
+                        <p className="announcement-message">{selectedAnnouncement.message}</p>
+
+                        {selectedAnnouncement.annexes && selectedAnnouncement.annexes.length > 0 && (
+                        <div className="announcement-attachments">
+                            <h5 className="ml-2">Anexos:</h5>
+                            <ul>
+                                {selectedAnnouncement.annexes.map((annex, index) => (
+                                    <li key={index}>
+                                        <a
+                                            href={`http://localhost:8080/uploads/${annex.path}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {annex.fileName}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        )}
+                    </div>
+                ) : (<p>Nenhum anúncio selecionado.</p>)}
             </Dialog>
 
             {/* Dialog para Novo Comunicado */}
@@ -347,12 +449,6 @@ function AnnouncementList() {
                 style={{ width: '50vw' }}
                 modal
                 onHide={closeDialog}
-                footer={
-                    <div>
-                        <Button label="Cancelar" icon="pi pi-times" onClick={closeDialog} className="p-button-text" />
-                        <Button label="Enviar" icon="pi pi-check" onClick={handleSubmit} autoFocus />
-                    </div>
-                }
             >
                 <div className="p-fluid">
                     <div className="field">
@@ -368,7 +464,7 @@ function AnnouncementList() {
                         <label htmlFor="program">Destinatário</label>
                         <MultiSelect
                             value={selectedPrograms}
-                            options={programs}
+                            options={programs.filter(program => program.value !== "Todos")}
                             onChange={(e) => setSelectedPrograms(e.value)}
                             placeholder="Selecione os cursos"
                             display="chip"
@@ -450,6 +546,16 @@ function AnnouncementList() {
                     onChange={(e) => setFilter(e.target.value)}
                     className="filter-input"
                 />
+
+                <div className="flex align-items-center flex-colum  -mt-3 -mt-2" >
+                    <i onClick={alternarOrdem} style={{ cursor: 'pointer', fontSize: '1.3rem' }} 
+                        className={`pi ${ordem === 'recente' ? 'pi-sort-amount-up-alt' : 'pi-sort-amount-down-alt'} mx-2`}>
+                    </i>
+                    <h4 onClick={alternarOrdem} style={{ cursor: 'pointer' }}>
+                        {ordem === 'recente' ? 'Recentes - Antigos' : 'Antigos - Recentes'}
+                    </h4>
+                </div>
+
                 <Dropdown
                     value={selectedProgram}
                     options={programs}

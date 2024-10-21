@@ -18,12 +18,6 @@
     font-weight: bold;
 }
 
-.announcement-siape,
-.announcement-cargo {
-    font-size: 1rem;
-    color: #555;
-}
-
 .announcement-list {
     margin: 50px 0;
     margin-right: 325px;
@@ -35,6 +29,22 @@
     display: flex;
     justify-content: center;
 }
+
+.icon_role_area img { margin-left: 8px;}
+.icon_role_area img:first-child { margin-left: 0;}
+
+.view-button {
+    position: absolute;
+    bottom: 15px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0px;
+    color: #555555;
+}
+
+.view-button:hover {color: #818181;}
 
 .button-new{
     margin: 20px;
@@ -66,19 +76,17 @@
     }
 }
 
-
-
-.view-button {
-    position: absolute;
-    bottom: 15px;
-    right: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0px;
-    color: #555555;
+.announcement-message {
+    word-break: break-all; /* Quebra palavras longas */
+    overflow-wrap: break-word; /* Adiciona quebra de palavras se necessário */
+    overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse o contêiner */
+    white-space: normal; /* Permite quebras de linha normais */
+    text-align: justify;
+    margin-right: 5px;
 }
 
-.view-button:hover {
-    color: #818181;
+.announcement-attachments li a{
+
+    text-decoration: none;
+    color: #1da053;
 }
