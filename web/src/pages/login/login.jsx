@@ -5,7 +5,7 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-import axios from 'axios';
+import axios from "axios";
 import "./login.css";
 
 const Login = () => {
@@ -19,22 +19,26 @@ const Login = () => {
 
   const login = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/user/login', {
+      const response = await axios.post(
+        "http://localhost:8080/api/user/login",
+        {
           siape: user.siape,
           password: user.password,
-      });
+        }
+      );
 
-      const id = response.data.id; 
+      const id = response.data.id;
       localStorage.setItem("id", id);
       localStorage.setItem("siape", user.siape);
+      localStorage.setItem("token", "token");
       navigate("/");
-  } catch (error) {
+    } catch (error) {
       if (error.response) {
-          setErrorMessage(error.response.data || "Erro ao fazer login");
+        setErrorMessage(error.response.data || "Erro ao fazer login");
       } else {
-          setErrorMessage("Erro ao conectar ao servidor");
+        setErrorMessage("Erro ao conectar ao servidor");
       }
-  }
+    }
   };
 
   useEffect(() => {
