@@ -299,6 +299,15 @@ function AnnouncementList() {
             return flags;
         };
 
+        function formatMessage(announcement) {
+            const maxLength = 380;
+            return announcement.message.length > maxLength
+                ? announcement.message.slice(0, maxLength) + '...'
+                : announcement.message;
+        }
+
+        const formattedMessage = formatMessage(announcement);
+
         return (
             <Card className="card-container">
 
@@ -306,23 +315,30 @@ function AnnouncementList() {
                     {renderFlags(courses)}
                 </div>
 
-                <Avatar
-                    icon="pi pi-file-edit"
-                    size="large"
-                    shape="square"
-                    className="announcement-avatar"
-                />
+                <div className="flex align-items-center flex-colum mb-3">
+
+                    <Avatar
+                        icon="pi pi-file-edit"
+                        size="large"
+                        shape="square"
+                        className="announcement-avatar mr-2"
+                    />
+
+                    <div>
+                        <div className="announcement-name ml-1">{announcement.title}</div>
+                        <div className="announcement-date ml-1">Em {formattedDate}</div>
+                    </div>
+                </div>
     
                 <div className="announcement-details">
-                    <div className="announcement-name">{announcement.title}</div>
+                    
     
                     <div className="announcement-meta">
                         <div className="announcement-course">{courses}</div>
                         <div className="announcement-classes">{formattedClasses}</div>
-                        <div className="announcement-date">Publicado em {formattedDate}</div>
                     </div>
     
-                    <div className="announcement-message">{announcement.message}</div>
+                    <div className="announcement-message mt-2">{formattedMessage}</div>
 
                     {announcement.annexes && announcement.annexes.length > 0 && (
                         <div className="announcement-attachments">

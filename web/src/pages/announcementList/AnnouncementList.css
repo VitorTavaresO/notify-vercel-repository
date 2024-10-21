@@ -75,3 +75,18 @@
         margin-top: 40%;
     }
 }
+
+.announcement-message {
+    word-break: break-all; /* Quebra palavras longas */
+    overflow-wrap: break-word; /* Adiciona quebra de palavras se necessário */
+    overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse o contêiner */
+    white-space: normal; /* Permite quebras de linha normais */
+    text-align: justify;
+    margin-right: 5px;
+}
+
+.announcement-attachments li a{
+
+    text-decoration: none;
+    color: #1da053;
+}
