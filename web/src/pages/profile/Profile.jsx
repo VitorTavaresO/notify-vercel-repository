@@ -17,22 +17,23 @@ const ProfileCard = () => {
     const [editedPhone, setEditedPhone] = useState('');
     const [visible, setVisible] = useState(false);
     const [memos, setMemos] = useState([]);
-    const [showAllMemos, setShowAllMemos] = useState(false);  
-    const [first, setFirst] = useState(0);                    
-    const [rows, setRows] = useState(2);                     
+    const [showAllMemos, setShowAllMemos] = useState(false);
+    const [first, setFirst] = useState(0);
+    const [rows, setRows] = useState(2);
 
     useEffect(() => {
         const fetchData = async () => {
+            const siape = localStorage.getItem('siape');
             try {
-                const response = await fetch("/archives/employeeList.json");
+                const response = await fetch(`http://localhost:8080/api/user/siape/${siape}`, {
+                    method: 'GET',
+                });
                 const data = await response.json();
-                if (data.length > 0) {
-                    setEmployee(data[4]);
-                    setEditedEmail(data[4].email);
-                    setEditedPhone(data[4].telefone);
-                }
+                setEmployee(data);
+                setEditedEmail(data.email);
+                setEditedPhone(data.telefone);
             } catch (error) {
-                console.error('Error fetching the employee data:', error);
+                console.error('Erro ao carregar os dados do perfil:', error);
             }
         };
         fetchData();
@@ -52,7 +53,7 @@ const ProfileCard = () => {
     }, []);
 
     const renderPermissionTag = () => {
-        switch (employee.permissao) {
+        switch (employee.position) {
             case "Gerenciador do sistema":
                 return <Tag className="function-tag" severity="info" value="Gerenciador do Sistema" />;
             case "Gerenciador de cadastros":
@@ -60,20 +61,8 @@ const ProfileCard = () => {
             case "Emissor de comunicados":
                 return <Tag className="function-tag" severity="warning" value="Emissor de Comunicados" />;
             default:
-                return null;
+                return <Tag className="function-tag" severity="warning" value={employee.position} />;
         }
-    };
-
-    const confirmEdit = () => {
-        confirmDialog({
-            message: 'Tem certeza de que deseja alterar o perfil?',
-            header: 'Confirmação',
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Sim',
-            rejectLabel: 'Cancelar',
-            accept: () => handleProfileEdit(),
-            reject: () => console.log('Alteração cancelada')
-        });
     };
 
     const changePassword = () => {
@@ -88,11 +77,47 @@ const ProfileCard = () => {
         });
     };
 
-    const handleProfileEdit = () => {
-        const updatedEmployee = { ...employee, email: editedEmail, telefone: editedPhone };
-        setEmployee(updatedEmployee);
-        console.log('Perfil atualizado:', updatedEmployee);
+    const confirmEdit = () => {
+        confirmDialog({
+            message: 'Tem certeza de que deseja alterar o perfil?',
+            header: 'Confirmação',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Cancelar',
+            accept: () => handleProfileEdit(),
+            reject: () => console.log('Alteração cancelada')
+        });
     };
+
+    const handleProfileEdit = async () => {
+        const siape = localStorage.getItem('siape');
+
+        const updatedEmployee = {
+            email: editedEmail,
+            phone: editedPhone  // Usar "phone" em vez de "telefone" para manter consistência com o backend
+        };
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/user/update-contact/${siape}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',  // Enviando JSON
+                },
+                body: JSON.stringify(updatedEmployee),  // Converte o objeto em JSON
+            });
+
+            if (response.ok) {
+                setEmployee(prevState => ({ ...prevState, email: editedEmail, phone: editedPhone }));
+                console.log('Perfil atualizado com sucesso!');
+            } else {
+                console.error('Falha ao atualizar o perfil.');
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar o perfil:', error);
+        }
+    };
+
+
 
     const onPageChange = (event) => {
         setFirst(event.first);
@@ -103,15 +128,15 @@ const ProfileCard = () => {
 
     return (
         <div className="container">
-            <ConfirmDialog visible={visible} onHide={() => setVisible(false)} />             
+            <ConfirmDialog visible={visible} onHide={() => setVisible(false)} />
             <Card className="profile-card">
                 <div className="profile-header">
-                    <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/asiyajavayant.png" 
-                    size="xlarge" 
-                    shape="circle" 
-                    className="profile-avatar" />
+                    <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/asiyajavayant.png"
+                        size="xlarge"
+                        shape="circle"
+                        className="profile-avatar" />
                     <div className="profile-info">
-                        <h2>{employee.nome}</h2>
+                        <h2>{employee.name}</h2>
                         <p>SIAPE: {employee.siape}</p>
                         <div className="functions">
                             {renderPermissionTag()}
@@ -125,7 +150,7 @@ const ProfileCard = () => {
                     <div className="profile-details p-mr-3">
                         <div className="detail-item">
                             <strong>Cargo</strong>
-                            <InputText value={employee.cargo} disabled className="itemText" />
+                            <InputText value={employee.position} disabled className="itemText" />
                         </div>
                         <div className="detail-item">
                             <strong>CPF</strong>
@@ -151,13 +176,13 @@ const ProfileCard = () => {
                                 <h4>{memo.titulo}</h4>
                                 <p>Para: {memo.para}</p>
                                 <p>Data: {memo.data}</p>
-                                <p>{memo.descricao}</p> 
+                                <p>{memo.descricao}</p>
                             </Card>
                         ))}
                         {memos.length > 2 && (
-                            <Button 
-                                label="Ver Todos" 
-                                className="p-button-link" 
+                            <Button
+                                label="Ver Todos"
+                                className="p-button-link"
                                 onClick={() => setShowAllMemos(true)}
                             />
                         )}
@@ -171,7 +196,7 @@ const ProfileCard = () => {
                             <h4>{memo.titulo}</h4>
                             <p>Para: {memo.para}</p>
                             <p>Data: {memo.data}</p>
-                            <p>{memo.descricao}</p> 
+                            <p>{memo.descricao}</p>
                         </Card>
                     ))}
                     <Paginator first={first} rows={rows} totalRecords={memos.length} onPageChange={onPageChange}></Paginator>

@@ -37,7 +37,7 @@ public class UserController {
     public User read(@PathVariable("id") Long id) {
         return userService.read(id);
     }
-    
+
     @GetMapping("/cpf/{cpf}")
     public User readCpf(@PathVariable("cpf") String cpf) {
         return userService.readCpf(cpf);
@@ -88,4 +88,29 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+    @PutMapping("/update-contact/{siape}")
+    public ResponseEntity<User> updateEmailAndPhone(
+        @PathVariable("siape") String siape,
+        @RequestBody User updatedUser) {
+    try {
+        User existingUser = userService.readSiape(siape);
+        
+        if (existingUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPhone(updatedUser.getPhone());
+
+        User updated = userService.update(existingUser);
+        
+        return ResponseEntity.ok(updated);
+    } catch (Exception e) {
+        // Log detalhado da exceção
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+}
+
 }
