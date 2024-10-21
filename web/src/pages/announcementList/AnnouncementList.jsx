@@ -52,7 +52,9 @@ function AnnouncementList() {
     ];
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-    const [dialogProgram, setDialogProgram] = useState(null);
+    const [dialogTitle, setDialogTitle] = useState(null);
+    const [dialogDate, setDialogDate] = useState(null);
+    const [dialogClasses, setDialogClasses] = useState(null);
 
     const openDialog = () => {
         setTitle("");
@@ -180,8 +182,31 @@ function AnnouncementList() {
     const handleDialogOpen = (announcement) => {
 
         setSelectedAnnouncement(announcement);
-        setDialogProgram(announcement.categoria);
+        setDialogTitle(announcement.title);
+
+        setDialogDate(formatDate(announcement.data));
+        setDialogClasses(formatClasses(announcement.className));
+
         setVisible(true);
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+    };
+
+    const formatClasses = (classes) => {
+
+        if (classes == "Todas") return "Todos as Turmas";
+
+        return classes
+            .sort((a, b) => a - b) 
+            .map(classNumber => `${classNumber}º Ano`)
+            .join(", ");
     };
 
     const fetchData = async () => {
@@ -220,13 +245,6 @@ function AnnouncementList() {
 
     const [visible, setVisible] = useState(false);
 
-    const footerEditProgram = (
-        <div>
-            <Button link label="Salvar" severity="info" onClick={() => setVisible(false)} className="p-button-text" autoFocus />
-            <Button link label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text" />
-        </div>
-    );
-
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
@@ -242,7 +260,6 @@ function AnnouncementList() {
             setEmail(emails);
         }
     };
-
 
     const itemTemplate = (announcement) => {
         const date = new Date(announcement.data);
@@ -388,25 +405,40 @@ function AnnouncementList() {
                 <title>Comunicados - NOTIFY</title>
             </Helmet>
 
-            {/* Dialog para Editar Permissões */}
             <Dialog
-                draggable={false}
-                header="Editar Permissões"
-                visible={visible}
-                style={{ minWidth: '35vw' }}
-                onHide={() => setVisible(false)}
-                footer={footerEditProgram}
-            >
-                <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
-                <h2 className="-mt-3 mb-4">{selectedAnnouncement ? selectedAnnouncement.titulo : ''}</h2>
-                <Dropdown
-                    value={dialogProgram}
-                    options={programs.filter(program => program.value !== "Todos")}
-                    itemTemplate={programsFilterTemplate}
-                    onChange={(e) => setDialogProgram(e.value)}
-                    placeholder="Selecione uma permissão"
-                    className="w-full"
-                />
+            header={dialogTitle}
+            visible={visible}
+            style={{ width: '47vw', maxHeight: '80vh', marginTop: '7vh' }}
+            onHide={() => setVisible(false)}>
+                {selectedAnnouncement ? (
+                    <div>
+                        <p className="-mt-1">{selectedAnnouncement.course.join(", ")}</p>
+                        <p className="-mt-3">{`${dialogClasses}`}</p>
+
+                        <p className="">{`Publicado em: ${dialogDate}`}</p>
+
+                        <p className="announcement-message">{selectedAnnouncement.message}</p>
+
+                        {selectedAnnouncement.annexes && selectedAnnouncement.annexes.length > 0 && (
+                        <div className="announcement-attachments">
+                            <h5 className="ml-2">Anexos:</h5>
+                            <ul>
+                                {selectedAnnouncement.annexes.map((annex, index) => (
+                                    <li key={index}>
+                                        <a
+                                            href={`http://localhost:8080/uploads/${annex.path}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {annex.fileName}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        )}
+                    </div>
+                ) : (<p>Nenhum anúncio selecionado.</p>)}
             </Dialog>
 
             {/* Dialog para Novo Comunicado */}
@@ -417,12 +449,6 @@ function AnnouncementList() {
                 style={{ width: '50vw' }}
                 modal
                 onHide={closeDialog}
-                footer={
-                    <div>
-                        <Button label="Cancelar" icon="pi pi-times" onClick={closeDialog} className="p-button-text" />
-                        <Button label="Enviar" icon="pi pi-check" onClick={handleSubmit} autoFocus />
-                    </div>
-                }
             >
                 <div className="p-fluid">
                     <div className="field">
