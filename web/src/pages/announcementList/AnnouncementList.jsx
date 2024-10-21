@@ -253,7 +253,6 @@ function AnnouncementList() {
         const formattedClasses = announcement.className ? formatClasses(announcement.className) : "Sem turma definida";
         const courses = announcement.course ? announcement.course.join(", ") : "Sem curso definido";
     
-        // Função para checar e exibir as bandeiras de cursos técnicos
         const renderFlags = (course) => {
             const flags = [];
             
@@ -411,7 +410,7 @@ function AnnouncementList() {
                         <label htmlFor="program">Destinatário</label>
                         <MultiSelect
                             value={selectedPrograms}
-                            options={programs}
+                            options={programs.filter(program => program.value !== "Todos")}
                             onChange={(e) => setSelectedPrograms(e.value)}
                             placeholder="Selecione os cursos"
                             display="chip"

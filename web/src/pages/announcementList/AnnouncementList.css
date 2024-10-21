@@ -18,12 +18,6 @@
     font-weight: bold;
 }
 
-.announcement-siape,
-.announcement-cargo {
-    font-size: 1rem;
-    color: #555;
-}
-
 .announcement-list {
     margin: 50px 0;
     margin-right: 325px;
@@ -35,6 +29,22 @@
     display: flex;
     justify-content: center;
 }
+
+.icon_role_area img { margin-left: 8px;}
+.icon_role_area img:first-child { margin-left: 0;}
+
+.view-button {
+    position: absolute;
+    bottom: 15px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0px;
+    color: #555555;
+}
+
+.view-button:hover {color: #818181;}
 
 .button-new{
     margin: 20px;
@@ -65,25 +75,3 @@
         margin-top: 40%;
     }
 }
-
-
-
-.view-button {
-    position: absolute;
-    bottom: 15px;
-    right: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0px;
-    color: #555555;
-}
-
-.view-button:hover {
-    color: #818181;
-}
-
-
-
-.icon_role_area img { margin-left: 8px;}
-.icon_role_area img:first-child { margin-left: 0;}
