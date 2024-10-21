@@ -449,6 +449,12 @@ function AnnouncementList() {
                 style={{ width: '50vw' }}
                 modal
                 onHide={closeDialog}
+                footer={
+                    <div>
+                        <Button label="Cancelar" icon="pi pi-times" onClick={closeDialog} className="p-button-text" />
+                        <Button label="Enviar" icon="pi pi-check" onClick={handleSubmit} autoFocus />
+                    </div>
+                }
             >
                 <div className="p-fluid">
                     <div className="field">
