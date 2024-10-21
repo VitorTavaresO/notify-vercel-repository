@@ -33,9 +33,9 @@ function AnnouncementList() {
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
         { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
-        { label: "Individual", value: "Individual" },
-        { label: "Institucional", value: "Institucional" },
+        { label: "Institucional", value: "Institucional", icon: '/images/flag_if.png' },
         { label: "Todos os Cursos", value: "Todos os Cursos", icon: '/images/flag_todosCursos.png' },
+        { label: "Individual", value: "Individual", icon: '/images/flag_individual.png' },
         { label: "Téc. Agroindústria", value: "Téc. Agroindústria", icon: '/images/flag_agro.png' },
         { label: "Téc. Informática", value: "Téc. Informática", icon: '/images/flag_info.png' },
         { label: "Téc. Mecatrônica", value: "Téc. Mecatrônica", icon: '/images/flag_meca.png' },
@@ -253,8 +253,51 @@ function AnnouncementList() {
         const formattedClasses = announcement.className ? formatClasses(announcement.className) : "Sem turma definida";
         const courses = announcement.course ? announcement.course.join(", ") : "Sem curso definido";
     
+        // Função para checar e exibir as bandeiras de cursos técnicos
+        const renderFlags = (course) => {
+            const flags = [];
+            
+            if (course.includes("Téc. Agroindústria")) {
+                flags.push(
+                    <img alt="Téc. Agroindústria" src="/images/flag_agro.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Téc. Informática")) {
+                flags.push(
+                    <img alt="Téc. Informática" src="/images/flag_info.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Téc. Mecatrônica")) {
+                flags.push(
+                    <img alt="Téc. Mecatrônica" src="/images/flag_meca.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Individual")) {
+                flags.push(
+                    <img alt="Individual" src="/images/flag_individual.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Institucional")) {
+                flags.push(
+                    <img alt="Institucional" src="/images/flag_if.png" height="35" className="icon_role" />
+                );
+            }
+            if (course.includes("Todos os Cursos")) {
+                flags.push(
+                    <img alt="Todos os Cursos" src="/images/flag_todosCursos.png" height="35" className="icon_role" />
+                );
+            }
+
+            return flags;
+        };
+
         return (
             <Card className="card-container">
+
+                <div className="icon_role_area">
+                    {renderFlags(courses)}
+                </div>
+
                 <Avatar
                     icon="pi pi-file-edit"
                     size="large"

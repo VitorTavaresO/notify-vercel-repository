@@ -82,3 +82,8 @@
 .view-button:hover {
     color: #818181;
 }
+
+
+
+.icon_role_area img { margin-left: 8px;}
+.icon_role_area img:first-child { margin-left: 0;}
