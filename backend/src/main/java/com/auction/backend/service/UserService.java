@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import com.auction.backend.exception.LoginException;
 import com.auction.backend.model.User;
 import com.auction.backend.repository.UserRepository;
 
@@ -36,6 +37,10 @@ public class UserService {
     public User readCpf(String cpf) {
         return userRepository.findByCpf(cpf).orElseThrow(() -> new NoSuchElementException("CPF not found"));
     }
+
+    public User readSiape(String siape) {
+        return userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("Email not found"));
+    } 
 
     public User update(User user) {
         User savedUser = userRepository.findById(user.getId())
@@ -135,7 +140,6 @@ public class UserService {
 
         EmailCriteria criteria = new EmailCriteria();
 
-        // Verifica se o email é válido
         if (!criteria.isValidEmail(email)) {
             throw new IllegalArgumentException("Email inválido.");
         }
@@ -213,4 +217,20 @@ public class UserService {
         
         return criteria;
     }
+
+    // --------------- LOGIN VALIDATION ---------------
+    public User authenticate(String siape, String password) throws LoginException {
+        User user = userRepository.findBySiape(siape)
+            .orElseThrow(() -> new LoginException("Siape não cadastrado"));
+
+        if (user == null) {
+            throw new LoginException("Usuario nulo");
+        }
+    
+        if (!user.getPassword().equals(password)) {
+            throw new LoginException("Credenciais inválidas");
+        }
+    
+        return user;
+    }   
 }
