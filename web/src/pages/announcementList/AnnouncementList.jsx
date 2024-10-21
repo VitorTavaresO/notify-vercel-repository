@@ -253,6 +253,9 @@ function AnnouncementList() {
         });
     
         const formatClasses = (classes) => {
+
+            if (classes == "Todas") return "Todos as Turmas";
+
             return classes
                 .sort((a, b) => a - b) 
                 .map(classNumber => `${classNumber}º Ano`)
@@ -519,7 +522,7 @@ function AnnouncementList() {
                 />
 
                 <div className="flex align-items-center flex-colum  -mt-3 -mt-2" >
-                    <i onClick={alternarOrdem} style={{ cursor: 'pointer', fontSize: '1rem' }} 
+                    <i onClick={alternarOrdem} style={{ cursor: 'pointer', fontSize: '1.3rem' }} 
                         className={`pi ${ordem === 'recente' ? 'pi-sort-amount-up-alt' : 'pi-sort-amount-down-alt'} mx-2`}>
                     </i>
                     <h4 onClick={alternarOrdem} style={{ cursor: 'pointer' }}>
