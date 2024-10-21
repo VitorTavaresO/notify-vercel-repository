@@ -29,6 +29,7 @@ function AnnouncementList() {
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
+    const [ordem, setOrdem] = useState('recente');
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
@@ -172,6 +173,10 @@ function AnnouncementList() {
         );
     };
 
+    const alternarOrdem = () => {
+        setOrdem((prev) => (prev === 'recente' ? 'antigo' : 'recente'));
+    };
+
     const handleDialogOpen = (announcement) => {
 
         setSelectedAnnouncement(announcement);
@@ -206,7 +211,11 @@ function AnnouncementList() {
 
             return matchesTitle && matchesProgram && matchesClass;
         })
-        .sort((a, b) => new Date(b.data) - new Date(a.data));
+        .sort((a, b) => {
+            return ordem === "recente"
+                ? new Date(b.data) - new Date(a.data)
+                : new Date(a.data) - new Date(b.data);
+        });
 
 
     const [visible, setVisible] = useState(false);
@@ -492,6 +501,16 @@ function AnnouncementList() {
                     onChange={(e) => setFilter(e.target.value)}
                     className="filter-input"
                 />
+
+                <div className="flex align-items-center flex-colum  -mt-3 -mt-2" >
+                    <i onClick={alternarOrdem} style={{ cursor: 'pointer', fontSize: '1rem' }} 
+                        className={`pi ${ordem === 'recente' ? 'pi-sort-amount-up-alt' : 'pi-sort-amount-down-alt'} mx-2`}>
+                    </i>
+                    <h4 onClick={alternarOrdem} style={{ cursor: 'pointer' }}>
+                        {ordem === 'recente' ? 'Recentes - Antigos' : 'Antigos - Recentes'}
+                    </h4>
+                </div>
+
                 <Dropdown
                     value={selectedProgram}
                     options={programs}
