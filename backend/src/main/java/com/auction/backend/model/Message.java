@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -33,21 +34,36 @@ public class Message {
     @Column(nullable = false, name = "author")
     private String author;
 
-    @Column(nullable = false, name = "course")
-    private String course;
+    @ElementCollection
+    @Column(nullable = true, name = "email", columnDefinition = "TEXT")
+    private List<String> email = new ArrayList<>();  
 
-    @Column(nullable = false, name = "class")
-    private String className;
+    @ElementCollection
+    @Column(nullable = true, name = "course", columnDefinition = "TEXT")
+    private List<String> course = new ArrayList<>();  
+
+    @ElementCollection
+    @Column(nullable = true, name = "class_name", columnDefinition = "TEXT")
+    private List<String> className = new ArrayList<>();  
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(nullable = false, name = "data")
     private LocalDateTime data;
 
-    @Column(nullable = false, name = "message")
+    @Column(nullable = false, name = "mensage", columnDefinition = "TEXT")
     private String message;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Annex> annexes = new ArrayList<>();
+
+    @Transient
+    private List<String> emailList;
+
+    @Transient
+    private List<String> courseList;
+
+    @Transient
+    private List<String> classNameList;
 
     public void addAnnex(Annex annex) {
         annexes.add(annex);
@@ -58,10 +74,8 @@ public class Message {
         annexes.remove(annex);
         annex.setMessage(null);
     }
-
     @PrePersist
     protected void onCreateTimestamp() {
         this.data = LocalDateTime.now();
     }
 }
-

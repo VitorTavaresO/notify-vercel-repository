@@ -31,23 +31,22 @@ public class MessageController {
             @RequestPart("message") String messageJson,
             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
         try {
-            System.out.println("Recebido JSON da mensagem: " + messageJson); // Adiciona log para depuração
+            System.out.println("JSON recebido: " + messageJson); // Verifica o JSON recebido
 
             ObjectMapper objectMapper = new ObjectMapper();
             Message message = objectMapper.readValue(messageJson, Message.class); // Desserializa o JSON
+
+            // Verifica se as listas foram corretamente populadas
+            System.out.println("Cursos recebidos: " + message.getCourse());
+            System.out.println("Turmas recebidas: " + message.getClassName());
 
             // Chama o serviço para criar a mensagem e salva anexos, se houver
             return messageService.create(message, files != null ? files : List.of());
 
         } catch (JsonMappingException e) {
-            System.err.println("Erro de mapeamento JSON: " + e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato de JSON inválido", e);
         } catch (JsonProcessingException e) {
-            System.err.println("Erro de processamento JSON: " + e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro de processamento de JSON", e);
-        } catch (Exception e) {
-            System.err.println("Erro ao criar a mensagem: " + e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a mensagem", e);
         }
     }
 
@@ -83,14 +82,6 @@ public class MessageController {
 
     @GetMapping
     public Iterable<Message> findAll() {
-        Iterable<Message> messages = messageService.findAll();
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String json = objectMapper.writeValueAsString(messages);
-            System.out.println("JSON de resposta: " + json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return messages;
+        return messageService.findAll(); // Simplesmente retorna a lista, Spring converte para JSON automaticamente
     }
 }

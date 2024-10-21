@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "primereact/card";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
@@ -8,6 +8,7 @@ import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
 import CpfValidation from "../../validation/cpfValidation";
+import EmailValidation from "../../validation/emailValidation";
 import "./register.css";
 
 const Register = () => {
@@ -33,11 +34,14 @@ const Register = () => {
         hasSpecialChar: false,
     });
     const [errorMessage, setErrorMessage] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({});
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
     const [isCpfValid, setIsCpfValid] = useState(false);
     const [isCpfFocused, setIsCpfFocused] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [isEmailFocused, setIsEmailFocused] = useState(false);
 
     useEffect(() => {
         const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
@@ -63,6 +67,46 @@ const Register = () => {
         confirmPassword,
         passwordCriteria,
     ]);
+
+    const handleRegister = () => {
+        setIsRegistering(true);
+        const formattedCpf = cpf.replace(/[^\d]/g, '');
+
+        fetch("http://localhost:8080/api/user", {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                name: name,
+                cpf: formattedCpf,
+                siape: siape,
+                position: position,
+                email: email,
+                phone: phone,
+                password: password
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {throw new Error(err.message);});
+        }
+        return response.json(); 
+        })
+        .then(data => {
+            console.log('Usuário cadastrado com sucesso:', data);
+            navigate('/login');
+        })
+        .catch(error => {
+            console.error('Erro ao cadastrar usuário:', error.message);
+            setErrorMessage(error.message);
+            alert(`Erro: ${error.message}`);
+        })
+        .finally(() => {
+            setIsRegistering(false);
+        });
+    };
 
     const header = <div className="font-bold mb-3">Informe a Senha</div>;
     const footer = (
@@ -133,9 +177,15 @@ const Register = () => {
     };
 
     const handleCpfChange = (e) => {
-        const novoCpf = e.target.value;
-        setCpf(novoCpf);
-        setIsCpfValid(CpfValidation(novoCpf));
+        const newCpf = e.target.value;
+        setCpf(newCpf);
+        setIsCpfValid(CpfValidation(newCpf));
+    }
+
+    const handleEmailChange = (e) => {
+        const newEmail = e.target.value;
+        setEmail(newEmail);
+        setIsEmailValid(EmailValidation(newEmail));
     }
 
     const handleFieldFocus = (field) => {
@@ -293,11 +343,15 @@ const Register = () => {
                                 id="email"
                                 name="email"
                                 autoComplete="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                onFocus={() => handleFieldFocus("Email")}
+                                onChange={handleEmailChange}
+                                onFocus={() => {
+                                    handleFieldFocus("Email");
+                                    setIsEmailFocused(true);
+                                }}
                                 onBlur={() => handleFieldBlur("Email", email)}
                                 keyfilter="email"
                                 required
+                                invalid={isEmailFocused && !isEmailValid}
                                 className={`
                                     w-full ${fieldErrors.email ? "p-invalid" : ""}`}/>
                             <label htmlFor="email">Email</label>
@@ -375,7 +429,8 @@ const Register = () => {
                                 mb-4
                                 ${isFormValid? "bg-green-600 border-green-600":"bg-gray-500 border-gray-500"}
                             `}
-                            disabled={!isFormValid}
+                            disabled={!isFormValid || isRegistering}
+                            onClick={handleRegister}
                         />
                     </div>
                     <div className="
