@@ -90,6 +90,35 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-contact/{siape}")
+    public ResponseEntity<User> updateEmailAndPhone(
+            @PathVariable("siape") String siape,
+            @RequestBody User updatedUser) {
+        try {
+            User existingUser = userService.readSiape(siape);
+
+            if (existingUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+                existingUser.setEmail(updatedUser.getEmail());
+            }
+
+            if (updatedUser.getPhone() != null && !updatedUser.getPhone().isEmpty()) {
+                existingUser.setPhone(updatedUser.getPhone());
+            }
+
+            User updated = userService.update(existingUser);
+
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
     @PutMapping("/update-permission/{siape}")
     public ResponseEntity<User> updatePermission(
             @PathVariable("siape") String siape,
