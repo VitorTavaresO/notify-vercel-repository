@@ -42,15 +42,24 @@ const ProfileCard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/archives/memoEmployees.json");
+                const response = await fetch("http://localhost:8080/api/messages", {
+                    method: 'GET',
+                });
                 const data = await response.json();
-                setMemos(data);
+
+                if (Array.isArray(data)) {
+                    setMemos(data);  
+                } else {
+                    setMemos([]);
+                }
             } catch (error) {
-                console.error('Error fetching the memo data:', error);
+                console.error('Erro ao buscar as mensagens:', error);
+                setMemos([]);  
             }
-        }
+        };
         fetchData();
     }, []);
+
 
     const renderPermissionTag = () => {
         switch (employee.position) {
@@ -94,16 +103,16 @@ const ProfileCard = () => {
 
         const updatedEmployee = {
             email: editedEmail,
-            phone: editedPhone  // Usar "phone" em vez de "telefone" para manter consistência com o backend
+            phone: editedPhone
         };
 
         try {
             const response = await fetch(`http://localhost:8080/api/user/update-contact/${siape}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',  // Enviando JSON
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedEmployee),  // Converte o objeto em JSON
+                body: JSON.stringify(updatedEmployee),
             });
 
             if (response.ok) {
@@ -171,12 +180,14 @@ const ProfileCard = () => {
                     </div>
                     <Divider layout='vertical' />
                     <div className="communications p-mr-3">
-                        {memos.slice(0, 2).map((memo, index) => (
+                        {memos.slice(0, 2).map((message, index) => (
                             <Card key={index} className="communication-item">
-                                <h4>{memo.titulo}</h4>
-                                <p>Para: {memo.para}</p>
-                                <p>Data: {memo.data}</p>
-                                <p>{memo.descricao}</p>
+                                <h4>{message.title}</h4>
+                                <p>Autor: {message.author}</p>
+                                <p>Curso(s): {message.course.join(", ")}</p>
+                                <p>Turma(s): {message.className.join(", ")}</p> 
+                                <p>Data: {new Date(message.data).toLocaleString()}</p>
+                                <p>{message.message}</p> 
                             </Card>
                         ))}
                         {memos.length > 2 && (
@@ -193,10 +204,10 @@ const ProfileCard = () => {
                 <div>
                     {memosPaginated.map((memo, index) => (
                         <Card key={index} className="communication-item">
-                            <h4>{memo.titulo}</h4>
-                            <p>Para: {memo.para}</p>
+                            <h4>{memo.title}</h4>
+                            <p>Para: {memo.course}</p>
                             <p>Data: {memo.data}</p>
-                            <p>{memo.descricao}</p>
+                            <p>{memo.message}</p>
                         </Card>
                     ))}
                     <Paginator first={first} rows={rows} totalRecords={memos.length} onPageChange={onPageChange}></Paginator>
