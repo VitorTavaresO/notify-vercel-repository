@@ -1,6 +1,7 @@
 package com.auction.backend.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -117,4 +118,25 @@ public class UserController {
         }
     }
 
+
+    @PutMapping("/update-permission/{siape}")
+    public ResponseEntity<User> updatePermission(
+            @PathVariable("siape") String siape,
+            @RequestBody Map<String, String> body) {
+        try {
+            User user = userService.readSiape(siape);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            String permissao = body.get("permissao");
+            user.setPermissao(permissao);
+
+            User updatedUser = userService.update(user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
