@@ -48,17 +48,44 @@ const ProfileCard = () => {
                 const data = await response.json();
 
                 if (Array.isArray(data)) {
-                    setMemos(data);  
+                    const sortedMessages = data.sort((a, b) => new Date(b.data) - new Date(a.data));
+                    setMemos(sortedMessages);
                 } else {
                     setMemos([]);
                 }
             } catch (error) {
                 console.error('Erro ao buscar as mensagens:', error);
-                setMemos([]);  
+                setMemos([]);
             }
         };
         fetchData();
     }, []);
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+    };
+
+    const formatClasses = (classes) => {
+        if (classes === "Todas") return "Todas as Turmas";
+        return classes
+            .sort((a, b) => a - b)
+            .map(classNumber => `${classNumber}º Ano`)
+            .join(", ");
+    };
+
+
+    function formatMessage(message) {
+        const maxLength = 380;
+        return message.length > maxLength
+            ? message.slice(0, maxLength) + '...'
+            : message;
+    }
+
 
 
     const renderPermissionTag = () => {
@@ -185,9 +212,8 @@ const ProfileCard = () => {
                                 <h4>{message.title}</h4>
                                 <p>Autor: {message.author}</p>
                                 <p>Curso(s): {message.course.join(", ")}</p>
-                                <p>Turma(s): {message.className.join(", ")}</p> 
-                                <p>Data: {new Date(message.data).toLocaleString()}</p>
-                                <p>{message.message}</p> 
+                                <p>Turma(s): {formatClasses(message.className)}</p>
+                                <p>Data: {formatDate(message.data)}</p>
                             </Card>
                         ))}
                         {memos.length > 2 && (
@@ -200,19 +226,20 @@ const ProfileCard = () => {
                     </div>
                 </div>
             </Card>
-            <Dialog header="Comunicados" className='dialogComs' visible={showAllMemos} onHide={() => setShowAllMemos(false)}>
+            <Dialog header="Prévia Comunicados" className='dialogComs' visible={showAllMemos} onHide={() => setShowAllMemos(false)}>
                 <div>
                     {memosPaginated.map((memo, index) => (
                         <Card key={index} className="communication-item">
                             <h4>{memo.title}</h4>
-                            <p>Para: {memo.course}</p>
-                            <p>Data: {memo.data}</p>
-                            <p>{memo.message}</p>
+                            <p>Curso(s): {memo.course.join(", ")}</p>
+                            <p>Turma(s): {formatClasses(memo.className)}</p>
+                            <p>Data: {formatDate(memo.data)}</p>
                         </Card>
                     ))}
                     <Paginator first={first} rows={rows} totalRecords={memos.length} onPageChange={onPageChange}></Paginator>
                 </div>
             </Dialog>
+
         </div>
     );
 };
