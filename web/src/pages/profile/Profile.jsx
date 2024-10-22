@@ -171,7 +171,7 @@ const ProfileCard = () => {
                         </div>
                         <div className="detail-item">
                             <strong>Telefone</strong>
-                            <InputMask mask="(99) 99999-9999" value={editedPhone} onChange={(e) => setEditedPhone(e.value)} className="itemText" />
+                            <InputMask mask="(99) 99999-9999" value={employee.phone} onChange={(e) => setEditedPhone(e.value)} className="itemText" />
                         </div>
                         <div className="profile-footer">
                             <Button label="Alterar Senha" className="p-button-danger" text onClick={changePassword} />
