@@ -13,11 +13,9 @@ const Header = () => {
         {label: 'Início',
             command: () => { navigate('/'); }
          },
-        {label: 'Comunicados'},
+        {label: 'Comunicados', command: () => { navigate('/announcement-list'); }},
         {label: 'Responsáveis'},
-        {label: 'Servidores',
-            command: () => { navigate('/employee-list'); }
-        },
+        {label: 'Servidores', command: () => { navigate('/employee-list'); }},
     ];
 
     const [isUserMenuVisible, setIsUserMenuVisible] = useState(false);

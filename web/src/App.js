@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
 import PrivateRouter from "./components/PrivateRouter.jsx";
+import AnnouncementList from "./pages/announcementList/AnnouncementList.jsx";
 
 function App() {
   return (
@@ -36,6 +37,16 @@ function App() {
               element={
                 <DefaultLayout>
                   <Home />
+                </DefaultLayout>
+              }
+            />
+          </Route>
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/announcement-list"
+              element={
+                <DefaultLayout>
+                  <AnnouncementList />
                 </DefaultLayout>
               }
             />

@@ -40,7 +40,7 @@ function EmployeeList() {
   };
 
   const handleDialogOpen = (employee) => {
-    
+
     setSelectedEmployee(employee);
     setDialogPermission(employee.permissao);
     setVisible(true);
@@ -49,11 +49,16 @@ function EmployeeList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/archives/employeeList.json");
+        const response = await fetch("http://localhost:8080/api/user", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
         const data = await response.json();
         setEmployees(data);
       } catch (error) {
-        console.error("Error fetching the employee data:", error);
+        console.error("Erro ao buscar os dados dos usuários:", error);
       } finally {
         setLoading(false);
       }
@@ -61,13 +66,42 @@ function EmployeeList() {
     fetchData();
   }, []);
 
+  const savePermission = async () => {
+    if (!selectedEmployee || !dialogPermission) return;
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/user/update-permission/${selectedEmployee.siape}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ permissao: dialogPermission }),
+      });
+
+      if (response.ok) {
+        const updatedEmployees = employees.map(employee =>
+          employee.siape === selectedEmployee.siape
+            ? { ...employee, permissao: dialogPermission }
+            : employee
+        );
+        setEmployees(updatedEmployees);
+        setVisible(false);
+        console.log("Permissão atualizada com sucesso!");
+      } else {
+        console.error("Falha ao atualizar a permissão.");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar a permissão:", error);
+    }
+  };
+
   const toggleExpand = (employee) => {
     setExpandEmployee(expandEmployee === employee ? null : employee);
   };
 
   const filteredEmployees = employees.filter((employee) => {
     const matchesNameOrSiape =
-      employee.nome.toLowerCase().includes(filter.toLowerCase()) ||
+      employee.name.toLowerCase().includes(filter.toLowerCase()) ||
       employee.siape.includes(filter);
     const matchesPermission =
       selectedPermission === "Todos" ||
@@ -80,8 +114,8 @@ function EmployeeList() {
 
   const footerEditPermission = (
     <div>
-      <Button link label="Salvar" severity="info" onClick={() => setVisible(false)} className="p-button-text" autoFocus/>
-      <Button link label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text"/>
+      <Button label="Salvar" severity="info" onClick={savePermission} className="p-button-text" autoFocus />
+      <Button label="Cancelar" severity="danger" onClick={() => setVisible(false)} className="p-button-text" />
     </div>
   );
 
@@ -96,13 +130,13 @@ function EmployeeList() {
           className="employee-avatar my-1 ml-3"
         />
         <div className="employee-details">
-          <div className="employee-name mb-1 mt-3 ml-3">{employee.nome}</div>
-          <div className="employee-cargo my-1 ml-3">{employee.cargo}</div>
+          <div className="employee-name mb-1 mt-3 ml-3">{employee.name}</div>
+          <div className="employee-cargo my-1 ml-3">{employee.position}</div>
           <div className="employee-siape my-1 ml-3">SIAPE: {employee.siape}</div>
         </div>
         {isExpanded && (
           <div className="extra-info">
-            <div className="employee-number my-1 ml-3">Telefone: {employee.telefone}</div>
+            <div className="employee-number my-1 ml-3">Telefone: {employee.phone}</div>
             <div className="employee-email my-1 ml-3">Email: {employee.email}</div>
             <div className="employee-permission my-1 ml-3">Permissão de Sistema: {employee.permissao}</div>
           </div>
@@ -114,7 +148,7 @@ function EmployeeList() {
             height={`${employee.permissao == "Emissor de comunicados" ? "35" : "0"}`}
             style={{ padding: `${employee.permissao == "Emissor de comunicados" ? '0 20px 0 0' : "0 0 0 0"}` }}
             className="icon_role" />
-            {/* style necessário apenas caso usuário tiver mais de uma role*/}
+          {/* style necessário apenas caso usuário tiver mais de uma role*/}
           <img
             alt="logo"
             src="/images/icon_role3_marked.png"
@@ -126,7 +160,7 @@ function EmployeeList() {
             src="/images/icon_role4_marked.png"
             height={`${employee.permissao == "Gerenciador do sistema" ? "35" : "0"}`}
             style={{ padding: `${employee.permissao == "Gerenciador do sistema" ? '0 20px 0 0' : "0 0 0 0"}` }}
-            className="icon_role"/>
+            className="icon_role" />
         </div>
 
         <Button
@@ -134,7 +168,7 @@ function EmployeeList() {
           className="edit-button"
           icon="pi pi-pencil"
           onClick={() => handleDialogOpen(employee)}
-          
+
         />
         <Button
           link
@@ -156,25 +190,25 @@ function EmployeeList() {
 
   return (
     <div className="container">
-    <Helmet>
-      <title>Servidores - NOTIFY</title>
-    </Helmet>
+      <Helmet>
+        <title>Servidores - NOTIFY</title>
+      </Helmet>
       <Dialog draggable={false} header="Editar Permissões" visible={visible} style={{ minWidth: '35vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerEditPermission}>
 
         <h4 className="mt-3" style={{ color: '#667182' }}>Selecione a nova permissão de</h4>
         <h2 className="-mt-3 mb-4">{selectedEmployee ? selectedEmployee.nome : ''}</h2>
 
         <Dropdown
-        value={dialogPermission}
-        options={permissions.filter(permission => permission.value !== "Todos")}
-        itemTemplate={permissionsFilterTemplate}
-        onChange={(e) => setDialogPermission(e.value)}
-        placeholder="Selecione uma permissão"
-        className="w-full"
+          value={dialogPermission}
+          options={permissions.filter(permission => permission.value !== "Todos")}
+          itemTemplate={permissionsFilterTemplate}
+          onChange={(e) => setDialogPermission(e.value)}
+          placeholder="Selecione uma permissão"
+          className="w-full"
         />
 
       </Dialog>
-      
+
       <div className="filter-container">
         <h3>Filtrar Servidor</h3>
         <InputText
@@ -193,7 +227,7 @@ function EmployeeList() {
       </div>
       <div className="employee-list">
         <Card title="Lista de Servidores" className="general-card">
-          <Divider className="-mt-2 mb-4"/>
+          <Divider className="-mt-2 mb-4" />
           <DataView
             value={filteredEmployees}
             layout="list"
