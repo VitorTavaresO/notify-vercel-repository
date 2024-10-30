@@ -14,7 +14,7 @@ const Header = () => {
             command: () => { navigate('/'); }
          },
         {label: 'Comunicados', command: () => { navigate('/announcement-list'); }},
-        {label: 'Responsáveis'},
+        {label: 'Responsáveis', command: () => { navigate('/guardian-list'); }},
         {label: 'Servidores', command: () => { navigate('/employee-list'); }},
     ];
 

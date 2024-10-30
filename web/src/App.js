@@ -9,6 +9,7 @@ import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
 import PrivateRouter from "./components/PrivateRouter.jsx";
 import AnnouncementList from "./pages/announcementList/AnnouncementList.jsx";
+import GuardianList from "./pages/guardianList/GuardianList.jsx";
 
 function App() {
   return (
@@ -57,6 +58,16 @@ function App() {
               element={
                 <DefaultLayout>
                   <EmployeeList />
+                </DefaultLayout>
+              }
+            />
+          </Route>
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/guardian-list"
+              element={
+                <DefaultLayout>
+                  <GuardianList />
                 </DefaultLayout>
               }
             />
