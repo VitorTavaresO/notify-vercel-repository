@@ -12,6 +12,14 @@ public class GuardianService {
     @Autowired
     private GuardianRepository guardianRepository;
 
+    public Guardian create(Guardian guardian) {
+        return guardianRepository.save(guardian);
+    }
+
+    public Guardian update(Guardian guardian) {
+        return guardianRepository.save(guardian);
+    }
+
     public List<Guardian> getAllGuardians() {
         return guardianRepository.findAll();
     }
