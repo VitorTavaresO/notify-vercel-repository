@@ -44,4 +44,7 @@ public class User {
 
     @Column(name = "permissao")
     private String permissao;
+
+    @JsonIgnore
+    private Role role;
 }
