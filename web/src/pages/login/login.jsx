@@ -96,6 +96,17 @@ const Login = () => {
       >
         <div
           className="
+                    second-additional-content 
+                    flex
+                    flex-column
+                    max-w-30rem
+                    min-h-full
+                    border-left-3
+                    pl-3
+                    justify-content-evenly"
+        >
+          <div
+            className="
                     additional-content 
                     flex
                     flex-column
@@ -104,30 +115,31 @@ const Login = () => {
                     border-left-3
                     pl-5
                     justify-content-evenly"
-        >
-          <img
-            id="first-image"
-            src="/images/login/logo-ifpr.png"
-            alt="Logo IFPR"
-            className="
-                        w-full 
-                        my-5"
-          />
-          <p
-            className="
-                        my-5 ml-full text-right"
           >
-            — “Mantendo os responsáveis sempre 
-            <br/>informados”
-          </p>
-          <img
-            id="second-image"
-            src="/images/login/login-background-image.png"
-            alt="Imagem de fundo"
-            className="
+            <img
+              id="first-image"
+              src="/images/login/logo-ifpr.png"
+              alt="Logo IFPR"
+              className="
                         w-full 
                         my-5"
-          />
+            />
+            <p
+              className="
+                        my-5 text-right"
+            >
+              — “Mantendo os responsáveis sempre
+              <br />informados”
+            </p>
+            <img
+              id="second-image"
+              src="/images/login/login-background-image.png"
+              alt="Imagem de fundo"
+              className="
+                        w-full 
+                        my-5"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -136,7 +148,7 @@ const Login = () => {
                 w-full"
       >
         <Card
-          title="Login"
+          title="LOGIN"
           className="
                     login-container
                     grid
@@ -144,9 +156,10 @@ const Login = () => {
                     max-w-30rem
                     align-items-center
                     justify-content-center
-                    text-center"
+                    text-center
+                    pt-5"
         >
-          <p className="sub-title font-bold">Acesse o Notify IFPR:</p>
+          <p className="sub-title font-bold mb-6">Acesse o Notify IFPR:</p>
           <div
             className="
                         container-grid
@@ -157,11 +170,13 @@ const Login = () => {
               className="
                             grid-item
                             col-12"
+
             >
               <FloatLabel
                 className="
                                 w-full
-                                mb-5"
+                                mb-3
+                                "
               >
                 <InputMask
                   value={user.siape}
@@ -174,9 +189,8 @@ const Login = () => {
                   required
                   className={`
                                         w-full 
-                                        ${
-                                          fieldErrors.siape ? "p-invalid" : ""
-                                        }`}
+                                        ${fieldErrors.siape ? "p-invalid" : ""
+                    }`}
                 />
                 <label htmlFor="siape">SIAPE</label>
               </FloatLabel>
@@ -190,7 +204,7 @@ const Login = () => {
               <FloatLabel
                 className="
                                 w-full
-                                mb-5"
+                                mb-2"
               >
                 <Password
                   value={user.password}
@@ -223,16 +237,16 @@ const Login = () => {
                             col-12"
             >
               <Button
+                rounded
                 label="Acessar"
                 id="login-button"
                 className={`
                                     w-full
-                                    mb-4
-                                    ${
-                                      isFormValid
-                                        ? "bg-green-600 border-green-600"
-                                        : "bg-gray-500 border-gray-500"
-                                    }
+                                    mb-2
+                                    ${isFormValid
+                    ? "bg-green-600 border-green-600"
+                    : "bg-gray-500 border-gray-500"
+                  }
                                 `}
                 disabled={!isFormValid}
                 onClick={handleLoginButton}

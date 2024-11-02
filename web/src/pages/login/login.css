@@ -3,8 +3,9 @@
     --login-container-color: rgb(255, 255, 255);
     --register-button-out-color: rgb(62, 187, 83);
     --register-button-over-color: rgb(46, 46, 46);
-    --acess-button-color: rgb(46, 46, 46);
+    --acess-button-color: rgb(245, 245, 245);
     --additional-content-border-color: rgb(100, 161, 112);
+    --second-additional-content-border-color: rgb(190, 59, 63);
 }
 
 .login-page{
@@ -75,6 +76,11 @@
     .additional-content{
         margin-right: min(50px, 5vw);
         border-color: var(--additional-content-border-color);
+    }
+
+    .second-additional-content{
+        margin-right: min(50px, 5vw);
+        border-color: var(--second-additional-content-border-color);
     }
 
     .login-background{
