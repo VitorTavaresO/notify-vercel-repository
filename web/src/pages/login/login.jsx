@@ -115,9 +115,10 @@ const Login = () => {
           />
           <p
             className="
-                        my-5"
+                        my-5 ml-full text-right"
           >
-            — “Mantendo os responsáveis sempre informados”
+            — “Mantendo os responsáveis sempre 
+            <br/>informados”
           </p>
           <img
             id="second-image"

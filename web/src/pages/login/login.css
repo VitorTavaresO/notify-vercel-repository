@@ -1,10 +1,10 @@
 :root {
-    --login-page-color: rgb(174, 204, 169);
-    --login-container-color: rgb(203, 231, 199);
-    --register-button-out-color: rgb(90, 135, 83);
+    --login-page-color: rgb(245, 245, 245);
+    --login-container-color: rgb(255, 255, 255);
+    --register-button-out-color: rgb(62, 187, 83);
     --register-button-over-color: rgb(46, 46, 46);
     --acess-button-color: rgb(46, 46, 46);
-    --additional-content-border-color: rgb(64, 153, 41);
+    --additional-content-border-color: rgb(100, 161, 112);
 }
 
 .login-page{
