@@ -21,5 +21,7 @@ public class Guardian {
     private String studentName;
     private int studentRA;
     private String status;
+    private String course;
+    private String courseYear;
 
 }

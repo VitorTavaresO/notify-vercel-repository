@@ -73,6 +73,8 @@ function GuardianList() {
                         <div className="guardian-number my-1 ml-3">Telefone: {guardian.phone}</div>
                         <div className="guardian-email my-1 ml-3">Email: {guardian.email}</div>
                         <div className="guardian-status my-1 ml-3">Status: {guardian.status}</div>
+                        <div className="guardian-course my-1 ml-3">Curso: {guardian.course}</div>
+                        <div className="guardian-course-year my-1 ml-3">Ano: {guardian.courseYear}</div>
                     </div>
                 )}
                 <Button

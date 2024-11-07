@@ -11,6 +11,8 @@ export async function fetchGuardians() {
             studentName: item.studentName || "Aluno desconhecido",
             studentRA: item.studentRA || null,
             status: item.status || "Status desconhecido",
+            course: item.course || "Curso desconhecido",
+            courseYear: item.courseYear || "Ano desconhecido",
         }));
     } catch (error) {
         console.error("Erro ao buscar dados dos guardiões:", error);
