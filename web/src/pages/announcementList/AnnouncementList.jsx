@@ -213,34 +213,35 @@ function AnnouncementList() {
         try {
             const response = await fetch("http://localhost:8080/api/messages");
             const data = await response.json();
-            setAnnouncements(data);
+            console.log("Dados recebidos da API:", data); // Adicione este log
+
+            setAnnouncements(Array.isArray(data) ? data : []);
         } catch (error) {
-            console.error("Error fetching the announcement data:", error);
+            console.error("Erro ao buscar os dados dos comunicados:", error);
+            setAnnouncements([]);
         } finally {
             setLoading(false);
         }
     };
 
+
     useEffect(() => {
         fetchData();
     }, []);
 
-    const filteredAnnouncements = announcements
-        .filter((announcement) => {
-            const matchesTitle =
-                announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
-            const matchesProgram =
-                selectedProgram === "Todos" || announcement.course.includes(selectedProgram);
-            const matchesClass =
-                selectedClass === "Todas" || announcement.className.includes(selectedClass);
-
+    const filteredAnnouncements = Array.isArray(announcements)
+        ? announcements.filter((announcement) => {
+            const matchesTitle = announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
+            const matchesProgram = selectedProgram === "Todos" || announcement.course.includes(selectedProgram);
+            const matchesClass = selectedClass === "Todas" || announcement.className.includes(selectedClass);
             return matchesTitle && matchesProgram && matchesClass;
         })
-        .sort((a, b) => {
-            return ordem === "recente"
-                ? new Date(b.data) - new Date(a.data)
-                : new Date(a.data) - new Date(b.data);
-        });
+            .sort((a, b) => {
+                return ordem === "recente"
+                    ? new Date(b.data) - new Date(a.data)
+                    : new Date(a.data) - new Date(b.data);
+            })
+        : [];
 
 
     const [visible, setVisible] = useState(false);
