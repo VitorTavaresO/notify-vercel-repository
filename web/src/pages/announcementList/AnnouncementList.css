@@ -1,0 +1,92 @@
+
+.announcement-item {
+    display: flex;
+    align-items: center;
+}
+
+.announcement-avatar {
+    margin-right: 15px;
+}
+
+.announcement-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.announcement-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.announcement-list {
+    margin: 50px 0;
+    margin-right: 325px;
+    padding: 20px;
+    overflow-y: auto;
+    height: auto;
+    transition: margin-right 0.3s ease;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.icon_role_area img { margin-left: 8px;}
+.icon_role_area img:first-child { margin-left: 0;}
+
+.view-button {
+    position: absolute;
+    bottom: 15px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0px;
+    color: #555555;
+}
+
+.view-button:hover {color: #818181;}
+
+.button-new{
+    margin: 20px;
+    background-color: green;
+}
+
+.new-announcement {
+    height: 80%;
+    margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+    .filter-container {
+        width: 100%;
+        position: fixed;
+        top: 4%;
+        right: 0;
+        bottom: 0;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        height: 20%;
+    }
+
+    .announcement-list {
+        margin: 0;
+        padding: 10px;
+        margin-top: 40%;
+    }
+}
+
+.announcement-message {
+    word-break: break-all; /* Quebra palavras longas */
+    overflow-wrap: break-word; /* Adiciona quebra de palavras se necessário */
+    overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse o contêiner */
+    white-space: normal; /* Permite quebras de linha normais */
+    text-align: justify;
+    margin-right: 5px;
+}
+
+.announcement-attachments li a{
+
+    text-decoration: none;
+    color: #1da053;
+}
