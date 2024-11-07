@@ -6,6 +6,7 @@ import { DataView } from "primereact/dataview";
 import { Avatar } from "primereact/avatar";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import { fetchGuardians } from "../../validation/APITranslator";
 
 function GuardianList() {
     const [guardians, setGuardians] = useState([]);
@@ -26,16 +27,11 @@ function GuardianList() {
     ];
 
     useEffect(() => {
-        const fetchGuardians = async () => {
-            try {
-                const response = await fetch("http://localhost:8080/api/guardian");
-                const data = await response.json();
-                setGuardians(Array.isArray(data) ? data : []);
-            } catch (error) {
-                console.error("Erro ao buscar dados dos guardiões:", error);
-            }
+        const loadGuardians = async () => {
+            const data = await fetchGuardians();
+            setGuardians(data);
         };
-        fetchGuardians();
+        loadGuardians();
     }, []);
 
 
