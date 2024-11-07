@@ -1,12 +1,16 @@
 package com.auction.backend.model;
 
+import com.auction.backend.enums.RoleName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -42,9 +46,6 @@ public class User {
     @NotBlank(message = "{name.required}")
     private String password;
 
-    @Column(name = "permissao")
-    private String permissao;
-
-    @JsonIgnore
-    private Role role;
+    @Enumerated(EnumType.STRING)
+    private RoleName roleName;
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auction.backend.enums.RoleName;
 import com.auction.backend.exception.LoginException;
 import com.auction.backend.model.LoginRequest;
 import com.auction.backend.model.User;
@@ -129,11 +130,17 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
-            String permissao = body.get("permissao");
-            user.setPermissao(permissao);
+            String roleName = body.get("role");
+            try {
+                user.setRoleName(RoleName.valueOf(roleName.toUpperCase()));
+
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
 
             User updatedUser = userService.update(user);
             return ResponseEntity.ok(updatedUser);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -5,12 +5,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.auction.backend.model.Role;
+import com.auction.backend.enums.RoleName;
 import com.auction.backend.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
 @Getter
 public class UserDetailsImpl implements UserDetails {
@@ -22,14 +22,25 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Role role = user.getRole(); 
-        if (role != null) {
-            return Collections.singletonList(new SimpleGrantedAuthority(role.getName())); 
-                                                                                          
+public Collection<? extends GrantedAuthority> getAuthorities() {
+    
+    List<GrantedAuthority> authorities = new ArrayList<>();
+
+    if (user.getRoleName() != null) {
+        authorities.add(new SimpleGrantedAuthority(user.getRoleName().name()));  
+
+        if (user.getRoleName() == RoleName.UNDEFINED) {
+            
+            authorities.clear(); 
+        } else {
+            if (user.getRoleName() == RoleName.ADMIN) {
+                authorities.add(new SimpleGrantedAuthority(RoleName.USER.name()));
+            }
         }
-        return Collections.emptyList(); 
     }
+
+    return authorities;
+}
 
     @Override
     public String getPassword() {
