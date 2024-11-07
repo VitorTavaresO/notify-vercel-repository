@@ -3,6 +3,7 @@ package com.auction.backend.service;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +25,12 @@ public class MessageService {
             // Persistir a mensagem e os anexos (se houver)
             if (files != null && !files.isEmpty()) {
                 for (MultipartFile file : files) {
-                    Annex annex = createAnnex(file); 
-                    message.addAnnex(annex); 
+                    Annex annex = createAnnex(file);
+                    message.addAnnex(annex);
                 }
             }
 
-            return messageRepository.save(message); 
+            return messageRepository.save(message);
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao processar a mensagem", e);
@@ -51,12 +52,12 @@ public class MessageService {
 
             if (newFiles != null && !newFiles.isEmpty()) {
                 for (MultipartFile file : newFiles) {
-                    Annex annex = createAnnex(file); 
-                    messageSaved.addAnnex(annex); 
+                    Annex annex = createAnnex(file);
+                    messageSaved.addAnnex(annex);
                 }
             }
 
-            return messageRepository.save(messageSaved); 
+            return messageRepository.save(messageSaved);
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao processar a mensagem", e);
@@ -94,5 +95,26 @@ public class MessageService {
         }
 
         return annex;
+    }
+
+    public ByteArrayResource downloadAnnex(Long messageId, Long annexId) {
+        Annex annex = findAnnexById(messageId, annexId); 
+
+        return new ByteArrayResource(annex.getContent()) {
+            @Override
+            public String getFilename() {
+                return annex.getFileName(); 
+            }
+        };
+    }
+
+    private Annex findAnnexById(Long messageId, Long annexId) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+
+        return message.getAnnexes().stream()
+                .filter(annex -> annex.getId().equals(annexId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Annex not found"));
     }
 }
