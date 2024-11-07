@@ -8,11 +8,11 @@
     --second-additional-content-border-color: rgb(190, 59, 63);
 }
 
-.login-page{
+.login-page {
     background-color: var(--login-page-color);
 }
 
-.login-container{
+.login-container {
     background-color: var(--login-container-color);
 }
 
@@ -38,11 +38,11 @@
         padding: 0;
     }
 
-    .additional-content-background{
+    .additional-content-background {
         display: none;
     }
 
-    .login-page{
+    .login-page {
         background-color: var(--login-container-color);
     }
 
@@ -65,7 +65,6 @@
     }
 }
 
-
 /* --------------- WEB --------------- */
 @media screen and (min-width: 601px) {
     .additional-content-background {
@@ -73,29 +72,41 @@
         padding-left: min(40px, 5vw);
     }
 
-    .additional-content{
+    .additional-content {
         margin-right: min(50px, 5vw);
-        border-color: var(--additional-content-border-color);
+        border-color: transparent;
+        position: relative;
     }
 
-    .second-additional-content{
+    .additional-content::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0%;
+        height: 75%;
+        width: 2.5px; /* Largura da borda */
+        background-color: var(--additional-content-border-color); /* Cor da borda */
+      }
+
+    .second-additional-content {
         margin-right: min(50px, 5vw);
         border-color: var(--second-additional-content-border-color);
     }
 
-    .login-background{
+
+    .login-background {
         padding-left: min(50px, 5vw);
     }
-    
+
     .login-container {
         max-width: 700px;
     }
 
-    #first-image{
+    #first-image {
         max-width: 300px;
     }
 
-    #second-image{
+    #second-image {
         max-width: 440px;
     }
 
