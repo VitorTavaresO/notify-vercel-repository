@@ -84,9 +84,11 @@
         left: 0;
         top: 0%;
         height: 75%;
-        width: 2.5px; /* Largura da borda */
-        background-color: var(--additional-content-border-color); /* Cor da borda */
-      }
+        width: 2.5px;
+        /* Largura da borda */
+        background-color: var(--additional-content-border-color);
+        /* Cor da borda */
+    }
 
     .second-additional-content {
         margin-right: min(50px, 5vw);
@@ -100,6 +102,11 @@
 
     .login-container {
         max-width: 700px;
+
+        background: linear-gradient(white, white) padding-box,
+            linear-gradient(to right, var(--additional-content-border-color), var(--second-additional-content-border-color)) border-box;
+        border-radius: 1rem;
+        border: 2px solid transparent;
     }
 
     #first-image {

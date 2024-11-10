@@ -95,8 +95,8 @@ const Login = () => {
                 py-8"
       >
 
-          <div
-            className="
+        <div
+          className="
                     second-additional-content 
                     flex
                     flex-column
@@ -105,9 +105,9 @@ const Login = () => {
                     border-left-3
                     pl-3
                     justify-content-evenly"
-          >
-            <div
-              className="
+        >
+          <div
+            className="
                     additional-content 
                     flex
                     flex-column
@@ -116,35 +116,36 @@ const Login = () => {
                     border-left-3
                     pl-5
                     justify-content-evenly"
-            >
-              <img
-                id="first-image"
-                src="/images/login/logo-ifpr.png"
-                alt="Logo IFPR"
-                className="
+          >
+            <img
+              id="first-image"
+              src="/images/login/logo-ifpr.png"
+              alt="Logo IFPR"
+              className="
                         w-full 
                         my-5"
-              />
-              <p
-                className="
+            />
+            <p
+              className="
                         my-5 text-right"
-              >
-                — “Mantendo os responsáveis sempre
-                <br />informados”
-              </p>
-              <img
-                id="second-image"
-                src="/images/login/login-background-image.png"
-                alt="Imagem de fundo"
-                className="
+            >
+              — “Mantendo os responsáveis sempre
+              <br />informados”
+            </p>
+            <img
+              id="second-image"
+              src="/images/login/login-background-image.png"
+              alt="Imagem de fundo"
+              className="
                         w-full 
                         my-5"
-              />
-            </div>
-        </div>        </div>
+            />
+          </div>
+        </div>
+      </div>
       <div
         className="
-                login-background 
+                login-background
                 w-full"
       >
         <Card
