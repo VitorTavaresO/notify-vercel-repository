@@ -200,7 +200,7 @@ function EmployeeList() {
   }
 
   return (
-    <div className="container">
+    <div className="employeelist-container">
       <Helmet>
         <title>Servidores - NOTIFY</title>
       </Helmet>
@@ -248,6 +248,7 @@ function EmployeeList() {
           />
         </Card>
       </div>
+      <div className="cover-container"></div>
     </div>
   );
 }
