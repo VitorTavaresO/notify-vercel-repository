@@ -6,6 +6,20 @@
 
 .footer {
     
-    background-color: #3E454D;
-    color: #EEEEEE;
+    background-color: #FFFFFF;
+    border-top: solid 2px #C14043;
+    border-radius: 7px;
+}
+
+.footer h1 {
+
+    color: #242424;
+    font-size: 17px;
+    font-weight: 550;
+}
+
+.footer .copy-char {
+
+    font-size: 18px;
+    font-weight: 650;
 }
