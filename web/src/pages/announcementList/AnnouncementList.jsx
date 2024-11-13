@@ -17,6 +17,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import './AnnouncementList.css';
 
 function AnnouncementList() {
+    const isFilter = useState(true);
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("");
@@ -55,6 +56,16 @@ function AnnouncementList() {
     const [dialogTitle, setDialogTitle] = useState(null);
     const [dialogDate, setDialogDate] = useState(null);
     const [dialogClasses, setDialogClasses] = useState(null);
+
+    useEffect(() => {
+        if (!loading) {
+          document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
+      
+          return () => {
+            document.documentElement.style.setProperty('--footer-width', '100%');
+          };
+        }
+    }, [isFilter, loading]);
 
     const openDialog = () => {
         setTitle("");

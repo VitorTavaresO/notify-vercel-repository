@@ -9,6 +9,8 @@
     background-color: #FFFFFF;
     border-top: solid 2px #C14043;
     border-radius: 7px;
+
+    width: var(--footer-width);
 }
 
 .footer h1 {
