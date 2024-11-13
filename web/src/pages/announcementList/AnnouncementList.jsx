@@ -411,7 +411,7 @@ function AnnouncementList() {
     }
 
     return (
-        <div className="container">
+        <div className="announcementlist-container">
             <Helmet>
                 <title>Comunicados - NOTIFY</title>
             </Helmet>
@@ -604,6 +604,7 @@ function AnnouncementList() {
                     />
                 </Card>
             </div>
+            <div className="cover-container"></div>
         </div>
     );
 
