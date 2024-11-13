@@ -86,7 +86,8 @@ const Login = () => {
             align-items-center
             justify-content-center"
     > 
-        <div className="
+        <div 
+          className="
               justify-content-end
               w-full
               h-screen
@@ -112,7 +113,7 @@ const Login = () => {
                     -mt-8
                     justify-content-evenly"
             >
-              <div /** */
+              <div
                 className="
                     additional-content 
                     flex
@@ -273,7 +274,7 @@ const Login = () => {
                 id="register-button"
                 className="
                                     w-full
-                                    mb-4"
+                                    mb-2"
                 link
                 onMouseOver={({ target }) =>
                   (target.style.color = "var(--register-button-over-color)")
@@ -282,6 +283,21 @@ const Login = () => {
                   (target.style.color = "var(--register-button-out-color)")
                 }
                 onClick={handleRegisterButton}
+              />
+              <Button
+                label="Esqueci minha senha"
+                id="recover-button"
+                className="
+                                    w-full
+                                    mb-2"
+                link
+                onMouseOver={({ target }) =>
+                  (target.style.color = "var(--register-button-over-color)")
+                }
+                onMouseOut={({ target }) =>
+                  (target.style.color = "var(--register-button-out-color)")
+                }
+                /*onClick={""}*/
               />
             </div>
           </div>
