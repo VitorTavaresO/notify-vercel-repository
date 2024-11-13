@@ -85,18 +85,23 @@ const Login = () => {
             min-h-screen
             align-items-center
             justify-content-center"
-    >
-      <div
-        className="
+    > 
+        <div className="
+              justify-content-end
+              w-full
+              h-screen
+              pl-3
+              -mt-8
+              py-8">
+          <div
+            className="
                 additional-content-background
                 justify-content-end
                 w-full
                 h-screen
-                py-8"
-      >
-
-        <div
-          className="
+                py-8">
+            <div
+              className="
                     second-additional-content 
                     flex
                     flex-column
@@ -104,10 +109,11 @@ const Login = () => {
                     min-h-full
                     border-left-3
                     pl-3
+                    -mt-8
                     justify-content-evenly"
-        >
-          <div
-            className="
+            >
+              <div /** */
+                className="
                     additional-content 
                     flex
                     flex-column
@@ -115,34 +121,37 @@ const Login = () => {
                     min-h-full
                     border-left-3
                     pl-5
+                    -mt-8
                     justify-content-evenly"
-          >
-            <img
-              id="first-image"
-              src="/images/login/logo-ifpr.png"
-              alt="Logo IFPR"
-              className="
+              >
+                <img
+                  id="first-image"
+                  src="/images/login/logo-ifpr.png"
+                  alt="Logo IFPR"
+                  className="
                         w-full 
                         my-5"
-            />
-            <p
-              className="
+                />
+                <p
+                  className="
                         my-5 text-right"
-            >
-              — “Mantendo os responsáveis sempre
-              <br />informados”
-            </p>
-            <img
-              id="second-image"
-              src="/images/login/login-background-image.png"
-              alt="Imagem de fundo"
-              className="
+                >
+                  — “Mantendo os responsáveis sempre
+                  <br />informados”
+                </p>
+                <img
+                  id="second-image"
+                  src="/images/login/login-background-image.png"
+                  alt="Imagem de fundo"
+                  className="
                         w-full 
                         my-5"
-            />
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
       <div
         className="
                 login-background

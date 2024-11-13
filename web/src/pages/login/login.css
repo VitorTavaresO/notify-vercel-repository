@@ -70,6 +70,8 @@
     .additional-content-background {
         display: flex;
         padding-left: min(40px, 5vw);
+
+        height: 100vh;
     }
 
     .additional-content {
