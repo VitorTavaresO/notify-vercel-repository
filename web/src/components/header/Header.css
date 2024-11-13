@@ -4,24 +4,38 @@
 .header {
 
     border-width: 0px;  /* evitar_problemas */
-    background-color: #3E454D;  /* background-menubar */
+    background-color: #FFFFFF;  /* background-menubar */
+    border-bottom: solid 2px #2F9E41;
+    border-radius: 7px;
     position: fixed; width: 100%;  /* menubar-fixed */
     z-index: 10000;  /* evitar_problemas */
 }
 
 .header .p-menuitem-text {
 
-    color: #EEEEEE !important; /* color-text */
-    font-weight: 350;
+    color: #242424 !important; /* color-text */
+    font-weight: 375;
 }
 
 .header .p-menuitem:hover {
 
-    .p-menuitem-text { color: #83F080 !important; }  /* color-text-hover */
-    .p-menuitem-content:hover { background: #3E454D !important; } /* evitar_problemas */
+    .p-menuitem-text {
+
+        color: #4bca60 !important; /* color-text */
+        transition: color 0.18s ease; /* transiçao-text */
+    }
+
+    .p-menuitem-content { transition: background-color 0.25s ease;} /* transiçao-background */
+    .p-menuitem-content:hover { background: #eefff1 !important; } /* color-hover-text */
 }
 
-.p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #3E454D !important; }  /* evitar_problemas */
+.header .avatar {
+    width: 38px; height: 38px; /* tamanho-avatar */
+    outline: solid 2px #6BD07B; /* borda-avatar */
+    outline-offset: -1px; /* evitar_problemas */
+}
+
+.p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #FFFFFF !important; }  /* evitar_problemas */
 
 
     /* DropDown Icon */
@@ -35,6 +49,7 @@
     padding: 8px 0;
     border-radius: 8px; overflow: hidden;
     background-color: #FFFFFF; box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
+    border: solid 2px #73e686;
 }
 
 .user-menu-item {
@@ -42,13 +57,14 @@
     cursor: pointer;
     white-space: nowrap;
     padding: 11px 145px 11px 20px;
+    transition: color 0.25s ease;
 }
 
-.user-menu-item:hover { background-color: #ECECEC;}  /* background-hover */
+.user-menu-item:hover { background-color: #edfff0; transition: background-color 0.25s ease;}  /* background-hover */
 
 
-.dropdown-icon { color: #E0E0E0 !important; }  /* color-icon */
-.dropdown-icon:hover{ background-color: #3E454D !important; }  /* evitar_problemas */
+.dropdown-icon { color: #242424 !important; }  /* color-icon */
+.dropdown-icon:hover{ background-color: #ffffff00 !important; }  /* evitar_problemas */
 .p-button:focus { box-shadow: 0 0 0 0px #3e454d00, 0 0 0 0px #3e454d00 !important; }  /* evitar_problemas */
 
 
@@ -56,17 +72,15 @@
 
 @media (max-width: 960px) {
 
-    .header .p-menubar-root-list { background-color: #4D545E !important; }  /* background-submenubar */
-    .header .p-menubar-root-list .p-menuitem-link { color: #EEEEEE !important; }  /* color-text */
-    .header .p-menubar-root-list .p-menuitem-link:hover { color: #83F080 !important ; }  /* color-text-hover */
+    .header .p-menubar-root-list { margin-top: 2px; background-color: #EBEBEB !important;}  /* posição e background-submenubar */
 
     .logo img{ margin-right: 20px; } /* margin-icon */
-    .p-menubar .p-menubar-button{ color: #EEEEEE !important;} /* color-icon */
-    .header .p-menubar-button { background-color: #3E454D !important; } /* background-icon */
+    .p-menubar .p-menubar-button{ color: #242424 !important;} /* color-icon */
+    .header .p-menubar-button { background-color: #FFFFFF !important; } /* background-icon */
 
-    .header .p-menubar-button .p-menubar-button-icon { color: #EEEEEE !important; } /* ??? */
+    .header .p-menubar-button .p-menubar-button-icon { color: #242424 !important; } /* ??? */
 
-    .header .p-menuitem:hover { .p-menuitem-content:hover { background: #4D545E !important; }} /* evitar_problemas */
+    .header .p-menuitem:hover { .p-menuitem-content:hover { background: #EBEBEB !important; }} /* evitar_problemas */
     .p-menubar .p-menubar-button:focus { outline: 0 none; outline-offset: 0; box-shadow: 0 0 0 0; } /* evitar_problemas */
-    .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #4d545e !important; } /* evitar_problemas */
+    .p-menubar .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content { background: #EBEBEB !important; } /* evitar_problemas */
 }

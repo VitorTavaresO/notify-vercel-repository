@@ -1,11 +1,14 @@
-.container {
-    background-color: #bebebe;
+.profile-container {
+    display: flex;
+    height: auto;
+    width: auto;
+    background-color: #F5F5F5;
 }
 
 .profile-card {
     padding: 20px;
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 45px auto 60px auto;
     width: 100%;
 }
 

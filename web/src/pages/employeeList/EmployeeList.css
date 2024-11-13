@@ -1,8 +1,18 @@
-.container {
+.employeelist-container {
     display: flex;
     height: auto;
     width: auto;
-    background-color: #EEEEEE;
+    background-color: #F5F5F5;
+}
+
+.cover-container{
+
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 62px);
+    background-color: #F5F5F5;
+
+    z-index: -1;
 }
 
 .card-container {

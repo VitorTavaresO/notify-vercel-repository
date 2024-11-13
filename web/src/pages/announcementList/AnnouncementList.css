@@ -1,3 +1,9 @@
+.announcementlist-container{
+    display: flex;
+    height: auto;
+    width: auto;
+    background-color: #F5F5F5;
+}
 
 .announcement-item {
     display: flex;
