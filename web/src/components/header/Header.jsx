@@ -53,7 +53,7 @@ const Header = () => {
                 className="mr-2 avatar"       
                 onClick={toggleUserMenu}
             />
-            <Button icon="pi pi-chevron-down" className="p-button-text -ml-2 dropdown-icon" onClick={toggleUserMenu} />
+            <Button icon="pi pi-chevron-down" className="p-button-text -ml-2 mr-1 dropdown-icon" onClick={toggleUserMenu} />
             {isUserMenuVisible && ( <div className="user-menu">
                 {userMenuItems.map((item, index) => (
                     <div key={index} className="user-menu-item" onClick={item.command}> {item.label} </div>

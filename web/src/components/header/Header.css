@@ -64,7 +64,7 @@
 
 
 .dropdown-icon { color: #242424 !important; }  /* color-icon */
-.dropdown-icon:hover{ background-color: #FFFFFF !important; }  /* evitar_problemas */
+.dropdown-icon:hover{ background-color: #ffffff00 !important; }  /* evitar_problemas */
 .p-button:focus { box-shadow: 0 0 0 0px #3e454d00, 0 0 0 0px #3e454d00 !important; }  /* evitar_problemas */
 
 
