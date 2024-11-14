@@ -1,63 +1,126 @@
 package com.auction.backend.service;
 
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
 import com.auction.backend.exception.LoginException;
 import com.auction.backend.model.User;
+import com.auction.backend.model.UserRecoveryPasswordDTO;
 import com.auction.backend.repository.UserRepository;
 
+import jakarta.mail.MessagingException;
+
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int CODE_LENGTH = 5;
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public User create(User user) {
+        user.setEmailValidationCode(generateRandomCode());
         cpfValidation(user.getCpf());
         emailValidation(user.getEmail());
         passwordValidation(user.getPassword());
 
         User userSaved = userRepository.save(user);
         Context context = new Context();
+        
         context.setVariable("name", userSaved.getName());
+        context.setVariable("link", "http://localhost:3000/email-validation/" + userSaved.getEmail() + "/" + userSaved.getEmailValidationCode());
+        context.setVariable("year", LocalDateTime.now().getYear());
+        try {
+            emailService.sendTemplateEmail(userSaved.getEmail(), "Cadastro realizado com sucesso", context, "emailWelcome");
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         return userSaved;
     }
-
-    public User read(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public User readCpf(String cpf) {
-        return userRepository.findByCpf(cpf).orElseThrow(() -> new NoSuchElementException("CPF not found"));
+    private String generateRandomCode() {
+        String code;
+        do {
+            StringBuilder codeBuilder = new StringBuilder(CODE_LENGTH);
+            for (int i = 0; i < CODE_LENGTH; i++) {
+                codeBuilder.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+            }
+            code = codeBuilder.toString();
+        } while (userRepository.existsByValidationCode(code));
+        return code;
     }
 
-    public User readSiape(String siape) {
-        return userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("Email not found"));
-    } 
-
-    public User update(User user) {
-        User savedUser = userRepository.findById(user.getId())
+    public String sendValidationCode(String email) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
-        savedUser.setName(user.getName());
-        return userRepository.save(savedUser);
+        Context context = new Context();
+        String validationCode = generateRandomCode();
+        user.setValidationCode(validationCode);
+        user.setValidationCodeValidity(LocalDateTime.now().plusMinutes(5));
+        userRepository.save(user);
+        context.setVariable("name", user.getName());
+        context.setVariable("validationCode", validationCode);
+        context.setVariable("year", LocalDateTime.now().getYear());
+        try {
+            emailService.sendTemplateEmail(user.getEmail(), "Código de validação", context, "emailValidationCode");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return validationCode;
+
     }
 
-    public void delete(Long id) {
-        User savedUser = userRepository.findById(id)
+    public boolean emailValidation(String email, String emailValidationCode) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
-        userRepository.delete(savedUser);
+        if (emailValidationCode.equals(user.getEmailValidationCode())) {
+            user.setActive(true);
+            user.setEmailValidationCode(null);
+            userRepository.save(user);
+            return true;
+        } else {
+            throw new IllegalArgumentException("Invalid email validation code");
+        }
     }
 
-    public List<User> list() {
-        return userRepository.findAll();
+    public boolean recoveryPassword(UserRecoveryPasswordDTO userRecoveryPasswordDTO) {
+        User user = userRepository.findByEmail(userRecoveryPasswordDTO.getEmail())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (userRecoveryPasswordDTO.getValidationCode().equals(user.getValidationCode())
+                && user.getValidationCodeValidity().isAfter(LocalDateTime.now())) {
+            user.setPassword(userRecoveryPasswordDTO.getNewPassword());
+            user.setValidationCode(null);
+            user.setValidationCodeValidity(null);
+            userRepository.save(user);
+            return true;
+        } else {
+            throw new IllegalArgumentException("Invalid validation code");
+        }
     }
+
 
     // --------------- CPF VALIDATION ---------------
 
@@ -233,4 +296,33 @@ public class UserService {
     
         return user;
     }   
+    
+    public User read(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
+    public User readCpf(String cpf) {
+        return userRepository.findByCpf(cpf).orElseThrow(() -> new NoSuchElementException("CPF not found"));
+    }
+
+    public User readSiape(String siape) {
+        return userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("Email not found"));
+    }
+
+    public User update(User user) {
+        User savedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        savedUser.setName(user.getName());
+        return userRepository.save(savedUser);
+    }
+
+    public void delete(Long id) {
+        User savedUser = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        userRepository.delete(savedUser);
+    }
+
+    public List<User> list() {
+        return userRepository.findAll();
+    }
 }

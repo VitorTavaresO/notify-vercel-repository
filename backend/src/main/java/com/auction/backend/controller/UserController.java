@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,13 @@ import com.auction.backend.enums.RoleName;
 import com.auction.backend.exception.LoginException;
 import com.auction.backend.model.LoginRequest;
 import com.auction.backend.model.User;
+import com.auction.backend.model.UserAuthRequestDTO;
+import com.auction.backend.model.UserAuthResponseDTO;
+import com.auction.backend.model.UserRecoveryPasswordDTO;
+import com.auction.backend.security.JwtService;
 import com.auction.backend.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/user")
@@ -33,6 +41,9 @@ public class UserController {
 
     @Autowired
     private AuthenticationManager  authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping
     public User create(@RequestBody User user) {
@@ -52,6 +63,29 @@ public class UserController {
     @GetMapping("/siape/{siape}")
     public User readSiape(@PathVariable("siape") String siape) {
         return userService.readSiape(siape);
+    }
+
+    @GetMapping("/email-validation/{email}/{code}")
+    public boolean emailValidation(@PathVariable String email, @PathVariable String code) {
+        return userService.emailValidation(email, code);
+    }
+    
+
+    @PostMapping("/login")
+    public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        return new UserAuthResponseDTO(authRequest.getEmail(), jwtService.generateToken(authentication.getName()));
+    }
+
+    @PostMapping("/send-validation-code")
+    public String sendValidationCode(@RequestBody Map<String, String> json){
+        String email = json.get("email");
+        return userService.sendValidationCode(email);
+    }
+
+    @PostMapping("/recovery-password")
+    public boolean recoveryPassword(@RequestBody UserRecoveryPasswordDTO userRecoveryPasswordDTO){
+        return userService.recoveryPassword(userRecoveryPasswordDTO);
     }
 
     @PutMapping
