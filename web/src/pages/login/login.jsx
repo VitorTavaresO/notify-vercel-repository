@@ -81,8 +81,8 @@ const Login = () => {
       className="
             login-page
             flex
-            min-w-screen
             min-h-screen
+            min-w-screen
             align-items-center
             justify-content-center"
     > 

@@ -10,6 +10,7 @@
 
 .login-page {
     background-color: var(--login-page-color);
+    overflow: hidden;
 }
 
 .login-container {
