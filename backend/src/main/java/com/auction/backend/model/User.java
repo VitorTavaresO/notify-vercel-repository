@@ -79,7 +79,6 @@ public class User implements UserDetails {
         this.password = passwordEncoder.encode(password);
     }
 
-
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     @Setter(value = AccessLevel.NONE)
     private List<UserProfile> userProfile;

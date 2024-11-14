@@ -40,15 +40,10 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private AuthenticationManager  authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtService jwtService;
-
-    @PostMapping
-    public User create(@RequestBody User user) {
-        return userService.create(user);
-    }
 
     @GetMapping("/id/{id}")
     public User read(@PathVariable("id") Long id) {
@@ -69,25 +64,30 @@ public class UserController {
     public boolean emailValidation(@PathVariable String email, @PathVariable String code) {
         return userService.emailValidation(email, code);
     }
-    
 
     @PostMapping("/login")
-    public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
-        return new UserAuthResponseDTO(authRequest.getEmail(), jwtService.generateToken(authentication.getName()));
+    public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getSiape(), authRequest.getPassword()));
+        return new UserAuthResponseDTO(authRequest.getSiape(), jwtService.generateToken(authentication.getName()));
     }
 
     @PostMapping("/send-validation-code")
-    public String sendValidationCode(@RequestBody Map<String, String> json){
+    public String sendValidationCode(@RequestBody Map<String, String> json) {
         String email = json.get("email");
         return userService.sendValidationCode(email);
     }
 
     @PostMapping("/recovery-password")
-    public boolean recoveryPassword(@RequestBody UserRecoveryPasswordDTO userRecoveryPasswordDTO){
+    public boolean recoveryPassword(@RequestBody UserRecoveryPasswordDTO userRecoveryPasswordDTO) {
         return userService.recoveryPassword(userRecoveryPasswordDTO);
     }
 
+    @PostMapping
+    public User create(@RequestBody User user) {
+        return userService.create(user);
+    }
+    
     @PutMapping
     public User update(@RequestBody User user) {
         return userService.update(user);
@@ -118,17 +118,6 @@ public class UserController {
         return userService.passwordValidation(password);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            User authenticatedUser = userService.authenticate(loginRequest.getSiape(), loginRequest.getPassword());
-            return ResponseEntity.ok(authenticatedUser);
-
-        } catch (LoginException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-    }
-
     @PutMapping("/update-contact/{siape}")
     public ResponseEntity<User> updateEmailAndPhone(
             @PathVariable("siape") String siape,
@@ -156,7 +145,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 
     @PutMapping("/update-permission/{siape}")
     public ResponseEntity<User> updatePermission(

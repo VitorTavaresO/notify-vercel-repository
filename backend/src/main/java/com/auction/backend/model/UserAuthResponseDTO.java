@@ -6,11 +6,11 @@ import lombok.Data;
 //@AllArgsConstructor
 public class UserAuthResponseDTO {
 
-    private String email;
+    private String siape;
     private String token;
 
-    public UserAuthResponseDTO(String email, String token) {
-        this.email = email;
+    public UserAuthResponseDTO(String siape, String token) {
+        this.siape = siape;
         this.token = token;
     }
 }
