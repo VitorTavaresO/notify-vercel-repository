@@ -19,6 +19,9 @@ public class Guardian {
     private String phone;
     private String email;
     private String studentName;
-    private int stutdentRA;
+    private int studentRA;
+    private String status;
+    private String course;
+    private String courseYear;
 
 }
