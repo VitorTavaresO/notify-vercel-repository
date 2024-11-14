@@ -271,7 +271,7 @@ const Login = () => {
             >
               <Button
                 label="Criar Conta"
-                id="register-button"
+                id="button"
                 className="
                                     w-full
                                     mb-2"
@@ -286,7 +286,7 @@ const Login = () => {
               />
               <Button
                 label="Esqueci minha senha"
-                id="recover-button"
+                id="button"
                 className="
                                     w-full
                                     mb-2"

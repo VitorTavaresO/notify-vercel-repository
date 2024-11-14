@@ -24,7 +24,7 @@
     color: var(--acess-button-color);
 }
 
-#register-button span {
+#button span {
     color: var(--register-button-out-color);
 }
 
