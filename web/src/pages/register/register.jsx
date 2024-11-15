@@ -207,7 +207,7 @@ const Register = () => {
     return (
         <div
             className="
-            login-page
+            register
             flex
             min-h-screen
             min-w-screen
@@ -260,12 +260,13 @@ const Register = () => {
                                 src="/images/login/logo-ifpr.png"
                                 alt="Logo IFPR"
                                 className="
-                                    w-full 
-                                    my-5"
+                                    w-full
+                                    pt-8
+                                    pl-5"
                             />
                             <p
                                 className="
-                                my-5 text-right"
+                                my-5 pl-5 text-right"
                             >
                                 — “Mantendo os responsáveis sempre
                                 <br />informados”
@@ -275,16 +276,18 @@ const Register = () => {
                                 src="/images/register/register-image-one.png"
                                 alt="Imagem de fundo"
                                 className="
-                                w-full 
-                                my-5"
+                                w-full
+                                pl-5"
                             />
                             <img
                                 id="third-image"
                                 src="/images/register/register-image-two.png"
                                 alt="Imagem de fundo"
                                 className="
-                                w-full 
-                                my-5"
+                                sticky
+                                pt-5
+                                pl-5
+                                w-full"
                             />
                         </div>
                     </div>

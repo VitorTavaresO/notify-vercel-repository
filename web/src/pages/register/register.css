@@ -1,5 +1,5 @@
 :root {
-    --login-page-color: rgb(245, 245, 245);
+    --register-color: rgb(245, 245, 245);
     --login-container-color: rgb(255, 255, 255);
     --register-button-out-color: rgb(62, 187, 83);
     --register-button-over-color: rgb(46, 46, 46);
@@ -8,52 +8,54 @@
     --second-additional-content-border-color: rgb(190, 59, 63);
 }
 
-.register{
+.register {
     background-color: var(--register-color);
+    overflow: hidden;
 }
 
-.register-container{
+.register-container {
     background-color: var(--register-container-color);
 }
 
-.register-container > div > div{ /*p-card-content: tem padding padrao*/
+.register-container>div>div {
+    /*p-card-content: tem padding padrao*/
     padding: 0;
 }
 
-.sub-title{
+.sub-title {
     margin: 0 0 40px 0;
 }
 
-.password-area div{
+.password-area div {
     width: 100%;
 }
 
-#register-button span{
+#register-button span {
     color: var(--register-button-color);
 }
 
-#back-button span{
+#back-button span {
     color: var(--back-button-out-color);
 }
 
 @media screen and (max-width: 600px) {
-    .p-card-body{
+    .p-card-body {
         padding: 0;
     }
 
-    .register-container{
+    .register-container {
         width: 100%;
         padding: 40px 10px;
         box-shadow: none;
     }
 
-    .container-grid{
+    .container-grid {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .grid-item{
+    .grid-item {
         min-width: 100%;
     }
 }
@@ -63,7 +65,7 @@
         padding: 20px 0;
     }
 
-    .register-container{
+    .register-container {
         max-width: 450px;
 
         background: linear-gradient(white, white) padding-box,
@@ -102,5 +104,20 @@
         border-color: var(--second-additional-content-border-color);
     }
 
-}
+    #first-image {
+        max-width: 300px;
+    }
 
+    #second-image {
+        max-width: 350px;
+    }
+
+    #third-image {
+        max-width: 300px;
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+    }
+
+
+}
