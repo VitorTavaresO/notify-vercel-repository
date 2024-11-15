@@ -64,7 +64,7 @@
     }
 
     .register-container{
-        max-width: 500px;
+        max-width: 450px;
 
         background: linear-gradient(white, white) padding-box,
             linear-gradient(to right, var(--additional-content-border-color), var(--second-additional-content-border-color)) border-box;

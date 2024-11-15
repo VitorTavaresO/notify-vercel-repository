@@ -205,53 +205,89 @@ const Register = () => {
     };
 
     return (
-        <div className="
-            register
+        <div
+            className="
+            login-page
             flex
             min-h-screen
+            min-w-screen
             align-items-center
-            justify-content-center">
+            justify-content-center"
+        >
             <div
                 className="
-                additional-content-background
                 justify-content-end
                 w-full
                 h-screen
+                pl-3
+                -mt-8
                 py-8"
-            >
+              >
                 <div
                     className="
-                    additional-content 
-                    flex
-                    flex-column
-                    max-w-30rem
-                    min-h-full
-                    border-left-3
-                    pl-5
-                    justify-content-evenly"
+                    additional-content-background
+                    justify-content-end
+                    w-full
+                    h-screen
+                    py-8"
                 >
-                    <img
-                        id="first-image"
-                        src="/images/login/logo-ifpr.png"
-                        alt="Logo IFPR"
+                    <div
                         className="
-                        w-full 
-                        my-5"
-                    />
-                    <p
-                        className="
-                        my-5"
+                        second-additional-content 
+                        flex
+                        flex-column
+                        max-w-30rem
+                        min-h-full
+                        border-left-3
+                        pl-3
+                        -mt-8
+                        justify-content-evenly"
                     >
-                        — “Mantendo os responsáveis sempre informados”
-                    </p>
-                    <img
-                        id="second-image"
-                        src="/images/login/login-background-image.png"
-                        alt="Imagem de fundo"
-                        className="
-                        w-full 
-                        my-5"
-                    />
+                        <div
+                            className="
+                            additional-content 
+                            flex
+                            flex-column
+                            max-w-30rem
+                            min-h-full
+                            border-left-3
+                            pl-5
+                            -mt-8
+                            justify-content-evenly"
+                        >
+                            <img
+                                id="first-image"
+                                src="/images/login/logo-ifpr.png"
+                                alt="Logo IFPR"
+                                className="
+                                    w-full 
+                                    my-5"
+                            />
+                            <p
+                                className="
+                                my-5 text-right"
+                            >
+                                — “Mantendo os responsáveis sempre
+                                <br />informados”
+                            </p>
+                            <img
+                                id="second-image"
+                                src="/images/register/register-image-one.png"
+                                alt="Imagem de fundo"
+                                className="
+                                w-full 
+                                my-5"
+                            />
+                            <img
+                                id="third-image"
+                                src="/images/register/register-image-two.png"
+                                alt="Imagem de fundo"
+                                className="
+                                w-full 
+                                my-5"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div
