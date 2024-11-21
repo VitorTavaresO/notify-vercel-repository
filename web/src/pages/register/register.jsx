@@ -311,10 +311,10 @@ const Register = () => {
                     justify-content-center">
                         <div className="
                         grid-item
-                        col-4">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <InputText
                                     value={name}
                                     id="name"
@@ -331,10 +331,10 @@ const Register = () => {
                         </div>
                         <div className="
                         grid-item
-                        col-4">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <InputMask
                                     value={cpf}
                                     id="cpf"
@@ -358,10 +358,10 @@ const Register = () => {
                         </div>
                         <div className="
                         grid-item
-                        col-4">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <InputMask
                                     value={siape}
                                     id="siape"
@@ -379,10 +379,10 @@ const Register = () => {
                         </div>
                         <div className="
                         grid-item
-                        col-4">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <InputMask
                                     value={phone}
                                     id="phone"
@@ -401,10 +401,10 @@ const Register = () => {
                         </div>
                         <div className="
                         grid-item
-                        col-4">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <InputText
                                     value={position}
                                     id="position"
@@ -421,10 +421,10 @@ const Register = () => {
                         </div>
                         <div className="
                         grid-item
-                        col-4">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <InputText
                                     value={email}
                                     id="email"
@@ -447,10 +447,10 @@ const Register = () => {
                         <div className="
                         password-area
                         grid-item
-                        col-6">
+                        col-12">
                             <FloatLabel className="
                             w-full
-                            mb-5">
+                            mb-3">
                                 <Password
                                     value={password}
                                     id="password"
@@ -477,11 +477,11 @@ const Register = () => {
                         </div>
                         <div className="
                         grid-item
-                        col-6">
+                        col-12">
                             <FloatLabel className="
                             password-area
                             w-full
-                            mb-5">
+                            mb-3">
                                 <Password
                                     value={confirmPassword}
                                     id="confirmPassword"
@@ -513,7 +513,7 @@ const Register = () => {
                                 id="register-button"
                                 className={`
                                 w-18rem
-                                mb-4
+                                mb-2
                                 ${isFormValid ? "bg-green-600 border-green-600" : "bg-gray-500 border-gray-500"}
                             `}
                                 disabled={!isFormValid || isRegistering}
@@ -528,7 +528,7 @@ const Register = () => {
                                 id="back-button"
                                 className="
                                 w-full
-                                mb-4"
+                                mb-2"
                                 link
                                 onMouseOver={({ target }) => target.style.color = "var(--back-button-over-color)"}
                                 onMouseOut={({ target }) => target.style.color = "var(--back-button-out-color)"}
