@@ -43,6 +43,7 @@ public class UserService implements UserDetailsService{
         Context context = new Context();
         
         context.setVariable("name", userSaved.getName());
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Mudar o ip por uma variavel !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         context.setVariable("link", "http://localhost:3000/email-validation/" + userSaved.getEmail() + "/" + userSaved.getEmailValidationCode());
         context.setVariable("year", LocalDateTime.now().getYear());
         try {
