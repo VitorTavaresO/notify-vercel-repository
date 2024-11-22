@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auction.backend.enums.RoleName;
-import com.auction.backend.exception.LoginException;
-import com.auction.backend.model.LoginRequest;
 import com.auction.backend.model.User;
 import com.auction.backend.model.UserAuthRequestDTO;
 import com.auction.backend.model.UserAuthResponseDTO;
