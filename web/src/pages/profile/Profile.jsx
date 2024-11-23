@@ -163,7 +163,7 @@ const ProfileCard = () => {
     const memosPaginated = memos.slice(first, first + rows);
 
     return (
-        <div className="container">
+        <div className="profile-container">
             <ConfirmDialog visible={visible} onHide={() => setVisible(false)} />
             <Card className="profile-card">
                 <div className="profile-header">

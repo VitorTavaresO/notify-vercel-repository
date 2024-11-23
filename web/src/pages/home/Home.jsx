@@ -6,10 +6,11 @@ import './Home.css';
 const Home = () => {
 
     return (
-        <>
-        <Helmet>
-            <title>Início</title>
-        </Helmet>
-        </>
+        <div className="home-container">
+            <Helmet>
+                <title>Início</title>
+            </Helmet>
+            <div className="cover-container"></div>
+        </div>
     );
 }; export default Home;

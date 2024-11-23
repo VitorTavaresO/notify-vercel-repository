@@ -14,7 +14,7 @@ const Header = () => {
             command: () => { navigate('/'); }
          },
         {label: 'Comunicados', command: () => { navigate('/announcement-list'); }},
-        {label: 'Responsáveis'},
+        {label: 'Responsáveis', command: () => { navigate('/guardian-list'); }},
         {label: 'Servidores', command: () => { navigate('/employee-list'); }},
     ];
 
@@ -48,11 +48,12 @@ const Header = () => {
     const end = (
         <div className="flex align-items-center mr-3 relative" ref={userMenuRef}>
             <Avatar 
-                image="https://primefaces.org/cdn/primereact/images/avatar/asiyajavayant.png" 
-                className="mr-2"         
+                image="/images/default_pic.png"
+                shape="circle"
+                className="mr-2 avatar"       
                 onClick={toggleUserMenu}
             />
-            <Button icon="pi pi-chevron-down" className="p-button-text -ml-2 dropdown-icon" onClick={toggleUserMenu} />
+            <Button icon="pi pi-chevron-down" className="p-button-text -ml-2 mr-1 dropdown-icon" onClick={toggleUserMenu} />
             {isUserMenuVisible && ( <div className="user-menu">
                 {userMenuItems.map((item, index) => (
                     <div key={index} className="user-menu-item" onClick={item.command}> {item.label} </div>
@@ -63,7 +64,7 @@ const Header = () => {
 
     return (
         <>
-        <Menubar model={items} start={start} end={end} className="border-noround header"/>
+        <Menubar model={items} start={start} end={end} className="header"/>
         </>
     );
 }; export default Header;
