@@ -6,8 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import com.auction.backend.model.UserAuthRequestDTO;
-import com.auction.backend.model.UserAuthResponseDTO;
+import com.auction.backend.model.dto.UserAuthRequestDTO;
+import com.auction.backend.model.dto.UserAuthResponseDTO;
 import com.auction.backend.security.JwtService;
 
 @RestController

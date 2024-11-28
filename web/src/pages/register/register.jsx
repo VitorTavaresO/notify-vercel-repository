@@ -8,7 +8,7 @@ import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
 import CpfValidation from "../../validation/cpfValidation";
-import EmailValidation from "../../validation/emailValidation";
+import EmailValidation from "../../validation/validatePasswordResetCode";
 import "./register.css";
 
 const Register = () => {

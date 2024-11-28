@@ -24,13 +24,13 @@ public class JwtService {
     private Key key;
 
     @PostConstruct
-    public void init(){
-         key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    public void init() {
+        key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String userAuthRequestDTO) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(userAuthRequestDTO)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -53,7 +53,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key) 
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

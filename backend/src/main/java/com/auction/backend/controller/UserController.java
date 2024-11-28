@@ -21,9 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auction.backend.enums.RoleName;
 import com.auction.backend.model.User;
-import com.auction.backend.model.UserAuthRequestDTO;
-import com.auction.backend.model.UserAuthResponseDTO;
-import com.auction.backend.model.UserRecoveryPasswordDTO;
+import com.auction.backend.model.dto.UserAuthRequestDTO;
+import com.auction.backend.model.dto.UserAuthResponseDTO;
+import com.auction.backend.model.dto.PasswordResetDTO;
+import com.auction.backend.model.dto.PasswordResetValidateDTO;
 import com.auction.backend.security.JwtService;
 import com.auction.backend.service.UserService;
 
@@ -58,11 +59,6 @@ public class UserController {
         return userService.readSiape(siape);
     }
 
-    @GetMapping("/email-validation/{email}/{code}")
-    public boolean emailValidation(@PathVariable String email, @PathVariable String code) {
-        return userService.emailValidation(email, code);
-    }
-
     @PostMapping("/login")
     public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -70,22 +66,29 @@ public class UserController {
         return new UserAuthResponseDTO(authRequest.getSiape(), jwtService.generateToken(authentication.getName()));
     }
 
-    @PostMapping("/send-validation-code")
-    public String sendValidationCode(@RequestBody Map<String, String> json) {
-        String email = json.get("email");
-        return userService.sendValidationCode(email);
+    @PostMapping("/password-reset-request")
+    public ResponseEntity<?> passwordResetRequest(@RequestBody UserAuthRequestDTO userAuthRequestDTO) {
+        userService.passwordCodeRequest(userAuthRequestDTO);
+        return ResponseEntity.ok("Código de validação enviado para o email.");
     }
 
-    @PostMapping("/recovery-password")
-    public boolean recoveryPassword(@RequestBody UserRecoveryPasswordDTO userRecoveryPasswordDTO) {
-        return userService.recoveryPassword(userRecoveryPasswordDTO);
+    @PostMapping("/password-reset-validate")
+    public ResponseEntity<?> passwordResetValidate(@RequestBody PasswordResetValidateDTO passwordResetValidateDTO) {
+        userService.validatePasswordResetCode(passwordResetValidateDTO);
+        return ResponseEntity.ok("Código de validação verificado.");
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<?> passwordReset(@RequestBody PasswordResetDTO passwordResetDTO) {
+        userService.resetPassword(passwordResetDTO);
+        return ResponseEntity.ok("Senha redefinida com sucesso.");
     }
 
     @PostMapping
     public User create(@RequestBody User user) {
         return userService.create(user);
     }
-    
+
     @PutMapping
     public User update(@RequestBody User user) {
         return userService.update(user);
@@ -107,8 +110,8 @@ public class UserController {
     }
 
     @PostMapping("/validate-email")
-    public UserService.EmailCriteria emailValidation(@RequestBody String email) {
-        return userService.emailValidation(email);
+    public UserService.EmailCriteria validatePasswordResetCode(@RequestBody String email) {
+        return userService.validatePasswordResetCode(email);
     }
 
     @PostMapping("/validate-password")

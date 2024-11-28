@@ -1,6 +1,6 @@
 package com.auction.backend.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,18 +12,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.auction.backend.enums.RoleName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,7 +39,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "user")
 @Data
-@JsonIgnoreProperties({"authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled"})
+@JsonIgnoreProperties({ "authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled" })
 public class User implements UserDetails {
 
     @Id
@@ -67,19 +72,19 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
-    private String validationCode;
-    private LocalDateTime validationCodeValidity;
-    private String emailValidationCode;
+    @JsonIgnore
+    @Column(name = "validation_code", unique = true)
+    private Integer validationCode;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date validationCodeValidity;
+
     private boolean active;
 
     @Transient
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void setPassword(String password) {
-        this.password = passwordEncoder.encode(password);
-    }
-
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Setter(value = AccessLevel.NONE)
     private List<UserProfile> userProfile;
 
@@ -99,6 +104,10 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return siape;
+    }
+
+    public void setPassword(String password) {
+        this.password = passwordEncoder.encode(password);
     }
 }

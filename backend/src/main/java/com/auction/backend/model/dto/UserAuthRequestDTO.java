@@ -1,4 +1,4 @@
-package com.auction.backend.model;
+package com.auction.backend.model.dto;
 
 import lombok.Data;
 
