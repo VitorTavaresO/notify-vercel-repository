@@ -30,11 +30,6 @@ import jakarta.validation.ConstraintViolationException;
 
 @Service
 public class UserService implements UserDetailsService {
-
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final int CODE_LENGTH = 5;
-    private static final SecureRandom RANDOM = new SecureRandom();
-
     @Autowired
     private UserRepository userRepository;
 
@@ -81,18 +76,6 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userIdentification) throws UsernameNotFoundException {
         return userRepository.findBySiape(
                 userIdentification).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-    private String generateRandomCode() {
-        String code;
-        do {
-            StringBuilder codeBuilder = new StringBuilder(CODE_LENGTH);
-            for (int i = 0; i < CODE_LENGTH; i++) {
-                codeBuilder.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
-            }
-            code = codeBuilder.toString();
-        } while (userRepository.existsByValidationCode(code));
-        return code;
     }
 
     public void passwordCodeRequest(UserAuthRequestDTO userAuthRequestDTO) {
