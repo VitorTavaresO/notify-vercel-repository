@@ -7,9 +7,9 @@ import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
-import CpfValidation from "../../validation/cpfValidation";
-import EmailValidation from "../../validation/validatePasswordResetCode";
-import "./register.css";
+import CpfValidation from "../../validation/CpfValidation";
+import EmailValidation from "../../validation/EmailValidation";
+import "./Register.css";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -101,7 +101,6 @@ const Register = () => {
         .catch(error => {
             console.error('Erro ao cadastrar usuário:', error.message);
             setErrorMessage(error.message);
-            alert(`Erro: ${error.message}`);
         })
         .finally(() => {
             setIsRegistering(false);

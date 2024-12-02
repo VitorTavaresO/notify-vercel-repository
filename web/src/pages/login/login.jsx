@@ -6,7 +6,7 @@ import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import axios from "axios";
-import "./login.css";
+import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
