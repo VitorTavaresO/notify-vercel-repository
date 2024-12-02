@@ -1,6 +1,6 @@
 package com.auction.backend.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,10 +74,10 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @Column(name = "validation_code", unique = true)
-    private Integer validationCode;
+    private String validationCode;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date validationCodeValidity;
+    private LocalDateTime validationCodeValidity;
 
     private boolean active;
 

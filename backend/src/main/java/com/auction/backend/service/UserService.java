@@ -30,6 +30,11 @@ import jakarta.validation.ConstraintViolationException;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int CODE_LENGTH = 5;
+    private static final SecureRandom RANDOM = new SecureRandom();
+
     @Autowired
     private UserRepository userRepository;
 
@@ -38,6 +43,19 @@ public class UserService implements UserDetailsService {
 
     @Transient
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    
+    private String generateRandomCode() {
+        String code;
+        do {
+            StringBuilder codeBuilder = new StringBuilder(CODE_LENGTH);
+            for (int i = 0; i < CODE_LENGTH; i++) {
+                codeBuilder.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+            }
+            code = codeBuilder.toString();
+        } while (userRepository.existsByValidationCode(code));
+        return code;
+    }
 
     public User create(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
@@ -53,6 +71,8 @@ public class UserService implements UserDetailsService {
         cpfValidation(user.getCpf());
         validatePasswordResetCode(user.getEmail());
         passwordValidation(user.getPassword());
+
+        user.setValidationCode(generateRandomCode());
 
         User userSaved = userRepository.save(user);
         Context context = new Context();
@@ -72,6 +92,22 @@ public class UserService implements UserDetailsService {
         return userSaved;
     }
 
+    public void emailValidation(String email, String code) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            User userDatabase = user.get();
+            if (code.equals(userDatabase.getValidationCode())) {
+                userDatabase.setActive(true);
+                userDatabase.setValidationCode(null);
+                userRepository.save(userDatabase);
+            } else {
+                throw new IllegalArgumentException("Código de validação inválido ou expirado.");
+            }
+        } else {
+            throw new NoSuchElementException("Usuário não encontrado.");
+        }
+    }
+
     @Override
     public UserDetails loadUserByUsername(String userIdentification) throws UsernameNotFoundException {
         return userRepository.findBySiape(
@@ -83,13 +119,12 @@ public class UserService implements UserDetailsService {
         if (user.isPresent()) {
             User userDatabase = user.get();
             // Gera um código de 6 dígitos:
-            int validationCode = (int) (Math.random() * 900000) + 100000;
-            userDatabase.setValidationCode(validationCode);
+            userDatabase.setValidationCode(generateRandomCode());
             // 10 minutos de validade:
-            userDatabase.setValidationCodeValidity(new Date(System.currentTimeMillis() + 10 * 60 * 1000));
+            userDatabase.setValidationCodeValidity(LocalDateTime.now().plusMinutes(5));
 
             Context context = new Context();
-            context.setVariable("validationCode", validationCode);
+            context.setVariable("validationCode", userDatabase.getValidationCode());
             try {
                 emailService.sendTemplateEmail(
                         userDatabase.getEmail(),
@@ -119,8 +154,8 @@ public class UserService implements UserDetailsService {
         Optional<User> user = userRepository.findByEmail(passwordResetValidateDTO.getEmail());
         if (user.isPresent()) {
             User userDatabase = user.get();
-            if (userDatabase.getValidationCode().equals(passwordResetValidateDTO.getValidationCode()) &&
-                    userDatabase.getValidationCodeValidity().after(new Date())) {
+            if (userDatabase.getValidationCode().equals(userDatabase.getValidationCode()) &&
+                    userDatabase.getValidationCodeValidity().isAfter(LocalDateTime.now())) {
                 // Código válido
             } else {
                 throw new IllegalArgumentException("Código de validação inválido ou expirado.");

@@ -12,6 +12,7 @@ import { Dialog } from 'primereact/dialog';
 import { Helmet } from 'react-helmet';
 
 function EmployeeList() {
+  const isFilter = useState(true);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandEmployee, setExpandEmployee] = useState(null);
@@ -27,6 +28,16 @@ function EmployeeList() {
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [dialogPermission, setDialogPermission] = useState(null);
+
+  useEffect(() => {
+    if (!loading) {
+      document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
+  
+      return () => {
+        document.documentElement.style.setProperty('--footer-width', '100%');
+      };
+    }
+  }, [isFilter, loading]);
 
   const permissionsFilterTemplate = (option) => {
     return (
@@ -189,7 +200,7 @@ function EmployeeList() {
   }
 
   return (
-    <div className="container">
+    <div className="employeelist-container">
       <Helmet>
         <title>Servidores - NOTIFY</title>
       </Helmet>
@@ -237,6 +248,7 @@ function EmployeeList() {
           />
         </Card>
       </div>
+      <div className="cover-container"></div>
     </div>
   );
 }

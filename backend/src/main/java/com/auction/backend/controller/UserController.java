@@ -2,6 +2,7 @@ package com.auction.backend.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import com.auction.backend.enums.RoleName;
 import com.auction.backend.model.User;
 import com.auction.backend.model.dto.UserAuthRequestDTO;
 import com.auction.backend.model.dto.UserAuthResponseDTO;
+import com.auction.backend.repository.UserRepository;
 import com.auction.backend.model.dto.PasswordResetDTO;
 import com.auction.backend.model.dto.PasswordResetValidateDTO;
 import com.auction.backend.security.JwtService;
@@ -37,6 +39,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -59,10 +64,26 @@ public class UserController {
         return userService.readSiape(siape);
     }
 
+    @GetMapping("/email-validation/{email}/{code}")
+    public void emailValidation(@PathVariable String email, @PathVariable String code) {
+        userService.emailValidation(email, code);
+    }
+
     @PostMapping("/login")
     public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest) {
+        User user = userRepository.findBySiape(authRequest.getSiape())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        if (!user.isActive()) {
+            throw new NoSuchElementException("User not active");
+        }
+        System.out.println(user.getSiape());
+        System.out.println(user.getPassword());
+        System.out.println(authRequest.getPassword());
+        
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getSiape(), authRequest.getPassword()));
+
+        System.out.println("ASD");
         return new UserAuthResponseDTO(authRequest.getSiape(), jwtService.generateToken(authentication.getName()));
     }
 

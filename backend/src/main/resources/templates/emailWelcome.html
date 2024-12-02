@@ -1,0 +1,94 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 7px;
+            border: solid 2px #C14043;
+        }
+
+        .header-card {
+            color: #FFFFFF;
+            background-color: #2F9E41;
+            text-align: center;
+            padding: 20px;
+            margin: 0 0 20px 0;
+            border-radius: 7px;
+        }
+
+        .header-card h1 {
+            margin: 0;
+        }
+
+        .footer-card {
+            color: #242424;
+            background-color: #FFFFFF;
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0 0 0;
+            border-top: solid 2px #C14043;
+            border-radius: 7px;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        .content h2 {
+            color: #242424;
+        }
+
+        .content p {
+            color: #666666;
+        }
+
+        .content a {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #FFFFFF;
+            background-color: #2F9E41;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .content a:hover {
+            background-color: #4bca60;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-card">
+            <h1>Notify</h1>
+        </div>
+
+        <div class="content">
+            <h2>Welcome</h2>
+            <p>Hi, <span th:text="${name}"></span></p>
+            <p>Thank you for registering with us. We are excited to have you on board.</p>
+            <p>Click on the button below to activate your account:</p>
+            <a th:href="@{${link}}">Activate Account</a>
+        </div>
+
+        <div class="footer-card">
+            <p>Notify &copy; <span th:text="${year}"></span></p>
+        </div>
+    </div>
+</body>
+
+</html>

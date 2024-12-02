@@ -9,6 +9,8 @@ import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
 import PrivateRouter from "./components/PrivateRouter.jsx";
 import AnnouncementList from "./pages/announcementList/AnnouncementList.jsx";
+import GuardianList from "./pages/guardianList/GuardianList.jsx";
+import RegisterConfirmation from "./pages/registerConfirmation/RegisterConfirmation.jsx";
 
 function App() {
   return (
@@ -28,6 +30,15 @@ function App() {
             element={
               <SimpleLayout>
                 <Register />
+              </SimpleLayout>
+            }
+          />
+          <Route
+            path="/email-validation/:email/:code"
+            element={
+              <SimpleLayout>
+                {" "}
+                <RegisterConfirmation />{" "}
               </SimpleLayout>
             }
           />
@@ -57,6 +68,16 @@ function App() {
               element={
                 <DefaultLayout>
                   <EmployeeList />
+                </DefaultLayout>
+              }
+            />
+          </Route>
+          <Route element={<PrivateRouter />}>
+            <Route
+              path="/guardian-list"
+              element={
+                <DefaultLayout>
+                  <GuardianList />
                 </DefaultLayout>
               }
             />
