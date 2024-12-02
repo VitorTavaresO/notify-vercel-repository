@@ -59,11 +59,11 @@ function AnnouncementList() {
 
     useEffect(() => {
         if (!loading) {
-          document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
-      
-          return () => {
-            document.documentElement.style.setProperty('--footer-width', '100%');
-          };
+            document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
+
+            return () => {
+                document.documentElement.style.setProperty('--footer-width', '100%');
+            };
         }
     }, [isFilter, loading]);
 
@@ -224,7 +224,7 @@ function AnnouncementList() {
         try {
             const response = await fetch("http://localhost:8080/api/messages");
             const data = await response.json();
-            console.log("Dados recebidos da API:", data); // Adicione este log
+            console.log("Dados recebidos da API:", data);
 
             setAnnouncements(Array.isArray(data) ? data : []);
         } catch (error) {
@@ -378,13 +378,12 @@ function AnnouncementList() {
                             <ul>
                                 {announcement.annexes.map((annex, index) => (
                                     <li key={index}>
-                                        <a
-                                            href={`http://localhost:8080/api/messages/${announcement.id}/annexes/${annex.id}/download`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {annex.fileName}
-                                        </a>
+                                        <Button
+                                            label={annex.fileName}
+                                            icon="pi pi-download"
+                                            className="p-button-text p-button-secondary"
+                                            onClick={() => window.open(`http://localhost:8080/api/messages/${announcement.id}/annexes/${annex.id}/download`, '_blank')}
+                                        />
                                     </li>
                                 ))}
                             </ul>
@@ -437,13 +436,12 @@ function AnnouncementList() {
                                 <ul>
                                     {selectedAnnouncement.annexes.map((annex, index) => (
                                         <li key={index}>
-                                            <a
-                                                href={`http://localhost:8080/api/messages/${selectedAnnouncement.id}/annexes/${annex.id}/download`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                {annex.fileName}
-                                            </a>
+                                            <Button
+                                                label={annex.fileName}
+                                                icon="pi pi-download" 
+                                                className="p-button-text p-button-secondary"
+                                                onClick={() => window.open(`http://localhost:8080/api/messages/${selectedAnnouncement.id}/annexes/${annex.id}/download`, '_blank')}
+                                            />
                                         </li>
                                     ))}
                                 </ul>
