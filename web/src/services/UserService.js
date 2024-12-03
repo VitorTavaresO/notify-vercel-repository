@@ -21,5 +21,12 @@ class UserService extends BaseService {
     );
     return response.data;
   }
+
+  async getUserRole(siape) {
+    const response = await this.api.get(`${this.endPoint}/getUserRole`, {
+      params: { siape },
+    });
+    return response.data;
+  }
 }
 export default UserService;

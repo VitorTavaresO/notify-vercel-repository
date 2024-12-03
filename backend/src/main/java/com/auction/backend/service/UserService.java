@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,6 +58,11 @@ public class UserService implements UserDetailsService {
         return code;
     }
 
+    public String getUserRole(User user) {
+        User userDatabase = userRepository.findBySiape(user.getSiape()).get();
+        return userDatabase.getRoleName().toString();
+    }
+
     public User create(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ConstraintViolationException("Email já está em uso", null);
@@ -92,20 +98,17 @@ public class UserService implements UserDetailsService {
         return userSaved;
     }
 
-    public void emailValidation(String email, String code) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            User userDatabase = user.get();
-            if (code.equals(userDatabase.getValidationCode())) {
-                userDatabase.setActive(true);
-                userDatabase.setValidationCode(null);
-                userRepository.save(userDatabase);
-            } else {
-                throw new IllegalArgumentException("Código de validação inválido ou expirado.");
+    public boolean emailValidation(String email, String code) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("Email não encontrado."));
+            if (code.equals(user.getValidationCode())) {
+                user.setActive(true);
+                user.setValidationCode(null);
+                userRepository.save(user);
+                return true;
+            } 
+            else {
+                throw new IllegalArgumentException("Código de validação inválido.");
             }
-        } else {
-            throw new NoSuchElementException("Usuário não encontrado.");
-        }
     }
 
     @Override

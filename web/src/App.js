@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
 import PrivateRouter from "./components/PrivateRouter.jsx";
+import ManagerRouter from "./components/ManagerRouter.jsx";
 import AnnouncementList from "./pages/announcementList/AnnouncementList.jsx";
 import GuardianList from "./pages/guardianList/GuardianList.jsx";
 import RegisterConfirmation from "./pages/registerConfirmation/RegisterConfirmation.jsx";
@@ -62,7 +63,7 @@ function App() {
               }
             />
           </Route>
-          <Route element={<PrivateRouter />}>
+          <Route element={<ManagerRouter />}>
             <Route
               path="/employee-list"
               element={

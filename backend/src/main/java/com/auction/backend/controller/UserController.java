@@ -31,6 +31,8 @@ import com.auction.backend.security.JwtService;
 import com.auction.backend.service.UserService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/user")
@@ -65,27 +67,28 @@ public class UserController {
     }
 
     @GetMapping("/email-validation/{email}/{code}")
-    public void emailValidation(@PathVariable String email, @PathVariable String code) {
-        userService.emailValidation(email, code);
+    public boolean emailValidation(@PathVariable String email, @PathVariable String code) {
+        return userService.emailValidation(email, code);
     }
+    
 
     @PostMapping("/login")
     public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest) {
-        User user = userRepository.findBySiape(authRequest.getSiape())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        if (!user.isActive()) {
+        User user = userRepository.findBySiape(authRequest.getSiape()).orElseThrow(() -> new NoSuchElementException("User not found"));
+        if(!user.isActive()){
             throw new NoSuchElementException("User not active");
         }
-        System.out.println(user.getSiape());
-        System.out.println(user.getPassword());
-        System.out.println(authRequest.getPassword());
-        
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getSiape(), authRequest.getPassword()));
-
-        System.out.println("ASD");
         return new UserAuthResponseDTO(authRequest.getSiape(), jwtService.generateToken(authentication.getName()));
     }
+
+    @GetMapping("/getUserRole")
+    public String getUserRole(@RequestParam String siape) {
+        User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
+        return userService.getUserRole(user);
+    }
+    
 
     @PostMapping("/password-reset-request")
     public ResponseEntity<?> passwordResetRequest(@RequestBody UserAuthRequestDTO userAuthRequestDTO) {
