@@ -211,14 +211,14 @@ const Register = () => {
             flex
             min-h-screen
             min-w-screen
-            align-items-center
+            align-items-stretch
             justify-content-center"
         >
             <div
                 className="
                 justify-content-end
                 w-full
-                h-screen
+                h-full
                 pl-3
                 -mt-8
                 py-8"
@@ -283,11 +283,6 @@ const Register = () => {
                                 id="third-image"
                                 src="/images/register/register-image-two.png"
                                 alt="Imagem de fundo"
-                                className="
-                                sticky
-                                pt-5
-                                pl-5
-                                w-full"
                             />
                         </div>
                     </div>

@@ -66,8 +66,7 @@
     }
 
     .register-container {
-        max-width: 375px;
-
+        max-width: 350px;
         background: linear-gradient(white, white) padding-box,
             linear-gradient(to right, var(--additional-content-border-color), var(--second-additional-content-border-color)) border-box;
         border-radius: 1rem;
@@ -77,8 +76,9 @@
     .additional-content-background {
         display: flex;
         padding-left: min(40px, 5vw);
-
+        position: fixed;
         height: 100vh;
+        padding-right: 50%;
     }
 
     .additional-content {
@@ -94,9 +94,7 @@
         top: 0%;
         height: 75%;
         width: 2.5px;
-        /* Largura da borda */
         background-color: var(--additional-content-border-color);
-        /* Cor da borda */
     }
 
     .second-additional-content {
@@ -114,7 +112,7 @@
 
     #third-image {
         max-width: 300px;
-        position: sticky;
+        position: fixed;
         bottom: 0;
         width: 100%;
     }
