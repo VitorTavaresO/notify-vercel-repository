@@ -68,7 +68,7 @@ public class UserController {
 
     @GetMapping("/email-validation/{email}/{code}")
     public boolean emailValidation(@PathVariable String email, @PathVariable String code) {
-        return userService.emailValidation(email, code);
+        return userService.emailCodeValidation(email, code);
     }
     
 
@@ -76,7 +76,7 @@ public class UserController {
     public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest) {
         User user = userRepository.findBySiape(authRequest.getSiape()).orElseThrow(() -> new NoSuchElementException("User not found"));
         if(!user.isActive()){
-            throw new NoSuchElementException("User not active");
+            throw new NoSuchElementException("Usuário Inativo");
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getSiape(), authRequest.getPassword()));

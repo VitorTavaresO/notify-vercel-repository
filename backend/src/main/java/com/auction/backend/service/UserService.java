@@ -98,8 +98,11 @@ public class UserService implements UserDetailsService {
         return userSaved;
     }
 
-    public boolean emailValidation(String email, String code) {
+    public boolean emailCodeValidation(String email, String code) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("Email não encontrado."));
+            
+            System.out.println(user.getValidationCode());
+            System.out.println(code);
             if (code.equals(user.getValidationCode())) {
                 user.setActive(true);
                 user.setValidationCode(null);
@@ -124,7 +127,7 @@ public class UserService implements UserDetailsService {
             // Gera um código de 6 dígitos:
             userDatabase.setValidationCode(generateRandomCode());
             // 10 minutos de validade:
-            userDatabase.setValidationCodeValidity(LocalDateTime.now().plusMinutes(5));
+            userDatabase.setValidationCodeValidity(LocalDateTime.now().plusMinutes(10));
 
             Context context = new Context();
             context.setVariable("validationCode", userDatabase.getValidationCode());
@@ -159,7 +162,6 @@ public class UserService implements UserDetailsService {
             User userDatabase = user.get();
             if (userDatabase.getValidationCode().equals(userDatabase.getValidationCode()) &&
                     userDatabase.getValidationCodeValidity().isAfter(LocalDateTime.now())) {
-                // Código válido
             } else {
                 throw new IllegalArgumentException("Código de validação inválido ou expirado.");
             }

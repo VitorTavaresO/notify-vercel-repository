@@ -8,11 +8,13 @@ const RegisterConfirmation = () => {
   const navigate = useNavigate();
   const userService = new UserService();
   const [counter, setCounter] = useState(5);
+  const [validationMessage, setValidationMessage] = useState("");
 
   const validateEmail = async () => {
     try {
-      const response = await userService.emailValidation(email, code);
-      if (response) {
+      const response = await userService.emailValidationCode(email, code);
+      if (response.data === "Email validated successfully!") {
+        setValidationMessage(response.data);
         const interval = setInterval(() => {
           setCounter((prevCounter) => {
             if (prevCounter <= 1) {
@@ -22,15 +24,22 @@ const RegisterConfirmation = () => {
             return prevCounter - 1;
           });
         }, 1000);
+      } else {
+        setValidationMessage(response.data);
       }
     } catch (error) {
       console.error(error);
+      if (error.response && error.response.data) {
+        setValidationMessage(error.response.data);
+      } else {
+        setValidationMessage("An error occurred during validation.");
+      }
     }
   };
 
   useEffect(() => {
     validateEmail();
-  }, [email, code, navigate, userService]);
+  }, [email, code]);
 
   return (
     <div
@@ -55,14 +64,18 @@ const RegisterConfirmation = () => {
             padding: "20px",
             backgroundColor: "#FFFFFF",
             borderRadius: "7px",
-            border: "solid 2px #2F9E41",
+            border: `solid 2px ${validationMessage === "Email validated successfully!" ? "#2F9E41" : "#FF0000"}`,
           }}
         >
-          <h1 style={{ color: "#2F9E41" }}>Register Confirmation</h1>
-          <h2 style={{ color: "#242424" }}>Email validated successfully!</h2>
-          <p style={{ color: "#666666" }}>
-            You will be redirected to the login screen in {counter} seconds.
-          </p>
+          <h1 style={{ color: validationMessage === "Email validated successfully!" ? "#2F9E41" : "#FF0000" }}>
+            Register Confirmation
+          </h1>
+          <h2 style={{ color: "#242424" }}>{validationMessage}</h2>
+          {validationMessage === "Email validated successfully!" && (
+            <p style={{ color: "#666666" }}>
+              You will be redirected to the login screen in {counter} seconds.
+            </p>
+          )}
         </div>
       </div>
       <Footer />
