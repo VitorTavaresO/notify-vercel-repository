@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
+import { Divider } from "primereact/divider";
+import { Password } from "primereact/password";
 import { InputOtp } from 'primereact/inputotp';
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
@@ -19,13 +21,72 @@ const ForgotPassword = () => {
     const [otp, setOtp] = useState("");
     const [email, setEmail] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
+    const [errorMessage, setErrorMessage] = useState("");
     const [isEmailValid, setIsEmailValid] = useState(false);
     const [isEmailFocused, setIsEmailFocused] = useState(false);
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
     const [user, setUser] = useState({ email: "", newPassword: "" });
 
     const [isFormValid1, setIsFormValid1] = useState(false);
     const [isFormValid2, setIsFormValid2] = useState(false);
+    const [isFormValid3, setIsFormValid3] = useState(false);
+
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordCriteria, setPasswordCriteria] = useState({
+        minLength: false,
+        hasUpperCase: false,
+        hasLowerCase: false,
+        hasNumber: false,
+        hasSpecialChar: false,
+    });
+
+    const header = <div className="font-bold mb-3">Informe a Senha</div>;
+    const footer = (
+        <>
+            <Divider />
+            <p className="mt-2">Obrigatório:</p>
+            <ul className="pl-2 ml-2 mt-0 line-height-3">
+                <li
+                    className={
+                        passwordCriteria.hasLowerCase ? "text-green-500" : "text-red-500"
+                    }
+                >
+                    Ao menos uma letra minúscula
+                </li>
+                <li
+                    className={
+                        passwordCriteria.hasUpperCase ? "text-green-500" : "text-red-500"
+                    }
+                >
+                    Ao menos uma letra maiúscula
+                </li>
+                <li
+                    className={
+                        passwordCriteria.hasNumber ? "text-green-500" : "text-red-500"
+                    }
+                >
+                    Ao menos um número
+                </li>
+                <li
+                    className={
+                        passwordCriteria.hasSpecialChar ? "text-green-500" : "text-red-500"
+                    }
+                >
+                    Ao menos um caractere especial
+                </li>
+                <li
+                    className={
+                        passwordCriteria.minLength ? "text-green-500" : "text-red-500"
+                    }
+                >
+                    Mínimo de 6 caracteres
+                </li>
+            </ul>
+
+        </>
+    );
 
     const handleOtpChange = (value) => {
         setOtp(value);
@@ -36,6 +97,28 @@ const ForgotPassword = () => {
         setEmail(newEmail);
         setUser((prevUser) => ({ ...prevUser, email: newEmail }));
         setIsEmailValid(EmailValidation(newEmail));
+    };
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        setPasswordCriteria({
+            minLength: newPassword.length >= 6,
+            hasUpperCase: /[A-Z]/.test(newPassword),
+            hasLowerCase: /[a-z]/.test(newPassword),
+            hasNumber: /[0-9]/.test(newPassword),
+            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>_\-\\]/.test(newPassword), // O '\\' é necessario para não ficar como palavra reservada.
+        });
+    };
+
+    const handlePasswordConfirmation = (e) => {
+        const confirmPassword = e.target.value;
+        setConfirmPassword(confirmPassword);
+        if (password !== confirmPassword) {
+            setErrorMessage("As senhas devem ser iguais.");
+        } else {
+            setErrorMessage("");
+        }
     };
 
     const handleFieldFocus = (field) => {
@@ -85,9 +168,14 @@ const ForgotPassword = () => {
             return () => clearInterval(interval);
         }
 
+        const isPasswordsEqual = password === confirmPassword;
+        const arePasswordCriteriaMet = Object.values(passwordCriteria).every(Boolean);
+        setIsFormValid3(isPasswordsEqual && arePasswordCriteriaMet);
+
     }, [user.email, isEmailValid,
         minutes, seconds, currentSection,
-        [otp]]);
+        [otp],
+        [password, confirmPassword, passwordCriteria]]);
 
     return (
         <>
@@ -101,7 +189,8 @@ const ForgotPassword = () => {
                         <div className="additional-content flex flex-column max-w-30rem min-h-full border-left-3 pl-5 -mt-8 justify-content-evenly">
                             <img id="first-image" src="/images/login/logo-ifpr.png" alt="Logo IFPR" className="w-full mt-7 -mb-5"/>
                             <p className="mt-8 mb-5 -mr-3 text-right primary-text">—  “Mantendo os responsáveis sempre<br/>informados”</p>
-                            <img id="forgot-image-one" src="/images/forgot/forgot-image-one.png" alt="Imagem de fundo" className="mt-8"/>
+                            <img id="forgot-image-one" className="mt-8"
+                                src={currentSection === 3 ? "/images/forgot/forgot-image-two.png" : "/images/forgot/forgot-image-one.png"}/>
                         </div>
                     </div>
                 </div>
@@ -166,7 +255,80 @@ const ForgotPassword = () => {
                         </div>
                     </div>
                     )}
-                    
+
+                    {currentSection === 3 && (
+                    <div>
+                        <p className="sub-title font-bold -mt-3 mb-8">Acesse ao Notify IFPR:</p>
+                        <div className="container-grid grid justify-content-center">
+                        <div className="
+                        password-area
+                        grid-item
+                        col-12">
+                            <FloatLabel className="
+                            w-full
+                            mb-3">
+                                <Password
+                                    value={password}
+                                    id="password"
+                                    name="password"
+                                    onChange={handlePasswordChange}
+                                    onFocus={() => {
+                                        handleFieldFocus("Senha");
+                                        setIsPasswordFocused(true);
+                                    }}
+                                    onBlur={() => handleFieldBlur("Senha", password)}
+                                    inputStyle={{ width: "100%" }}
+                                    toggleMask
+                                    header={header}
+                                    footer={footer}
+                                    invalid={
+                                        isPasswordFocused &&
+                                        !Object.values(passwordCriteria).every(Boolean)
+                                    }
+                                    className={`
+                                    w-full
+                                    ${fieldErrors.password ? "p-invalid" : ""}`} />
+                                <label htmlFor="password">Senha</label>
+                            </FloatLabel>
+                        </div>
+                        <div className="
+                        grid-item
+                        col-12">
+                            <FloatLabel className="
+                            password-area
+                            w-full
+                            mb-3">
+                                <Password
+                                    value={confirmPassword}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    onChange={handlePasswordConfirmation}
+                                    onFocus={() => handleFieldFocus("Confirme a Senha")}
+                                    onBlur={() =>
+                                        handleFieldBlur("Confirme a Senha", confirmPassword)
+                                    }
+                                    inputStyle={{ width: "100%" }}
+                                    toggleMask
+                                    feedback={false}
+                                    required
+                                    className={`
+                                    w-full
+                                    ${fieldErrors.confirmPassword ? "p-invalid" : ""}`} />
+                                <label htmlFor="confirmPassword">Confirme a Senha</label>
+                            </FloatLabel>
+                        </div>
+                        </div>
+                        <div className="grid-item max-w-16rem col-12" style={{ marginLeft: "87px" }}>
+                            <Button label="Redefinir Senha" id="login-button" disabled={!isFormValid3} onClick={handleNext} rounded 
+                                className={`w-full mb-2 ${isFormValid3 ? "bg-green-600 border-green-600" : "bg-gray-500 border-gray-500"}`}
+                                onMouseOver={({ target }) =>(target.style.color = "var(--register-button-over-color)")}
+                                onMouseOut={({ target }) => (target.style.color = "var(--register-button-out-color)")}/>
+
+                            <Link to="/login"><Button label="Voltar" onClick={handleBack} link className="back-btn mt-3 -mb-4"/></Link>
+                        </div>
+                    </div>
+                    )}
+
                 </Card>
             </div>
         </div>
