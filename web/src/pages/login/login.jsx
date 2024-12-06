@@ -74,6 +74,10 @@ const Login = () => {
     navigate("/register");
   };
 
+  const handleForgotButton = () => {
+    navigate("/forgot-password");
+  };
+
   const header = <div className="font-bold mb-3">Informe a Senha</div>;
 
   return (
@@ -297,7 +301,7 @@ const Login = () => {
                 onMouseOut={({ target }) =>
                   (target.style.color = "var(--register-button-out-color)")
                 }
-                /*onClick={""}*/
+                onClick={handleForgotButton}
               />
             </div>
           </div>

@@ -9,6 +9,7 @@ import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
 import PrivateRouter from "./components/PrivateRouter.jsx";
 import AnnouncementList from "./pages/announcementList/AnnouncementList.jsx";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword.jsx";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
             element={
               <SimpleLayout>
                 <Register />
+              </SimpleLayout>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <SimpleLayout>
+                <ForgotPassword />
               </SimpleLayout>
             }
           />
