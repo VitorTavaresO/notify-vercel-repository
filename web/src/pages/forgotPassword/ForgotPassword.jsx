@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
+import { InputOtp } from 'primereact/inputotp';
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 
@@ -14,6 +16,7 @@ const ForgotPassword = () => {
 
     const [currentSection, setCurrentSection] = useState(1);
 
+    const [otp, setOtp] = useState("");
     const [email, setEmail] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
     const [isEmailValid, setIsEmailValid] = useState(false);
@@ -21,7 +24,12 @@ const ForgotPassword = () => {
 
     const [user, setUser] = useState({ email: "", newPassword: "" });
 
-    const [isFormValid, setIsFormValid] = useState(false);
+    const [isFormValid1, setIsFormValid1] = useState(false);
+    const [isFormValid2, setIsFormValid2] = useState(false);
+
+    const handleOtpChange = (value) => {
+        setOtp(value);
+    };
 
     const handleEmailChange = (e) => {
         const newEmail = e.target.value;
@@ -50,10 +58,36 @@ const ForgotPassword = () => {
         setCurrentSection(prevSection => prevSection + 1);
     };
 
+    const handleBack = () => {
+        setCurrentSection(prevSection => prevSection - 1);
+    };
+
+    const [minutes, setMinutes] = useState(5);
+    const [seconds, setSeconds] = useState(0);
+
     useEffect(() => {
-        const isFormFilled = !!user.email && isEmailValid;
-        setIsFormValid(isFormFilled);
-    }, [user.email, isEmailValid]);
+        const isFormFilled1 = !!user.email && isEmailValid;
+        setIsFormValid1(isFormFilled1);
+
+        const isFormFilled2 = otp.length === 6;
+        setIsFormValid2(isFormFilled2);
+
+        if (currentSection === 2) {
+            const interval = setInterval(() => {
+                if (seconds > 0) {
+                    setSeconds(prevSeconds => prevSeconds - 1);
+                } else if (minutes > 0) {
+                    setMinutes(prevMinutes => prevMinutes - 1);
+                    setSeconds(59);
+                }
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+
+    }, [user.email, isEmailValid,
+        minutes, seconds, currentSection,
+        [otp]]);
 
     return (
         <>
@@ -94,14 +128,45 @@ const ForgotPassword = () => {
                             </div>
                         </div>
                         <div className="grid-item max-w-16rem col-12" style={{ marginLeft: "87px" }}>
-                            <Button label="Enviar Código" id="login-button" disabled={!isFormValid} onClick={handleNext} rounded 
-                                className={`w-full mb-2 ${isFormValid ? "bg-green-600 border-green-600" : "bg-gray-500 border-gray-500"}`}
+                            <Button label="Enviar Código" id="login-button" disabled={!isFormValid1} onClick={handleNext} rounded 
+                                className={`w-full mb-2 ${isFormValid1 ? "bg-green-600 border-green-600" : "bg-gray-500 border-gray-500"}`}
                                 onMouseOver={({ target }) =>(target.style.color = "var(--register-button-over-color)")}
                                 onMouseOut={({ target }) => (target.style.color = "var(--register-button-out-color)")}/>
+
+                            <Link to="/login"><Button label="Voltar" onClick={handleBack} link className="back-btn mt-3 -mb-4"/></Link>
                         </div>
                     </div>
                     )}
 
+                    {currentSection === 2 && (
+                    <div>
+                        <p className="sub-title font-bold -mt-3 mb-3">Acesse ao Notify IFPR:</p>
+                        <div className="container-grid grid justify-content-center">
+                            <div className="grid-item col-12">
+
+                                <p className="mt-3 mb-5 timer-input font-bold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</p>
+
+                                <p>Informe o código enviado para</p>
+                                <p className="-mt-2 email-input font-bold">{email}</p>
+
+                                <div className="mt-5 mb-6 flex flex-column align-items-center">
+                                    <InputOtp length={6} integerOnly value={otp} onChange={(e) => handleOtpChange(e.value)}
+                                        style={{ pointerEvents: "auto", zIndex: 10}}/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div className="grid-item max-w-16rem col-12" style={{ marginLeft: "12px" }}>
+                            <Button label="Próximo" id="login-button" disabled={!isFormValid2} onClick={handleNext} rounded 
+                                className={`w-full mb-2 ${isFormValid2 ? "bg-green-600 border-green-600" : "bg-gray-500 border-gray-500"}`}
+                                onMouseOver={({ target }) =>(target.style.color = "var(--register-button-over-color)")}
+                                onMouseOut={({ target }) => (target.style.color = "var(--register-button-out-color)")}/>
+
+                            <Button label="Voltar" onClick={handleBack} link className="back-btn mt-3 -mb-4"/>
+                        </div>
+                    </div>
+                    )}
+                    
                 </Card>
             </div>
         </div>
