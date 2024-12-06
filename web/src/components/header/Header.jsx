@@ -24,7 +24,12 @@ const Header = () => {
         {label: 'Perfil',
             command: () => { navigate('/profile'); }
         },
-        {label: 'Sair'},
+        {label: 'Sair',
+            command: () => {
+                localStorage.removeItem('token');
+                navigate('/login');
+            }
+        },
     ];
 
     const toggleUserMenu = () => { setIsUserMenuVisible(prevState => !prevState);};
