@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import com.auction.backend.enums.RoleName;
 import com.auction.backend.exception.LoginException;
 import com.auction.backend.model.User;
 import com.auction.backend.model.dto.PasswordResetDTO;
@@ -79,6 +80,7 @@ public class UserService implements UserDetailsService {
         passwordValidation(user.getPassword());
 
         user.setValidationCode(generateRandomCode());
+        user.setRoleName(RoleName.UNDEFINED); 
 
         User userSaved = userRepository.save(user);
         Context context = new Context();
@@ -362,7 +364,22 @@ public class UserService implements UserDetailsService {
         User savedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         savedUser.setName(user.getName());
+        savedUser.setRoleName(user.getRoleName());
         return userRepository.save(savedUser);
+    }
+
+    public User updateUserRole(String siape, String role) {
+        User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
+        if (role.trim().equalsIgnoreCase("Gerenciador de Cadastros")) {
+            user.setRoleName(RoleName.REGISTRATION_MANAGER);
+        } else if (role.trim().equalsIgnoreCase("Emissor de Comunicados")) {
+            user.setRoleName(RoleName.ANNOUNCEMENT_ISSUER);
+        } else if (role.trim().equalsIgnoreCase("Gerenciador do Sistema")) {
+            user.setRoleName(RoleName.ADMIN);
+        } else {
+            user.setRoleName(RoleName.UNDEFINED);
+        }
+        return userRepository.save(user);
     }
 
     public void delete(Long id) {

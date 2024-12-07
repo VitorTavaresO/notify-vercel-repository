@@ -171,25 +171,36 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-role/{siape}")
+    public ResponseEntity<User> updateUserRole(
+            @PathVariable("siape") String siape,
+            @RequestBody Map<String, String> body) {
+        try {
+            String role = body.get("role");
+            if (role == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            User updatedUser = userService.updateUserRole(siape, role);
+            return ResponseEntity.ok(updatedUser);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @PutMapping("/update-permission/{siape}")
     public ResponseEntity<User> updatePermission(
             @PathVariable("siape") String siape,
             @RequestBody Map<String, String> body) {
         try {
-            User user = userService.readSiape(siape);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            String roleName = body.get("role");
-            try {
-                user.setRoleName(RoleName.valueOf(roleName.toUpperCase()));
-
-            } catch (IllegalArgumentException e) {
+            String role = body.get("role");
+            if (role == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
-            User updatedUser = userService.update(user);
+            User updatedUser = userService.updateUserRole(siape, role);
             return ResponseEntity.ok(updatedUser);
 
         } catch (Exception e) {

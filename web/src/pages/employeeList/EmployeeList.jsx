@@ -10,6 +10,8 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from 'primereact/dialog';
 import { Helmet } from 'react-helmet';
+import UserService from "../../services/UserService";
+import { useNavigate } from "react-router-dom";
 
 function EmployeeList() {
   const isFilter = useState(true);
@@ -18,6 +20,9 @@ function EmployeeList() {
   const [expandEmployee, setExpandEmployee] = useState(null);
   const [filter, setFilter] = useState("");
   const [selectedPermission, setSelectedPermission] = useState("Todos");
+  const [selectedRole, setSelectedRole] = useState("");
+  const userService = new UserService();
+  const navigate = useNavigate();
 
   const permissions = [
     { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
@@ -51,7 +56,6 @@ function EmployeeList() {
   };
 
   const handleDialogOpen = (employee) => {
-
     setSelectedEmployee(employee);
     setDialogPermission(employee.permissao);
     setVisible(true);
@@ -86,7 +90,7 @@ function EmployeeList() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ permissao: dialogPermission }),
+        body: JSON.stringify({ role: dialogPermission }), 
       });
 
       if (response.ok) {
@@ -103,6 +107,32 @@ function EmployeeList() {
       }
     } catch (error) {
       console.error("Erro ao atualizar a permissão:", error);
+    }
+  };
+
+  const saveUser = async (user) => {
+    try {
+      let role;
+      switch (selectedRole) {
+        case "Emissor de Comunicados":
+          role = "ANNOUNCEMENT_ISSUER";
+          break;
+        case "Gerenciador do Sistema":
+          role = "ADMIN";
+          break;
+        case "Gerenciador de Cadastros":
+          role = "REGISTRATION_MANAGER";
+          break;
+        default:
+          role = "UNDEFINED";
+          break;
+      }
+      await userService.updateUserRole(user.siape, role);
+      navigate("/employee-list");
+
+      console.log("Permissão atualizada com sucesso!");
+    } catch (error) {
+      console.error("Error atualizando a permissão do usuário:", error);
     }
   };
 

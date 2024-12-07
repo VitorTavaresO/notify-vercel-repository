@@ -1,7 +1,8 @@
 package com.auction.backend.enums;
 
 public enum RoleName {
-    ADMIN, 
-    USER, 
-    UNDEFINED;
+    ANNOUNCEMENT_ISSUER, 
+    ADMIN,
+    REGISTRATION_MANAGER,
+    UNDEFINED
 }

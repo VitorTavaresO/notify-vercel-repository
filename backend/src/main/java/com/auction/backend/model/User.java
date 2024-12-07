@@ -70,6 +70,7 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role_name", length = 21) 
     private RoleName roleName;
 
     @JsonIgnore
