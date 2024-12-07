@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/email-validation/{email}/{code}")
-    public boolean emailValidation(@PathVariable String email, @PathVariable String code) {
+    public boolean emailCodeValidation(@PathVariable String email, @PathVariable String code) {
         return userService.emailCodeValidation(email, code);
     }
     

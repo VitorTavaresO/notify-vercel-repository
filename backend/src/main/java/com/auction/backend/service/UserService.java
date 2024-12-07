@@ -100,10 +100,11 @@ public class UserService implements UserDetailsService {
 
     public boolean emailCodeValidation(String email, String code) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("Email não encontrado."));
-            
-            System.out.println(user.getValidationCode());
-            System.out.println(code);
-            if (code.equals(user.getValidationCode())) {
+
+            if(user.getValidationCode() == null){
+                throw new IllegalArgumentException("Usuário já validado.");
+                
+            }else if (code.equals(user.getValidationCode())) {
                 user.setActive(true);
                 user.setValidationCode(null);
                 userRepository.save(user);

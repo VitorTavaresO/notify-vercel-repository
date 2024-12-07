@@ -15,7 +15,7 @@ class UserService extends BaseService {
     return response.data;
   }
 
-  async emailValidation(email, code) {
+  async emailCodeValidation(email, code) {
     const response = await this.api.get(
       `${this.endPoint}/email-validation/${email}/${code}`
     );

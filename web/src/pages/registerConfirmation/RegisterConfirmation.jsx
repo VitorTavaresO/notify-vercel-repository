@@ -12,9 +12,10 @@ const RegisterConfirmation = () => {
 
   const validateEmail = async () => {
     try {
-      const response = await userService.emailValidationCode(email, code);
-      if (response.data === "Email validated successfully!") {
-        setValidationMessage(response.data);
+      const response = await userService.emailCodeValidation(email, code);
+      const message = typeof response.data === 'string' ? response.data : response.data.message;
+      if (message === "Email validated successfully!") {
+        setValidationMessage(message);
         const interval = setInterval(() => {
           setCounter((prevCounter) => {
             if (prevCounter <= 1) {
@@ -25,12 +26,13 @@ const RegisterConfirmation = () => {
           });
         }, 1000);
       } else {
-        setValidationMessage(response.data);
+        setValidationMessage(message);
       }
     } catch (error) {
       console.error(error);
       if (error.response && error.response.data) {
-        setValidationMessage(error.response.data);
+        const errorMessage = typeof error.response.data === 'string' ? error.response.data : error.response.data.message;
+        setValidationMessage(errorMessage);
       } else {
         setValidationMessage("An error occurred during validation.");
       }
