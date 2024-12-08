@@ -5,11 +5,12 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputMask } from "primereact/inputmask";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-import axios from "axios";
-import "./login.css";
+import UserService from "../../services/UserService.js";
+import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const userService = new UserService();
 
   const [errorMessage, setErrorMessage] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
@@ -19,24 +20,25 @@ const Login = () => {
 
   const login = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/login",
-        {
-          siape: user.siape,
-          password: user.password,
-        }
-      );
-
-      const id = response.data.id;
-      localStorage.setItem("id", id);
-      localStorage.setItem("siape", user.siape);
-      localStorage.setItem("token", "token");
-      navigate("/");
+      console.log(user);
+      const response = await userService.login(user);
+      if (response) {
+        localStorage.setItem("user", JSON.stringify(response));
+        navigate("/");
+      }
     } catch (error) {
-      if (error.response) {
-        setErrorMessage(error.response.data || "Erro ao fazer login");
+      console.log(error);
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "User not found") {
+          setErrorMessage("Usuário Não Encontrado");
+        } else if (errorMessage === "Bad credentials") {
+          setErrorMessage("Senha Inválida");
+        } else {
+          setErrorMessage("Error ao Logar");
+        }
       } else {
-        setErrorMessage("Erro ao conectar ao servidor");
+        setErrorMessage("Erro com o servidor");
       }
     }
   };
@@ -66,12 +68,12 @@ const Login = () => {
     setUser({ ...user, [input.target.name]: input.target.value });
   };
 
-  const handleLoginButton = () => {
-    login();
-  };
-
   const handleRegisterButton = () => {
     navigate("/register");
+  };
+
+  const handleForgotButton = () => {
+    navigate("/forgot-password");
   };
 
   const header = <div className="font-bold mb-3">Informe a Senha</div>;
@@ -85,24 +87,26 @@ const Login = () => {
             min-w-screen
             align-items-center
             justify-content-center"
-    > 
-        <div 
-          className="
+    >
+      <div
+        className="
               justify-content-end
               w-full
               h-screen
               pl-3
               -mt-8
-              py-8">
-          <div
-            className="
+              py-8"
+      >
+        <div
+          className="
                 additional-content-background
                 justify-content-end
                 w-full
                 h-screen
-                py-8">
-            <div
-              className="
+                py-8"
+        >
+          <div
+            className="
                     second-additional-content 
                     flex
                     flex-column
@@ -112,9 +116,9 @@ const Login = () => {
                     pl-3
                     -mt-8
                     justify-content-evenly"
-            >
-              <div
-                className="
+          >
+            <div
+              className="
                     additional-content 
                     flex
                     flex-column
@@ -124,34 +128,35 @@ const Login = () => {
                     pl-5
                     -mt-8
                     justify-content-evenly"
-              >
-                <img
-                  id="first-image"
-                  src="/images/login/logo-ifpr.png"
-                  alt="Logo IFPR"
-                  className="
+            >
+              <img
+                id="first-image"
+                src="/images/login/logo-ifpr.png"
+                alt="Logo IFPR"
+                className="
                         w-full 
                         my-5"
-                />
-                <p
-                  className="
+              />
+              <p
+                className="
                         my-5 text-right"
-                >
-                  — “Mantendo os responsáveis sempre
-                  <br />informados”
-                </p>
-                <img
-                  id="second-image"
-                  src="/images/login/login-background-image.png"
-                  alt="Imagem de fundo"
-                  className="
+              >
+                — “Mantendo os responsáveis sempre
+                <br />
+                informados”
+              </p>
+              <img
+                id="second-image"
+                src="/images/login/login-background-image.png"
+                alt="Imagem de fundo"
+                className="
                         w-full 
                         my-5"
-                />
-              </div>
+              />
             </div>
           </div>
         </div>
+      </div>
 
       <div
         className="
@@ -254,13 +259,14 @@ const Login = () => {
                 className={`
                                     w-full
                                     mb-2
-                                    ${isFormValid
-                    ? "bg-green-600 border-green-600"
-                    : "bg-gray-500 border-gray-500"
-                  }
+                                    ${
+                                      isFormValid
+                                        ? "bg-green-600 border-green-600"
+                                        : "bg-gray-500 border-gray-500"
+                                    }
                                 `}
                 disabled={!isFormValid}
-                onClick={handleLoginButton}
+                onClick={login}
               />
             </div>
             <div
@@ -297,7 +303,7 @@ const Login = () => {
                 onMouseOut={({ target }) =>
                   (target.style.color = "var(--register-button-out-color)")
                 }
-                /*onClick={""}*/
+                onClick={handleForgotButton}
               />
             </div>
           </div>

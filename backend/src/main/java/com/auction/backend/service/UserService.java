@@ -1,62 +1,175 @@
 package com.auction.backend.service;
 
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import com.auction.backend.enums.RoleName;
 import com.auction.backend.exception.LoginException;
 import com.auction.backend.model.User;
+import com.auction.backend.model.dto.PasswordResetDTO;
+import com.auction.backend.model.dto.PasswordResetValidateDTO;
+import com.auction.backend.model.dto.UserAuthRequestDTO;
+import com.auction.backend.model.dto.UserChangePasswordDTO;
 import com.auction.backend.repository.UserRepository;
 
+import jakarta.mail.MessagingException;
+import jakarta.persistence.Transient;
+import jakarta.validation.ConstraintViolationException;
+
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int CODE_LENGTH = 5;
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Transient
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    
+    private String generateRandomCode() {
+        String code;
+        do {
+            StringBuilder codeBuilder = new StringBuilder(CODE_LENGTH);
+            for (int i = 0; i < CODE_LENGTH; i++) {
+                codeBuilder.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+            }
+            code = codeBuilder.toString();
+        } while (userRepository.existsByValidationCode(code));
+        return code;
+    }
+
+    public String getUserRole(User user) {
+        User userDatabase = userRepository.findBySiape(user.getSiape()).get();
+        return userDatabase.getRoleName().toString();
+    }
+
     public User create(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new ConstraintViolationException("Email já está em uso", null);
+        }
+        if (userRepository.findBySiape(user.getSiape()).isPresent()) {
+            throw new ConstraintViolationException("Siape já cadastrado", null);
+        }
+        if (userRepository.findByCpf(user.getCpf()).isPresent()) {
+            throw new ConstraintViolationException("CPF já cadastrado", null);
+        }
+
         cpfValidation(user.getCpf());
-        emailValidation(user.getEmail());
+        validatePasswordResetCode(user.getEmail());
         passwordValidation(user.getPassword());
+
+        user.setValidationCode(generateRandomCode());
+        user.setRoleName(RoleName.UNDEFINED); 
 
         User userSaved = userRepository.save(user);
         Context context = new Context();
+
         context.setVariable("name", userSaved.getName());
+        context.setVariable("link", "http://localhost:3000/email-validation/" + userSaved.getEmail() + "/"
+                + userSaved.getValidationCode());
+        context.setVariable("year", LocalDateTime.now().getYear());
+        try {
+            emailService.sendTemplateEmail(userSaved.getEmail(), "Cadastro realizado com sucesso", context,
+                    "emailWelcome");
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         return userSaved;
     }
 
-    public User read(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    public boolean emailCodeValidation(String email, String code) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("Email não encontrado."));
+
+            if(user.getValidationCode() == null){
+                throw new IllegalArgumentException("Usuário já validado.");
+                
+            }else if (code.equals(user.getValidationCode())) {
+                user.setActive(true);
+                user.setValidationCode(null);
+                userRepository.save(user);
+                return true;
+            } 
+            else {
+                throw new IllegalArgumentException("Código de validação inválido.");
+            }
     }
 
-    public User readCpf(String cpf) {
-        return userRepository.findByCpf(cpf).orElseThrow(() -> new NoSuchElementException("CPF not found"));
+    @Override
+    public UserDetails loadUserByUsername(String userIdentification) throws UsernameNotFoundException {
+        return userRepository.findBySiape(
+                userIdentification).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public User readSiape(String siape) {
-        return userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("Email not found"));
-    } 
+    public void passwordCodeRequest(UserAuthRequestDTO userAuthRequestDTO) {
+        Optional<User> user = userRepository.findBySiape(userAuthRequestDTO.getSiape());
+        if (user.isPresent()) {
+            User userDatabase = user.get();
+            // Gera um código de 6 dígitos:
+            userDatabase.setValidationCode(generateRandomCode());
+            // 10 minutos de validade:
+            userDatabase.setValidationCodeValidity(LocalDateTime.now().plusMinutes(10));
 
-    public User update(User user) {
-        User savedUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        savedUser.setName(user.getName());
-        return userRepository.save(savedUser);
+            Context context = new Context();
+            context.setVariable("validationCode", userDatabase.getValidationCode());
+            try {
+                emailService.sendTemplateEmail(
+                        userDatabase.getEmail(),
+                        "Código de Validação para Redefinição de Senha",
+                        context,
+                        "passwordResetCode");
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void delete(Long id) {
-        User savedUser = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        userRepository.delete(savedUser);
+    public void resetPassword(PasswordResetDTO passwordResetDTO) {
+        Optional<User> user = userRepository.findByEmail(passwordResetDTO.getEmail());
+        if (user.isPresent()) {
+            User userDatabase = user.get();
+            userDatabase.setPassword(passwordEncoder.encode(passwordResetDTO.getNewPassword()));
+            userDatabase.setValidationCode(null);
+            userDatabase.setValidationCodeValidity(null);
+            userRepository.save(userDatabase);
+        } else {
+            throw new NoSuchElementException("Usuário não encontrado.");
+        }
     }
 
-    public List<User> list() {
-        return userRepository.findAll();
+    public void validatePasswordResetCode(PasswordResetValidateDTO passwordResetValidateDTO) {
+        Optional<User> user = userRepository.findByEmail(passwordResetValidateDTO.getEmail());
+        if (user.isPresent()) {
+            User userDatabase = user.get();
+            if (userDatabase.getValidationCode().equals(userDatabase.getValidationCode()) &&
+                    userDatabase.getValidationCodeValidity().isAfter(LocalDateTime.now())) {
+            } else {
+                throw new IllegalArgumentException("Código de validação inválido ou expirado.");
+            }
+        } else {
+            throw new NoSuchElementException("Usuário não encontrado.");
+        }
     }
 
     // --------------- CPF VALIDATION ---------------
@@ -133,7 +246,7 @@ public class UserService {
         }
     }
 
-    public EmailCriteria emailValidation(String email) {
+    public EmailCriteria validatePasswordResetCode(String email) {
         if (email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email não pode ser nulo ou vazio.");
         }
@@ -214,23 +327,126 @@ public class UserService {
         if (!isValidPassword(criteria)) {
             throw new IllegalArgumentException("Senha inválida. Certifique-se de que atende a todos os critérios.");
         }
-        
+
         return criteria;
     }
 
     // --------------- LOGIN VALIDATION ---------------
     public User authenticate(String siape, String password) throws LoginException {
         User user = userRepository.findBySiape(siape)
-            .orElseThrow(() -> new LoginException("Siape não cadastrado"));
+                .orElseThrow(() -> new LoginException("Siape não cadastrado"));
 
         if (user == null) {
             throw new LoginException("Usuario nulo");
         }
-    
+
         if (!user.getPassword().equals(password)) {
             throw new LoginException("Credenciais inválidas");
         }
-    
+
         return user;
-    }   
+    }
+
+    public User read(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
+    public User readCpf(String cpf) {
+        return userRepository.findByCpf(cpf).orElseThrow(() -> new NoSuchElementException("CPF not found"));
+    }
+
+    public User readSiape(String siape) {
+        return userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("Email not found"));
+    }
+
+    public User update(User user) {
+        User savedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        savedUser.setName(user.getName());
+        savedUser.setRoleName(user.getRoleName());
+        return userRepository.save(savedUser);
+    }
+
+    public User updateUserRole(String siape, String role) {
+        User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
+        if (role.trim().equalsIgnoreCase("Gerenciador de Cadastros")) {
+            user.setRoleName(RoleName.REGISTRATION_MANAGER);
+        } else if (role.trim().equalsIgnoreCase("Emissor de Comunicados")) {
+            user.setRoleName(RoleName.ANNOUNCEMENT_ISSUER);
+        } else if (role.trim().equalsIgnoreCase("Gerenciador do Sistema")) {
+            user.setRoleName(RoleName.ADMIN);
+        } else {
+            user.setRoleName(RoleName.UNDEFINED);
+        }
+        return userRepository.save(user);
+    }
+
+    public void delete(Long id) {
+        User savedUser = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        userRepository.delete(savedUser);
+    }
+
+    public List<User> list() {
+        return userRepository.findAll();
+    }
+
+    
+    // --------------- RECOVER EMAIL ---------------
+
+    public String recoverSendEmail(String email) {
+
+        System.out.println(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
+
+        String code = generateRandomCode();
+
+        user.setValidationCode(code);
+        user.setValidationCodeValidity(LocalDateTime.now().plusMinutes(5));
+        userRepository.save(user);
+
+        Context context = new Context();
+        context.setVariable("name", user.getName());
+        context.setVariable("code", code);
+
+        try {
+            emailService.sendTemplateEmail(user.getEmail(), "Recuperar", context, "emailRecover");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        return "Email enviado!";
+    }
+
+
+    // --------------- RECOVER VALIDATION CODE ---------------
+
+    public User recoverVerifyCode(String validationCode){
+
+        User user = userRepository.findByValidationCode(validationCode).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
+
+        if(user.getValidationCode().equals(validationCode) && user.getValidationCodeValidity().isAfter(LocalDateTime.now())){
+
+            user.setValidationCode(null);
+            user.setValidationCodeValidity(null);
+
+            userRepository.save(user);
+            return user;
+        }
+        else { throw new IllegalArgumentException("Invalid Validation Code");}
+    }
+
+    
+    // --------------- RECOVER CHANGE PASSWORD ---------------
+
+    public User recoverChangePassword(UserChangePasswordDTO dto){
+
+        System.out.println(dto.getEmail() + "   " +dto.getPassword());
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
+
+        user.setPassword(dto.getPassword());
+
+        userRepository.save(user);
+        return user;
+    }
 }

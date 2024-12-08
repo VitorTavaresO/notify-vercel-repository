@@ -2,10 +2,14 @@ package com.auction.backend.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +20,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auction.backend.exception.LoginException;
-import com.auction.backend.model.LoginRequest;
 import com.auction.backend.model.User;
+import com.auction.backend.model.dto.UserAuthRequestDTO;
+import com.auction.backend.model.dto.UserAuthResponseDTO;
+import com.auction.backend.model.dto.UserChangePasswordDTO;
+import com.auction.backend.repository.UserRepository;
+import com.auction.backend.model.dto.PasswordResetDTO;
+import com.auction.backend.model.dto.PasswordResetValidateDTO;
+import com.auction.backend.security.JwtService;
 import com.auction.backend.service.UserService;
+
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/user")
@@ -29,10 +42,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public User create(@RequestBody User user) {
-        return userService.create(user);
-    }
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/id/{id}")
     public User read(@PathVariable("id") Long id) {
@@ -47,6 +64,53 @@ public class UserController {
     @GetMapping("/siape/{siape}")
     public User readSiape(@PathVariable("siape") String siape) {
         return userService.readSiape(siape);
+    }
+
+    @GetMapping("/email-validation/{email}/{code}")
+    public boolean emailCodeValidation(@PathVariable String email, @PathVariable String code) {
+        return userService.emailCodeValidation(email, code);
+    }
+    
+
+    @PostMapping("/login")
+    public UserAuthResponseDTO authenticateUser(@Valid @RequestBody UserAuthRequestDTO authRequest) {
+        User user = userRepository.findBySiape(authRequest.getSiape()).orElseThrow(() -> new NoSuchElementException("User not found"));
+        if(!user.isActive()){
+            throw new NoSuchElementException("Usuário Inativo");
+        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getSiape(), authRequest.getPassword()));
+        return new UserAuthResponseDTO(authRequest.getSiape(), jwtService.generateToken(authentication.getName()));
+    }
+
+    @GetMapping("/getUserRole")
+    public String getUserRole(@RequestParam String siape) {
+        User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
+        return userService.getUserRole(user);
+    }
+    
+
+    @PostMapping("/password-reset-request")
+    public ResponseEntity<?> passwordResetRequest(@RequestBody UserAuthRequestDTO userAuthRequestDTO) {
+        userService.passwordCodeRequest(userAuthRequestDTO);
+        return ResponseEntity.ok("Código de validação enviado para o email.");
+    }
+
+    @PostMapping("/password-reset-validate")
+    public ResponseEntity<?> passwordResetValidate(@RequestBody PasswordResetValidateDTO passwordResetValidateDTO) {
+        userService.validatePasswordResetCode(passwordResetValidateDTO);
+        return ResponseEntity.ok("Código de validação verificado.");
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<?> passwordReset(@RequestBody PasswordResetDTO passwordResetDTO) {
+        userService.resetPassword(passwordResetDTO);
+        return ResponseEntity.ok("Senha redefinida com sucesso.");
+    }
+
+    @PostMapping
+    public User create(@RequestBody User user) {
+        return userService.create(user);
     }
 
     @PutMapping
@@ -70,24 +134,13 @@ public class UserController {
     }
 
     @PostMapping("/validate-email")
-    public UserService.EmailCriteria emailValidation(@RequestBody String email) {
-        return userService.emailValidation(email);
+    public UserService.EmailCriteria validatePasswordResetCode(@RequestBody String email) {
+        return userService.validatePasswordResetCode(email);
     }
 
     @PostMapping("/validate-password")
     public UserService.PasswordCriteria passwordValidation(@RequestBody String password) {
         return userService.passwordValidation(password);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            User authenticatedUser = userService.authenticate(loginRequest.getSiape(), loginRequest.getPassword());
-            return ResponseEntity.ok(authenticatedUser);
-
-        } catch (LoginException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
     }
 
     @PutMapping("/update-contact/{siape}")
@@ -118,25 +171,61 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-role/{siape}")
+    public ResponseEntity<User> updateUserRole(
+            @PathVariable("siape") String siape,
+            @RequestBody Map<String, String> body) {
+        try {
+            String role = body.get("role");
+            if (role == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            User updatedUser = userService.updateUserRole(siape, role);
+            return ResponseEntity.ok(updatedUser);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     @PutMapping("/update-permission/{siape}")
     public ResponseEntity<User> updatePermission(
             @PathVariable("siape") String siape,
             @RequestBody Map<String, String> body) {
         try {
-            User user = userService.readSiape(siape);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            String role = body.get("role");
+            if (role == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
-            String permissao = body.get("permissao");
-            user.setPermissao(permissao);
-
-            User updatedUser = userService.update(user);
+            User updatedUser = userService.updateUserRole(siape, role);
             return ResponseEntity.ok(updatedUser);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @PostMapping("/recover-email")
+    public String recoverSendEmail(@RequestBody Map<String, String> json){
+        String email = json.get("email");
+        return userService.recoverSendEmail(email);
+    }
+
+    @PostMapping("/recover-code")
+    public User recoverVerifyCode(@RequestBody Map<String, String> request){
+        String validationCode = request.get("validationCode");
+        return userService.recoverVerifyCode(validationCode);
+    }
+
+    @PostMapping("/recover-change")
+    public User recoverChangePassword(@RequestBody UserChangePasswordDTO dto){
+
+        System.out.println(dto.getEmail());
+        System.out.println(dto.getPassword());
+        return userService.recoverChangePassword(dto);
     }
 }
