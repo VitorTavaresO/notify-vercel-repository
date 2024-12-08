@@ -59,11 +59,11 @@ function AnnouncementList() {
 
     useEffect(() => {
         if (!loading) {
-          document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
-      
-          return () => {
-            document.documentElement.style.setProperty('--footer-width', '100%');
-          };
+            document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
+
+            return () => {
+                document.documentElement.style.setProperty('--footer-width', '100%');
+            };
         }
     }, [isFilter, loading]);
 
@@ -215,7 +215,7 @@ function AnnouncementList() {
         if (classes == "Todas") return "Todos as Turmas";
 
         return classes
-            .sort((a, b) => a - b) 
+            .sort((a, b) => a - b)
             .map(classNumber => `${classNumber}º Ano`)
             .join(", ");
     };
@@ -224,34 +224,35 @@ function AnnouncementList() {
         try {
             const response = await fetch("http://localhost:8080/api/messages");
             const data = await response.json();
-            setAnnouncements(data);
+            console.log("Dados recebidos da API:", data);
+
+            setAnnouncements(Array.isArray(data) ? data : []);
         } catch (error) {
-            console.error("Error fetching the announcement data:", error);
+            console.error("Erro ao buscar os dados dos comunicados:", error);
+            setAnnouncements([]);
         } finally {
             setLoading(false);
         }
     };
 
+
     useEffect(() => {
         fetchData();
     }, []);
 
-    const filteredAnnouncements = announcements
-        .filter((announcement) => {
-            const matchesTitle =
-                announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
-            const matchesProgram =
-                selectedProgram === "Todos" || announcement.course.includes(selectedProgram);
-            const matchesClass =
-                selectedClass === "Todas" || announcement.className.includes(selectedClass);
-
+    const filteredAnnouncements = Array.isArray(announcements)
+        ? announcements.filter((announcement) => {
+            const matchesTitle = announcement.title && announcement.title.toLowerCase().includes(filter.toLowerCase());
+            const matchesProgram = selectedProgram === "Todos" || announcement.course.includes(selectedProgram);
+            const matchesClass = selectedClass === "Todas" || announcement.className.includes(selectedClass);
             return matchesTitle && matchesProgram && matchesClass;
         })
-        .sort((a, b) => {
-            return ordem === "recente"
-                ? new Date(b.data) - new Date(a.data)
-                : new Date(a.data) - new Date(b.data);
-        });
+            .sort((a, b) => {
+                return ordem === "recente"
+                    ? new Date(b.data) - new Date(a.data)
+                    : new Date(a.data) - new Date(b.data);
+            })
+        : [];
 
 
     const [visible, setVisible] = useState(false);
@@ -279,23 +280,23 @@ function AnnouncementList() {
             month: "2-digit",
             year: "numeric",
         });
-    
+
         const formatClasses = (classes) => {
 
             if (classes == "Todas") return "Todos as Turmas";
 
             return classes
-                .sort((a, b) => a - b) 
+                .sort((a, b) => a - b)
                 .map(classNumber => `${classNumber}º Ano`)
                 .join(", ");
         };
-    
+
         const formattedClasses = announcement.className ? formatClasses(announcement.className) : "Sem turma definida";
         const courses = announcement.course ? announcement.course.join(", ") : "Sem curso definido";
-    
+
         const renderFlags = (course) => {
             const flags = [];
-            
+
             if (course.includes("Téc. Agroindústria")) {
                 flags.push(
                     <img alt="Téc. Agroindústria" src="/images/flag_agro.png" height="35" className="icon_role" />
@@ -360,15 +361,15 @@ function AnnouncementList() {
                         <div className="announcement-date ml-1">Em {formattedDate}</div>
                     </div>
                 </div>
-    
+
                 <div className="announcement-details">
-                    
-    
+
+
                     <div className="announcement-meta">
                         <div className="announcement-course">{courses}</div>
                         <div className="announcement-classes">{formattedClasses}</div>
                     </div>
-    
+
                     <div className="announcement-message mt-2">{formattedMessage}</div>
 
                     {announcement.annexes && announcement.annexes.length > 0 && (
@@ -377,20 +378,19 @@ function AnnouncementList() {
                             <ul>
                                 {announcement.annexes.map((annex, index) => (
                                     <li key={index}>
-                                        <a
-                                            href={`http://localhost:8080/uploads/${annex.path}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {annex.fileName}
-                                        </a>
+                                        <Button
+                                            label={annex.fileName}
+                                            icon="pi pi-download"
+                                            className="p-button-text p-button-secondary"
+                                            onClick={() => window.open(`http://localhost:8080/api/messages/${announcement.id}/annexes/${annex.id}/download`, '_blank')}
+                                        />
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     )}
                 </div>
-    
+
                 <Button
                     link
                     className="view-button"
@@ -417,10 +417,10 @@ function AnnouncementList() {
             </Helmet>
 
             <Dialog
-            header={dialogTitle}
-            visible={visible}
-            style={{ width: '47vw', maxHeight: '80vh', marginTop: '7vh' }}
-            onHide={() => setVisible(false)}>
+                header={dialogTitle}
+                visible={visible}
+                style={{ width: '47vw', maxHeight: '80vh', marginTop: '7vh' }}
+                onHide={() => setVisible(false)}>
                 {selectedAnnouncement ? (
                     <div>
                         <p className="-mt-1">{selectedAnnouncement.course.join(", ")}</p>
@@ -431,22 +431,21 @@ function AnnouncementList() {
                         <p className="announcement-message">{selectedAnnouncement.message}</p>
 
                         {selectedAnnouncement.annexes && selectedAnnouncement.annexes.length > 0 && (
-                        <div className="announcement-attachments">
-                            <h5 className="ml-2">Anexos:</h5>
-                            <ul>
-                                {selectedAnnouncement.annexes.map((annex, index) => (
-                                    <li key={index}>
-                                        <a
-                                            href={`http://localhost:8080/uploads/${annex.path}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {annex.fileName}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                            <div className="announcement-attachments">
+                                <h5 className="ml-2">Anexos:</h5>
+                                <ul>
+                                    {selectedAnnouncement.annexes.map((annex, index) => (
+                                        <li key={index}>
+                                            <Button
+                                                label={annex.fileName}
+                                                icon="pi pi-download" 
+                                                className="p-button-text p-button-secondary"
+                                                onClick={() => window.open(`http://localhost:8080/api/messages/${selectedAnnouncement.id}/annexes/${annex.id}/download`, '_blank')}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         )}
                     </div>
                 ) : (<p>Nenhum anúncio selecionado.</p>)}
@@ -524,7 +523,7 @@ function AnnouncementList() {
                     <div className="field">
                         <label htmlFor="attachments">Anexos</label>
                         <FileUpload
-                            ref={fileUploadRef} 
+                            ref={fileUploadRef}
                             name="attachments"
                             mode="basic"
                             multiple
@@ -565,7 +564,7 @@ function AnnouncementList() {
                 />
 
                 <div className="flex align-items-center flex-colum  -mt-3 -mt-2" >
-                    <i onClick={alternarOrdem} style={{ cursor: 'pointer', fontSize: '1.3rem' }} 
+                    <i onClick={alternarOrdem} style={{ cursor: 'pointer', fontSize: '1.3rem' }}
                         className={`pi ${ordem === 'recente' ? 'pi-sort-amount-up-alt' : 'pi-sort-amount-down-alt'} mx-2`}>
                     </i>
                     <h4 onClick={alternarOrdem} style={{ cursor: 'pointer' }}>
