@@ -35,7 +35,10 @@ const Header = () => {
     };
 
     useEffect(() => {
-
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            localStorage.setItem('userRole', user.role);
+        }
         document.addEventListener('mousedown', handleClickOutside);
         return () => { document.removeEventListener('mousedown', handleClickOutside); };
     }, []);

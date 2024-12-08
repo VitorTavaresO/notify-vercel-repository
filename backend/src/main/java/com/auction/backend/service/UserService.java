@@ -370,9 +370,7 @@ public class UserService implements UserDetailsService {
 
     public User updateUserRole(String siape, String role) {
         User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
-        if (role.trim().equalsIgnoreCase("Gerenciador de Cadastros")) {
-            user.setRoleName(RoleName.REGISTRATION_MANAGER);
-        } else if (role.trim().equalsIgnoreCase("Emissor de Comunicados")) {
+        if (role.trim().equalsIgnoreCase("Emissor de Comunicados")) {
             user.setRoleName(RoleName.ANNOUNCEMENT_ISSUER);
         } else if (role.trim().equalsIgnoreCase("Gerenciador do Sistema")) {
             user.setRoleName(RoleName.ADMIN);
@@ -390,5 +388,13 @@ public class UserService implements UserDetailsService {
 
     public List<User> list() {
         return userRepository.findAll();
+    }
+
+    public boolean isAdmin(User user) {
+        return user.getRoleName() == RoleName.ADMIN;
+    }
+
+    public boolean isAnnouncementIssuer(User user) {
+        return user.getRoleName() == RoleName.ANNOUNCEMENT_ISSUER;
     }
 }

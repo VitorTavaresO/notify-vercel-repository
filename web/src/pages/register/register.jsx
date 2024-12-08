@@ -83,7 +83,7 @@ const Register = () => {
         email: email,
         phone: phone,
         password: password,
-        role: "UNDEFINED", // Adicione o campo role com valor padrão
+        role: "UNDEFINED",
       })
       .then((data) => {
         console.log("Usuário cadastrado com sucesso:", data);
