@@ -303,7 +303,7 @@ const Login = () => {
                 onMouseOut={({ target }) =>
                   (target.style.color = "var(--register-button-out-color)")
                 }
-                /*onClick={""}*/
+                onClick={handleForgotButton}
               />
             </div>
           </div>

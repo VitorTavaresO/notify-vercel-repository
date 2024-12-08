@@ -22,7 +22,7 @@
   }
   
   .register-container > div > div {
-    /p-card-content: tem padding padrao/
+    p-card-content: tem padding padrao;
     padding: 0;
   }
   

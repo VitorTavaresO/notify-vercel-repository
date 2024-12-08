@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
@@ -10,14 +10,16 @@ import { InputOtp } from 'primereact/inputotp';
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 
-import EmailValidation from "web\src\validation\emailValidation.js";
+import EmailValidation from "web/src/validation/EmailValidation.js";
 
 import './ForgotPassword.css';
+import UserService from "../../services/UserService";
 
 const ForgotPassword = () => {
 
     const [currentSection, setCurrentSection] = useState(1);
 
+    const navigate = useNavigate();
     const [otp, setOtp] = useState("");
     const [email, setEmail] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
@@ -26,7 +28,9 @@ const ForgotPassword = () => {
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-    const [user, setUser] = useState({ email: "", newPassword: "" });
+    const userService = new UserService;
+
+    const [user, setUser] = useState({ email: "", password: "" });
 
     const [isFormValid1, setIsFormValid1] = useState(false);
     const [isFormValid2, setIsFormValid2] = useState(false);
@@ -100,14 +104,14 @@ const ForgotPassword = () => {
     };
 
     const handlePasswordChange = (e) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
+        const password = e.target.value;
+        setPassword(password);
         setPasswordCriteria({
-            minLength: newPassword.length >= 6,
-            hasUpperCase: /[A-Z]/.test(newPassword),
-            hasLowerCase: /[a-z]/.test(newPassword),
-            hasNumber: /[0-9]/.test(newPassword),
-            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>_\-\\]/.test(newPassword), // O '\\' é necessario para não ficar como palavra reservada.
+            minLength: password.length >= 6,
+            hasUpperCase: /[A-Z]/.test(password),
+            hasLowerCase: /[a-z]/.test(password),
+            hasNumber: /[0-9]/.test(password),
+            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>_\-\\]/.test(password), // O '\\' é necessario para não ficar como palavra reservada.
         });
     };
 
@@ -137,9 +141,32 @@ const ForgotPassword = () => {
         }
     };
 
-    const handleNext = () => {
-        setCurrentSection(prevSection => prevSection + 1);
-    };
+    const handleNext = async () => {
+        
+        if(currentSection == 1){
+            try{
+                const response = await userService.recoverSendEmail(email);
+                if(response){ setCurrentSection(prevSection => prevSection + 1);}
+            }
+            catch(error){ setErrorMessage("Erro ao enviar o código para o Email");}
+        };
+
+        if(currentSection == 2){
+            try{
+                const response = await userService.recoverVerifyCode(otp);
+                if(response){ setCurrentSection(prevSection => prevSection + 1);}
+            }
+            catch(error){ setErrorMessage("Código Inválido");}
+        }
+
+        if(currentSection == 3){
+            try{
+                const response = await userService.recoverChangePassword({email, password});
+                if(response){ navigate("/login")}
+            }
+            catch(error){ setErrorMessage("Erro ao alterar a Senha"); console.log(error) }
+        }
+    }
 
     const handleBack = () => {
         setCurrentSection(prevSection => prevSection - 1);

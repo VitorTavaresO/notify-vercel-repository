@@ -2,14 +2,12 @@ package com.auction.backend.service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -398,6 +396,7 @@ public class UserService implements UserDetailsService {
 
     public String recoverSendEmail(String email) {
 
+        System.out.println(email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
 
         String code = generateRandomCode();
@@ -416,7 +415,7 @@ public class UserService implements UserDetailsService {
             e.printStackTrace();
         }
 
-        return "";
+        return "Email enviado!";
     }
 
 
@@ -442,6 +441,7 @@ public class UserService implements UserDetailsService {
 
     public User recoverChangePassword(UserChangePasswordDTO dto){
 
+        System.out.println(dto.getEmail() + "   " +dto.getPassword());
         User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
 
         user.setPassword(dto.getPassword());

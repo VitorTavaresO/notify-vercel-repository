@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auction.backend.enums.RoleName;
 import com.auction.backend.model.User;
 import com.auction.backend.model.dto.UserAuthRequestDTO;
 import com.auction.backend.model.dto.UserAuthResponseDTO;
@@ -225,6 +224,8 @@ public class UserController {
     @PostMapping("/recover-change")
     public User recoverChangePassword(@RequestBody UserChangePasswordDTO dto){
 
+        System.out.println(dto.getEmail());
+        System.out.println(dto.getPassword());
         return userService.recoverChangePassword(dto);
     }
 }
