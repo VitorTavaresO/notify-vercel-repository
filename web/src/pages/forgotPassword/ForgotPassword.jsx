@@ -10,7 +10,7 @@ import { InputOtp } from 'primereact/inputotp';
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 
-import EmailValidation from "../../validation/emailValidation";
+import EmailValidation from "web\src\validation\emailValidation.js";
 
 import './ForgotPassword.css';
 
@@ -152,7 +152,7 @@ const ForgotPassword = () => {
         const isFormFilled1 = !!user.email && isEmailValid;
         setIsFormValid1(isFormFilled1);
 
-        const isFormFilled2 = otp.length === 6;
+        const isFormFilled2 = otp.length === 5;
         setIsFormValid2(isFormFilled2);
 
         if (currentSection === 2) {
@@ -239,7 +239,7 @@ const ForgotPassword = () => {
                                 <p className="-mt-2 email-input font-bold">{email}</p>
 
                                 <div className="mt-5 mb-6 flex flex-column align-items-center">
-                                    <InputOtp length={6} integerOnly value={otp} onChange={(e) => handleOtpChange(e.value)}
+                                    <InputOtp length={5} value={otp} onChange={(e) => handleOtpChange(e.value)}
                                         style={{ pointerEvents: "auto", zIndex: 10}}/>
                                 </div>
 

@@ -8,9 +8,9 @@ public class UserChangePasswordDTO {
     private String email;
     private String password;
 
-    public UserChangePasswordDTO(String email, String validationCode, String password){
+    public UserChangePasswordDTO(String email, String newPassword) {
 
         this.email = email;
-        this.password = password;
+        this.password = newPassword;
     }
 }
