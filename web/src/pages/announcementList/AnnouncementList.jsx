@@ -13,8 +13,10 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from "primereact/fileupload";
 import { Chips } from "primereact/chips";
 import { MultiSelect } from 'primereact/multiselect';
+import { InputMask } from "primereact/inputmask";
 
 import './AnnouncementList.css';
+import { InputNumber } from "primereact/inputnumber";
 
 function AnnouncementList() {
     const isFilter = useState(true);
@@ -30,6 +32,9 @@ function AnnouncementList() {
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
+    const [rA, setRA] = useState("");
+    const [nomeAluno, setNomeAluno] = useState("");
+    const [nomeResponsavel, setNomeResponsavel] = useState("");
     const [ordem, setOrdem] = useState('recente');
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
@@ -401,6 +406,23 @@ function AnnouncementList() {
         );
     };
 
+    const handleRAChange = (value) => {
+        setRA(value);
+
+    };
+
+    const handleNomeAlunoChange = (value) => {
+        setNomeAluno(value);
+
+        
+    };
+
+    const handleNomeResponsavelChange = (value) => {
+        setNomeResponsavel(value);
+
+        
+    };
+
 
     if (loading) {
         return (
@@ -488,16 +510,38 @@ function AnnouncementList() {
                     </div>
                     {/* Campo de E-mails para o Nível Individual */}
                     {selectedPrograms.includes("Individual") && (
+                        <>
                         <div className="field">
-                            <label htmlFor="email">E-mails</label>
-                            <Chips
-                                id="email"
-                                value={email}
-                                onChange={handleEmailChange}
-                                placeholder="Digite e pressione Enter para adicionar e-mails"
-                                separator=","
+                            <label htmlFor="title">RA do Aluno</label>
+                            <InputMask
+                                id="rA"
+                                value={rA}
+                                mask="99999999999"
+                                onChange={(e) => handleRAChange(e.value)}
+                                placeholder="Digite o RA do Aluno"
                             />
                         </div>
+                        <div className="field">
+                            <label htmlFor="title">Nome do Aluno</label>
+                            <InputText
+                                id="nomeAluno"
+                                value={nomeAluno}    
+                                onChange={(e) => handleNomeAlunoChange(e.value)}
+                                placeholder="Digite o nome do Aluno"
+                                disabled={/^\d{11}$/.test(rA)}
+                            />
+                        </div>
+                        <div className="field">
+                            <label htmlFor="title">Nome do Responsável</label>
+                            <InputText
+                                id="nomeResponsavel"
+                                value={nomeResponsavel}
+                                onChange={(e) => handleNomeResponsavelChange(e.value)}
+                                placeholder="Digite o nome do Responsável"
+                                disabled={/^\d{11}$/.test(rA)}
+                            />
+                        </div>
+                        </>
                     )}
                     <div className="field">
                         <label htmlFor="class">Turma</label>
