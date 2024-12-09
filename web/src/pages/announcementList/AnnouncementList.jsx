@@ -14,9 +14,9 @@ import { FileUpload } from "primereact/fileupload";
 import { Chips } from "primereact/chips";
 import { MultiSelect } from 'primereact/multiselect';
 import { InputMask } from "primereact/inputmask";
+import { fetchGuardians } from "../../validation/APITranslator";
 
 import './AnnouncementList.css';
-import { InputNumber } from "primereact/inputnumber";
 
 function AnnouncementList() {
     const isFilter = useState(true);
@@ -33,9 +33,12 @@ function AnnouncementList() {
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
     const [rA, setRA] = useState("");
-    const [nomeAluno, setNomeAluno] = useState("");
+    const [nomeEstudante, setNomeEstudante] = useState("");
     const [nomeResponsavel, setNomeResponsavel] = useState("");
     const [ordem, setOrdem] = useState('recente');
+
+    const [guardiansName, setGuardiansName] = useState([]);
+    const [studentsName, setStudentsName] = useState([]);
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
@@ -65,12 +68,38 @@ function AnnouncementList() {
     useEffect(() => {
         if (!loading) {
             document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
-
+    
             return () => {
                 document.documentElement.style.setProperty('--footer-width', '100%');
             };
         }
     }, [isFilter, loading]);
+
+    useEffect(() => {
+        const loadGuardians = async () => {
+            try {
+                const data = await fetchGuardians();
+                
+                const formattedGuardians = data.map(guardian => ({
+                    value: guardian.id,
+                    label: guardian.name,
+                    studentRA: guardian.studentRA,
+                    studentName: guardian.studentName,
+                }));
+                setGuardiansName(formattedGuardians);
+        
+                const formattedStudents = formattedGuardians.map(guardian => ({
+                    label: guardian.studentName
+                }));
+                setStudentsName(formattedStudents);
+
+            } catch (error) {
+                console.error("Erro ao carregar os dados dos responsáveis:", error);
+            }
+        };
+    
+        loadGuardians(); 
+    }, []);
 
     const openDialog = () => {
         setTitle("");
@@ -240,7 +269,6 @@ function AnnouncementList() {
         }
     };
 
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -408,19 +436,32 @@ function AnnouncementList() {
 
     const handleRAChange = (value) => {
         setRA(value);
+    
+        if (value.length === 11) {
 
+            const matchingGuardian = guardiansName.find(
+                (guardian) => guardian.studentRA === value
+            );
+
+            if (matchingGuardian) {
+                setNomeResponsavel(matchingGuardian.label);
+                setNomeEstudante(matchingGuardian.studentName);
+            } else {
+                console.warn("Nenhum responsável encontrado para o RA:", value);
+                setNomeEstudante(null);
+                setNomeResponsavel(null);
+            }
+        }
     };
 
-    const handleNomeAlunoChange = (value) => {
-        setNomeAluno(value);
+    const handleNomeEstudanteChange = (value) => {
+        setNomeEstudante(value);
 
-        
     };
 
     const handleNomeResponsavelChange = (value) => {
         setNomeResponsavel(value);
 
-        
     };
 
 
@@ -508,36 +549,38 @@ function AnnouncementList() {
                             display="chip"
                         />
                     </div>
-                    {/* Campo de E-mails para o Nível Individual */}
+                    {/* Campos para o Nível Individual */}
                     {selectedPrograms.includes("Individual") && (
                         <>
                         <div className="field">
-                            <label htmlFor="title">RA do Aluno</label>
+                            <label htmlFor="title">RA do Estudante</label>
                             <InputMask
                                 id="rA"
                                 value={rA}
                                 mask="99999999999"
                                 onChange={(e) => handleRAChange(e.value)}
-                                placeholder="Digite o RA do Aluno"
+                                placeholder="Digite o RA do Estudante"
                             />
                         </div>
                         <div className="field">
-                            <label htmlFor="title">Nome do Aluno</label>
-                            <InputText
-                                id="nomeAluno"
-                                value={nomeAluno}    
-                                onChange={(e) => handleNomeAlunoChange(e.value)}
-                                placeholder="Digite o nome do Aluno"
+                            <label htmlFor="nomeEstudante">Nome do Estudante</label>
+                            <Dropdown
+                                id="nomeEstudante"
+                                value={studentsName.find((student) => student.label === nomeEstudante) || nomeEstudante}
+                                options={studentsName}
+                                onChange={(e) => setNomeEstudante(e.value)}
+                                placeholder="Selecione ou digite o nome do Estudante"
                                 disabled={/^\d{11}$/.test(rA)}
                             />
                         </div>
                         <div className="field">
-                            <label htmlFor="title">Nome do Responsável</label>
-                            <InputText
+                            <label htmlFor="nomeResponsavel">Nome do Responsável</label>
+                            <Dropdown
                                 id="nomeResponsavel"
-                                value={nomeResponsavel}
-                                onChange={(e) => handleNomeResponsavelChange(e.value)}
-                                placeholder="Digite o nome do Responsável"
+                                value={guardiansName.find((guardian) => guardian.label === nomeResponsavel)?.label || nomeResponsavel}
+                                options={guardiansName}
+                                onChange={(e) => setNomeResponsavel(e.value)}
+                                placeholder="Selecione ou digite o nome do Responsável"
                                 disabled={/^\d{11}$/.test(rA)}
                             />
                         </div>
