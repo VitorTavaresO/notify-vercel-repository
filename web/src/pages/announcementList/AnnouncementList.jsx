@@ -13,8 +13,11 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from "primereact/fileupload";
 import { Chips } from "primereact/chips";
 import { MultiSelect } from 'primereact/multiselect';
+import { InputMask } from "primereact/inputmask";
+import { fetchGuardians } from "../../validation/APITranslator";
 
 import './AnnouncementList.css';
+import { use } from "react";
 
 function AnnouncementList() {
     const isFilter = useState(true);
@@ -30,7 +33,17 @@ function AnnouncementList() {
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
+    const [selectedEmail, setSelectedEmail] = useState(null);
+    const [rA, setRA] = useState(null);
+    const [nomeEstudante, setNomeEstudante] = useState(null);
+    const [nomeResponsavel, setNomeResponsavel] = useState(null);
+    const [visibleRA, setVisibleRA] = useState(false);
+    const [visibleNomeEstudante, setVisibleNomeEstudante] = useState(false);
+    const [visibleNomeResponsavel, setVisibleNomeResponsavel] = useState(false);
     const [ordem, setOrdem] = useState('recente');
+
+    const [guardiansName, setGuardiansName] = useState([]);
+    const [studentsName, setStudentsName] = useState([]);
 
     const [selectedProgram, setSelectedProgram] = useState("Todos");
     const programs = [
@@ -60,17 +73,57 @@ function AnnouncementList() {
     useEffect(() => {
         if (!loading) {
             document.documentElement.style.setProperty('--footer-width', isFilter ? 'calc(100% - 325px)' : '100%');
-
+    
             return () => {
                 document.documentElement.style.setProperty('--footer-width', '100%');
             };
         }
     }, [isFilter, loading]);
 
+    useEffect(() => {
+        if (selectedEmail) {
+            setEmail([selectedEmail]);
+        }
+    }, [selectedEmail]);
+    
+    useEffect(() => {
+        const loadGuardians = async () => {
+            try {
+                const data = await fetchGuardians();
+                
+                const formattedGuardians = data.map(guardian => ({
+                    value: guardian.id,
+                    label: guardian.name,
+                    studentRA: guardian.studentRA,
+                    studentName: guardian.studentName,
+                    email: guardian.email,
+                }));
+                setGuardiansName(formattedGuardians);
+        
+                const formattedStudents = formattedGuardians.map(guardian => ({
+                    label: guardian.studentName,
+                }));
+                
+                setStudentsName(formattedStudents);
+
+            } catch (error) {
+                console.error("Erro ao carregar os dados dos responsáveis:", error);
+            }
+        };
+    
+        loadGuardians(); 
+    }, []);
+
     const openDialog = () => {
         setTitle("");
         setMessage("");
         setEmail([]);
+        setRA(null);
+        setNomeEstudante(null);
+        setNomeResponsavel(null);
+        setVisibleRA(false);
+        setVisibleNomeEstudante(false);
+        setVisibleNomeResponsavel(false);
         setSelectedPrograms([]);
         setSelectedClasses([]);
         setAttachments([]);
@@ -83,6 +136,12 @@ function AnnouncementList() {
         setTitle("");
         setMessage("");
         setEmail([]);
+        setRA(null);
+        setNomeEstudante(null);
+        setNomeResponsavel(null);
+        setVisibleRA(false);
+        setVisibleNomeEstudante(false);
+        setVisibleNomeResponsavel(false);
         setSelectedPrograms([]);
         setSelectedClasses([]);
         setAttachments([]);
@@ -235,7 +294,6 @@ function AnnouncementList() {
         }
     };
 
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -256,22 +314,6 @@ function AnnouncementList() {
 
 
     const [visible, setVisible] = useState(false);
-
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    };
-
-    const handleEmailChange = (e) => {
-        const emails = e.value;
-        const invalidEmails = emails.filter(email => !validateEmail(email));
-
-        if (invalidEmails.length > 0) {
-            alert("E-mails inválidos: " + invalidEmails.join(", "));
-        } else {
-            setEmail(emails);
-        }
-    };
 
     const itemTemplate = (announcement) => {
         const date = new Date(announcement.data);
@@ -401,6 +443,94 @@ function AnnouncementList() {
         );
     };
 
+    const handleRAChange = (value) => {
+        setRA(value);
+    
+        if(value.length === 0){
+            setNomeEstudante(null);
+            setNomeResponsavel(null);
+
+            setVisibleNomeEstudante(false);
+            setVisibleNomeResponsavel(false);
+            setSelectedEmail(null);
+        }
+
+        if (value.length === 11) {
+
+            const matchingGuardian = guardiansName.find((guardian) => guardian.studentRA === value);
+
+            if (matchingGuardian) {
+                setNomeEstudante(matchingGuardian.studentName);
+                setNomeResponsavel(matchingGuardian.value);
+                setSelectedEmail(matchingGuardian.email);
+            } else {
+                console.warn("Nenhum registro encontrado para o RA:", value);
+                setNomeEstudante(null);
+                setNomeResponsavel(null);
+            }
+
+            setVisibleNomeEstudante(true);
+            setVisibleNomeResponsavel(true);
+        }
+    };
+
+    const handleNomeEstudanteChange = (value) => {
+
+        if(value != null){
+            setNomeEstudante(value);
+        
+            const matchingGuardian = guardiansName.find((guardian) => guardian.studentName === value.label);
+        
+            setVisibleRA(false);
+            setVisibleNomeResponsavel(false);
+
+            if (matchingGuardian) {
+                setRA(matchingGuardian.studentRA);
+                setNomeResponsavel(matchingGuardian.value);
+                setSelectedEmail(matchingGuardian.email);
+
+                setVisibleRA(true);
+                setVisibleNomeResponsavel(true);
+            } else {
+                console.warn("Nenhum registro encontrado para o Estudante:", value);
+                setRA(null);
+                setNomeResponsavel(null);
+            }
+        }
+        else{
+            setRA(null);
+            setNomeEstudante(null);
+            setNomeResponsavel(null);
+
+            setVisibleRA(false);
+            setVisibleNomeResponsavel(false);
+            setSelectedEmail(null);
+        }
+    };
+
+    const handleNomeResponsavelChange = (value) => {
+        setNomeResponsavel(value);
+
+        const matchingGuardian = guardiansName.find((guardian) => guardian.value === value);
+    
+        setVisibleRA(false);
+        setVisibleNomeEstudante(false);
+        setSelectedEmail(null);
+
+        if (matchingGuardian) {
+            setRA(matchingGuardian.studentRA);
+            setNomeEstudante(matchingGuardian.studentName);
+            setSelectedEmail(matchingGuardian.email);
+
+            setVisibleRA(true);
+            setVisibleNomeEstudante(true);
+        } else {
+            console.warn("Nenhum registro encontrado para o Responsável:", value);
+            setRA(null);
+            setNomeEstudante(null);
+        }
+    };
+
 
     if (loading) {
         return (
@@ -486,18 +616,45 @@ function AnnouncementList() {
                             display="chip"
                         />
                     </div>
-                    {/* Campo de E-mails para o Nível Individual */}
+                    {/* Campos para o Nível Individual */}
                     {selectedPrograms.includes("Individual") && (
+                        <>
                         <div className="field">
-                            <label htmlFor="email">E-mails</label>
-                            <Chips
-                                id="email"
-                                value={email}
-                                onChange={handleEmailChange}
-                                placeholder="Digite e pressione Enter para adicionar e-mails"
-                                separator=","
+                            <label htmlFor="title">RA do Estudante</label>
+                            <InputMask
+                                id="rA"
+                                value={rA}
+                                mask="99999999999"
+                                onChange={(e) => handleRAChange(e.value)}
+                                placeholder="Digite o RA do Estudante"
+                                disabled={visibleRA}
                             />
                         </div>
+                        <div className="field">
+                            <label htmlFor="nomeEstudante">Nome do Estudante</label>
+                            <Dropdown
+                                id="nomeEstudante"
+                                value={studentsName.find((student) => student.label === nomeEstudante) || nomeEstudante}
+                                options={studentsName}
+                                onChange={(e) => handleNomeEstudanteChange(e.value)}
+                                placeholder="Selecione ou digite o nome do Estudante"
+                                disabled={visibleNomeEstudante}
+                                filter showClear
+                            />
+                        </div>
+                        <div className="field">
+                            <label htmlFor="nomeResponsavel">Nome do Responsável</label>
+                            <Dropdown
+                                id="nomeResponsavel"
+                                value={guardiansName.find((guardian) => guardian.label === nomeResponsavel) || nomeResponsavel}
+                                options={guardiansName}
+                                onChange={(e) => handleNomeResponsavelChange(e.value)}
+                                placeholder="Selecione ou digite o nome do Responsável"
+                                disabled={visibleNomeResponsavel}
+                                filter showClear
+                            />
+                        </div>
+                        </>
                     )}
                     <div className="field">
                         <label htmlFor="class">Turma</label>

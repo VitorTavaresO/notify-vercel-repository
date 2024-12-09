@@ -1,5 +1,6 @@
 package com.auction.backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,9 +20,11 @@ public class Guardian {
     private String phone;
     private String email;
     private String studentName;
-    private int studentRA;
+    
+    @Column(name = "student_ra", columnDefinition = "CHAR(11)")
+    private String studentRA;
+
     private String status;
     private String course;
     private String courseYear;
-
 }
