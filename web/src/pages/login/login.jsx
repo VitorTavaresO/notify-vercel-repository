@@ -30,10 +30,8 @@ const Login = () => {
       console.log(error);
       if (error.response && error.response.data) {
         const errorMessage = error.response.data.message;
-        if (errorMessage === "User not found") {
-          setErrorMessage("Usuário Não Encontrado");
-        } else if (errorMessage === "Bad credentials") {
-          setErrorMessage("Senha Inválida");
+        if (errorMessage) {
+          setErrorMessage(errorMessage);
         } else {
           setErrorMessage("Error ao Logar");
         }
