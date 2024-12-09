@@ -17,6 +17,7 @@ import { InputMask } from "primereact/inputmask";
 import { fetchGuardians } from "../../validation/APITranslator";
 
 import './AnnouncementList.css';
+import { use } from "react";
 
 function AnnouncementList() {
     const isFilter = useState(true);
@@ -32,9 +33,13 @@ function AnnouncementList() {
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
+    const [selectedEmail, setSelectedEmail] = useState(null);
     const [rA, setRA] = useState(null);
     const [nomeEstudante, setNomeEstudante] = useState(null);
     const [nomeResponsavel, setNomeResponsavel] = useState(null);
+    const [visibleRA, setVisibleRA] = useState(false);
+    const [visibleNomeEstudante, setVisibleNomeEstudante] = useState(false);
+    const [visibleNomeResponsavel, setVisibleNomeResponsavel] = useState(false);
     const [ordem, setOrdem] = useState('recente');
 
     const [guardiansName, setGuardiansName] = useState([]);
@@ -76,6 +81,12 @@ function AnnouncementList() {
     }, [isFilter, loading]);
 
     useEffect(() => {
+        if (selectedEmail) {
+            setEmail([selectedEmail]);
+        }
+    }, [selectedEmail]);
+    
+    useEffect(() => {
         const loadGuardians = async () => {
             try {
                 const data = await fetchGuardians();
@@ -85,6 +96,7 @@ function AnnouncementList() {
                     label: guardian.name,
                     studentRA: guardian.studentRA,
                     studentName: guardian.studentName,
+                    email: guardian.email,
                 }));
                 setGuardiansName(formattedGuardians);
         
@@ -106,6 +118,12 @@ function AnnouncementList() {
         setTitle("");
         setMessage("");
         setEmail([]);
+        setRA(null);
+        setNomeEstudante(null);
+        setNomeResponsavel(null);
+        setVisibleRA(false);
+        setVisibleNomeEstudante(false);
+        setVisibleNomeResponsavel(false);
         setSelectedPrograms([]);
         setSelectedClasses([]);
         setAttachments([]);
@@ -118,6 +136,12 @@ function AnnouncementList() {
         setTitle("");
         setMessage("");
         setEmail([]);
+        setRA(null);
+        setNomeEstudante(null);
+        setNomeResponsavel(null);
+        setVisibleRA(false);
+        setVisibleNomeEstudante(false);
+        setVisibleNomeResponsavel(false);
         setSelectedPrograms([]);
         setSelectedClasses([]);
         setAttachments([]);
@@ -291,22 +315,6 @@ function AnnouncementList() {
 
     const [visible, setVisible] = useState(false);
 
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    };
-
-    const handleEmailChange = (e) => {
-        const emails = e.value;
-        const invalidEmails = emails.filter(email => !validateEmail(email));
-
-        if (invalidEmails.length > 0) {
-            alert("E-mails inválidos: " + invalidEmails.join(", "));
-        } else {
-            setEmail(emails);
-        }
-    };
-
     const itemTemplate = (announcement) => {
         const date = new Date(announcement.data);
         const formattedDate = date.toLocaleDateString("pt-BR", {
@@ -441,6 +449,10 @@ function AnnouncementList() {
         if(value.length === 0){
             setNomeEstudante(null);
             setNomeResponsavel(null);
+
+            setVisibleNomeEstudante(false);
+            setVisibleNomeResponsavel(false);
+            setSelectedEmail(null);
         }
 
         if (value.length === 11) {
@@ -450,26 +462,49 @@ function AnnouncementList() {
             if (matchingGuardian) {
                 setNomeEstudante(matchingGuardian.studentName);
                 setNomeResponsavel(matchingGuardian.value);
+                setSelectedEmail(matchingGuardian.email);
             } else {
                 console.warn("Nenhum registro encontrado para o RA:", value);
                 setNomeEstudante(null);
                 setNomeResponsavel(null);
             }
+
+            setVisibleNomeEstudante(true);
+            setVisibleNomeResponsavel(true);
         }
     };
 
     const handleNomeEstudanteChange = (value) => {
-        setNomeEstudante(value);
-    
-        const matchingGuardian = guardiansName.find((guardian) => guardian.studentName === value.label);
-    
-        if (matchingGuardian) {
-            setRA(matchingGuardian.studentRA);
-            setNomeResponsavel(matchingGuardian.value);
-        } else {
-            console.warn("Nenhum registro encontrado para o Estudante:", value);
+
+        if(value != null){
+            setNomeEstudante(value);
+        
+            const matchingGuardian = guardiansName.find((guardian) => guardian.studentName === value.label);
+        
+            setVisibleRA(false);
+            setVisibleNomeResponsavel(false);
+
+            if (matchingGuardian) {
+                setRA(matchingGuardian.studentRA);
+                setNomeResponsavel(matchingGuardian.value);
+                setSelectedEmail(matchingGuardian.email);
+
+                setVisibleRA(true);
+                setVisibleNomeResponsavel(true);
+            } else {
+                console.warn("Nenhum registro encontrado para o Estudante:", value);
+                setRA(null);
+                setNomeResponsavel(null);
+            }
+        }
+        else{
             setRA(null);
+            setNomeEstudante(null);
             setNomeResponsavel(null);
+
+            setVisibleRA(false);
+            setVisibleNomeResponsavel(false);
+            setSelectedEmail(null);
         }
     };
 
@@ -478,9 +513,17 @@ function AnnouncementList() {
 
         const matchingGuardian = guardiansName.find((guardian) => guardian.value === value);
     
+        setVisibleRA(false);
+        setVisibleNomeEstudante(false);
+        setSelectedEmail(null);
+
         if (matchingGuardian) {
             setRA(matchingGuardian.studentRA);
             setNomeEstudante(matchingGuardian.studentName);
+            setSelectedEmail(matchingGuardian.email);
+
+            setVisibleRA(true);
+            setVisibleNomeEstudante(true);
         } else {
             console.warn("Nenhum registro encontrado para o Responsável:", value);
             setRA(null);
@@ -584,6 +627,7 @@ function AnnouncementList() {
                                 mask="99999999999"
                                 onChange={(e) => handleRAChange(e.value)}
                                 placeholder="Digite o RA do Estudante"
+                                disabled={visibleRA}
                             />
                         </div>
                         <div className="field">
@@ -594,7 +638,7 @@ function AnnouncementList() {
                                 options={studentsName}
                                 onChange={(e) => handleNomeEstudanteChange(e.value)}
                                 placeholder="Selecione ou digite o nome do Estudante"
-                                disabled={/^\d{11}$/.test(rA)}
+                                disabled={visibleNomeEstudante}
                                 filter showClear
                             />
                         </div>
@@ -606,7 +650,7 @@ function AnnouncementList() {
                                 options={guardiansName}
                                 onChange={(e) => handleNomeResponsavelChange(e.value)}
                                 placeholder="Selecione ou digite o nome do Responsável"
-                                disabled={/^\d{11}$/.test(rA)}
+                                disabled={visibleNomeResponsavel}
                                 filter showClear
                             />
                         </div>
