@@ -1,7 +1,7 @@
 import "./App.css";
 import Login from "./pages/login/Login.jsx";
 import Register from "./pages/register/Register.jsx";
-import ForgotPassword from "./pages/forgotPassword/ForgotPassword"
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import Home from "./pages/home/Home";
 import EmployeeList from "./pages/employeeList/EmployeeList";
 import Profile from "./pages/profile/Profile";
@@ -62,13 +62,36 @@ function App() {
             />
           </Route>
           <Route path="/employee-list" element={<ManagerRouter />}>
-            <Route path="" element={<EmployeeList />} />
+            <Route
+              path=""
+              element={
+                <DefaultLayout>
+                  <EmployeeList />
+                </DefaultLayout>
+              }
+            />
           </Route>
           <Route path="/announcement-list" element={<ManagerRouter />}>
-            <Route path="" element={<AnnouncementList />} />
+            <Route
+              path=""
+              element={
+                <DefaultLayout>
+                  {" "}
+                  <AnnouncementList />{" "}
+                </DefaultLayout>
+              }
+            />
           </Route>
           <Route path="/guardian-list" element={<ManagerRouter />}>
-            <Route path="" element={<GuardianList />} />
+            <Route
+              path=""
+              element={
+                <DefaultLayout>
+                  {" "}
+                  <GuardianList />{" "}
+                </DefaultLayout>
+              }
+            />
           </Route>
           <Route element={<PrivateRouter />}>
             <Route
