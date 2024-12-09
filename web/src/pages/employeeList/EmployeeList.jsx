@@ -23,11 +23,11 @@ function EmployeeList() {
   const [selectedRole, setSelectedRole] = useState("");
   const userService = new UserService();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const permissions = [
     { label: "Todos", value: "Todos", icon: '/images/icon_role0_marked.png' },
     { label: "Emissor de Comunicados", value: "Emissor de comunicados", icon: '/images/icon_role1_marked.png' },
-    { label: "Gerenciador de Cadastrados", value: "Gerenciador de cadastros", icon: '/images/icon_role3_marked.png' },
     { label: "Gerenciador do Sistema", value: "Gerenciador do sistema", icon: '/images/icon_role4_marked.png' },
   ];
 
@@ -120,9 +120,6 @@ function EmployeeList() {
         case "Gerenciador do Sistema":
           role = "ADMIN";
           break;
-        case "Gerenciador de Cadastros":
-          role = "REGISTRATION_MANAGER";
-          break;
         default:
           role = "UNDEFINED";
           break;
@@ -192,12 +189,6 @@ function EmployeeList() {
           {/* style necessário apenas caso usuário tiver mais de uma role*/}
           <img
             alt="logo"
-            src="/images/icon_role3_marked.png"
-            height={`${employee.permissao == "Gerenciador de cadastros" ? "35" : "0"}`}
-            style={{ padding: `${employee.permissao == "Gerenciador de cadastros" ? '0 20px 0 0' : "0 0 0 0"}` }}
-            className="icon_role" />
-          <img
-            alt="logo"
             src="/images/icon_role4_marked.png"
             height={`${employee.permissao == "Gerenciador do sistema" ? "35" : "0"}`}
             style={{ padding: `${employee.permissao == "Gerenciador do sistema" ? '0 20px 0 0' : "0 0 0 0"}` }}
@@ -219,6 +210,14 @@ function EmployeeList() {
         />
       </Card>
     );
+  };
+
+  const handleButtonClick = () => {
+    if (user.role !== 'ADMIN') {
+      alert('Você não tem permissão para acessar esta funcionalidade.');
+    } else {
+      // Ação permitida para ADMIN
+    }
   };
 
   if (loading) {
@@ -279,6 +278,7 @@ function EmployeeList() {
         </Card>
       </div>
       <div className="cover-container"></div>
+      <Button label="Ação Restrita" onClick={handleButtonClick} />
     </div>
   );
 }

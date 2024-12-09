@@ -5,7 +5,7 @@ import ForgotPassword from "./pages/forgotPassword/ForgotPassword"
 import Home from "./pages/home/Home";
 import EmployeeList from "./pages/employeeList/EmployeeList";
 import Profile from "./pages/profile/Profile";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import DefaultLayout from "./components/DefaultLayout";
 import SimpleLayout from "./components/SimpleLayout";
 import PrivateRouter from "./components/PrivateRouter.jsx";
@@ -17,7 +17,7 @@ import RegisterConfirmation from "./pages/registerConfirmation/RegisterConfirmat
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <Router>
         <Routes>
           <Route
             path="/login"
@@ -47,8 +47,7 @@ function App() {
             path="/email-validation/:email/:code"
             element={
               <SimpleLayout>
-                {" "}
-                <RegisterConfirmation />{" "}
+                <RegisterConfirmation />
               </SimpleLayout>
             }
           />
@@ -62,35 +61,14 @@ function App() {
               }
             />
           </Route>
-          <Route element={<PrivateRouter />}>
-            <Route
-              path="/announcement-list"
-              element={
-                <DefaultLayout>
-                  <AnnouncementList />
-                </DefaultLayout>
-              }
-            />
+          <Route path="/employee-list" element={<ManagerRouter />}>
+            <Route path="" element={<EmployeeList />} />
           </Route>
-          <Route element={<ManagerRouter />}>
-            <Route
-              path="/employee-list"
-              element={
-                <DefaultLayout>
-                  <EmployeeList />
-                </DefaultLayout>
-              }
-            />
+          <Route path="/announcement-list" element={<ManagerRouter />}>
+            <Route path="" element={<AnnouncementList />} />
           </Route>
-          <Route element={<PrivateRouter />}>
-            <Route
-              path="/guardian-list"
-              element={
-                <DefaultLayout>
-                  <GuardianList />
-                </DefaultLayout>
-              }
-            />
+          <Route path="/guardian-list" element={<ManagerRouter />}>
+            <Route path="" element={<GuardianList />} />
           </Route>
           <Route element={<PrivateRouter />}>
             <Route
@@ -103,7 +81,7 @@ function App() {
             />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </Router>
     </>
   );
 }

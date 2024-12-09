@@ -80,7 +80,9 @@ public class UserController {
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getSiape(), authRequest.getPassword()));
-        return new UserAuthResponseDTO(authRequest.getSiape(), jwtService.generateToken(authentication.getName()));
+        String token = jwtService.generateToken(authentication.getName());
+        String role = user.getRoleName().toString();
+        return new UserAuthResponseDTO(authRequest.getSiape(), token, role);
     }
 
     @GetMapping("/getUserRole")
@@ -89,6 +91,17 @@ public class UserController {
         return userService.getUserRole(user);
     }
     
+    @GetMapping("/is-admin")
+    public boolean isAdmin(@RequestParam String siape) {
+        User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
+        return userService.isAdmin(user);
+    }
+
+    @GetMapping("/is-announcement-issuer")
+    public boolean isAnnouncementIssuer(@RequestParam String siape) {
+        User user = userRepository.findBySiape(siape).orElseThrow(() -> new NoSuchElementException("User not found"));
+        return userService.isAnnouncementIssuer(user);
+    }
 
     @PostMapping("/password-reset-request")
     public ResponseEntity<?> passwordResetRequest(@RequestBody UserAuthRequestDTO userAuthRequestDTO) {

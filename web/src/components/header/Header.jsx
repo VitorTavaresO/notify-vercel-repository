@@ -5,7 +5,6 @@ import { Avatar } from 'primereact/avatar';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 
-
 const Header = () => {
     const navigate = useNavigate();
 
@@ -30,12 +29,14 @@ const Header = () => {
     const toggleUserMenu = () => { setIsUserMenuVisible(prevState => !prevState);};
 
     const handleClickOutside = (event) => {
-
         if (userMenuRef.current && !userMenuRef.current.contains(event.target)) { setIsUserMenuVisible(false);}
     };
 
     useEffect(() => {
-
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            localStorage.setItem('userRole', user.role);
+        }
         document.addEventListener('mousedown', handleClickOutside);
         return () => { document.removeEventListener('mousedown', handleClickOutside); };
     }, []);
@@ -67,4 +68,6 @@ const Header = () => {
         <Menubar model={items} start={start} end={end} className="header"/>
         </>
     );
-}; export default Header;
+}; 
+
+export default Header;
