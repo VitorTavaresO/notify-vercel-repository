@@ -32,9 +32,9 @@ function AnnouncementList() {
     const [selectedPrograms, setSelectedPrograms] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [email, setEmail] = useState([]);
-    const [rA, setRA] = useState("");
-    const [nomeEstudante, setNomeEstudante] = useState("");
-    const [nomeResponsavel, setNomeResponsavel] = useState("");
+    const [rA, setRA] = useState(null);
+    const [nomeEstudante, setNomeEstudante] = useState(null);
+    const [nomeResponsavel, setNomeResponsavel] = useState(null);
     const [ordem, setOrdem] = useState('recente');
 
     const [guardiansName, setGuardiansName] = useState([]);
@@ -438,17 +438,20 @@ function AnnouncementList() {
     const handleRAChange = (value) => {
         setRA(value);
     
+        if(value.length === 0){
+            setNomeEstudante(null);
+            setNomeResponsavel(null);
+        }
+
         if (value.length === 11) {
 
-            const matchingGuardian = guardiansName.find(
-                (guardian) => guardian.studentRA === value
-            );
+            const matchingGuardian = guardiansName.find((guardian) => guardian.studentRA === value);
 
             if (matchingGuardian) {
-                setNomeResponsavel(matchingGuardian.value);
                 setNomeEstudante(matchingGuardian.studentName);
+                setNomeResponsavel(matchingGuardian.value);
             } else {
-                console.warn("Nenhum responsável encontrado para o RA:", value);
+                console.warn("Nenhum registro encontrado para o RA:", value);
                 setNomeEstudante(null);
                 setNomeResponsavel(null);
             }
@@ -457,12 +460,32 @@ function AnnouncementList() {
 
     const handleNomeEstudanteChange = (value) => {
         setNomeEstudante(value);
-
+    
+        const matchingGuardian = guardiansName.find((guardian) => guardian.studentName === value.label);
+    
+        if (matchingGuardian) {
+            setRA(matchingGuardian.studentRA);
+            setNomeResponsavel(matchingGuardian.value);
+        } else {
+            console.warn("Nenhum registro encontrado para o Estudante:", value);
+            setRA(null);
+            setNomeResponsavel(null);
+        }
     };
 
     const handleNomeResponsavelChange = (value) => {
         setNomeResponsavel(value);
 
+        const matchingGuardian = guardiansName.find((guardian) => guardian.value === value);
+    
+        if (matchingGuardian) {
+            setRA(matchingGuardian.studentRA);
+            setNomeEstudante(matchingGuardian.studentName);
+        } else {
+            console.warn("Nenhum registro encontrado para o Responsável:", value);
+            setRA(null);
+            setNomeEstudante(null);
+        }
     };
 
 
@@ -569,20 +592,22 @@ function AnnouncementList() {
                                 id="nomeEstudante"
                                 value={studentsName.find((student) => student.label === nomeEstudante) || nomeEstudante}
                                 options={studentsName}
-                                onChange={(e) => setNomeEstudante(e.value)}
+                                onChange={(e) => handleNomeEstudanteChange(e.value)}
                                 placeholder="Selecione ou digite o nome do Estudante"
                                 disabled={/^\d{11}$/.test(rA)}
+                                filter showClear
                             />
                         </div>
                         <div className="field">
                             <label htmlFor="nomeResponsavel">Nome do Responsável</label>
                             <Dropdown
                                 id="nomeResponsavel"
-                                value={guardiansName.find((guardian) => guardian.label === nomeResponsavel)?.label || nomeResponsavel}
+                                value={guardiansName.find((guardian) => guardian.label === nomeResponsavel) || nomeResponsavel}
                                 options={guardiansName}
-                                onChange={(e) => setNomeResponsavel(e.value)}
+                                onChange={(e) => handleNomeResponsavelChange(e.value)}
                                 placeholder="Selecione ou digite o nome do Responsável"
                                 disabled={/^\d{11}$/.test(rA)}
+                                filter showClear
                             />
                         </div>
                         </>
