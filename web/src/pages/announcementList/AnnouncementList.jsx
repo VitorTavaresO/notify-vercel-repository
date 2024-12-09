@@ -89,8 +89,9 @@ function AnnouncementList() {
                 setGuardiansName(formattedGuardians);
         
                 const formattedStudents = formattedGuardians.map(guardian => ({
-                    label: guardian.studentName
+                    label: guardian.studentName,
                 }));
+                
                 setStudentsName(formattedStudents);
 
             } catch (error) {
@@ -444,7 +445,7 @@ function AnnouncementList() {
             );
 
             if (matchingGuardian) {
-                setNomeResponsavel(matchingGuardian.label);
+                setNomeResponsavel(matchingGuardian.value);
                 setNomeEstudante(matchingGuardian.studentName);
             } else {
                 console.warn("Nenhum responsável encontrado para o RA:", value);
