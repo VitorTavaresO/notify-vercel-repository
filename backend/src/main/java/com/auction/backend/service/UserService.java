@@ -395,6 +395,7 @@ public class UserService implements UserDetailsService {
 
     public boolean isAnnouncementIssuer(User user) {
         return user.getRoleName() == RoleName.ANNOUNCEMENT_ISSUER;
+    }
     
     // --------------- RECOVER EMAIL ---------------
 
