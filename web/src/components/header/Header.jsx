@@ -27,6 +27,7 @@ const Header = () => {
         {label: 'Sair',
             command: () => {
                 localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 navigate('/login');
             }
         },
