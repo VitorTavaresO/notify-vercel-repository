@@ -30,8 +30,10 @@ const Login = () => {
       console.log(error);
       if (error.response && error.response.data) {
         const errorMessage = error.response.data.message;
-        if (errorMessage) {
-          setErrorMessage(errorMessage);
+        if (errorMessage === "User not found") {
+          setErrorMessage("Usuário Não Encontrado");
+        } else if (errorMessage === "Bad credentials") {
+          setErrorMessage("Senha Inválida");
         } else {
           setErrorMessage("Error ao Logar");
         }
@@ -68,6 +70,10 @@ const Login = () => {
 
   const handleRegisterButton = () => {
     navigate("/register");
+  };
+
+  const handleForgotButton = () => {
+    navigate("/forgot-password");
   };
 
   const header = <div className="font-bold mb-3">Informe a Senha</div>;
@@ -180,6 +186,7 @@ const Login = () => {
               className="
                             grid-item
                             col-12"
+
             >
               <FloatLabel
                 className="
@@ -198,9 +205,8 @@ const Login = () => {
                   required
                   className={`
                                         w-full 
-                                        ${
-                                          fieldErrors.siape ? "p-invalid" : ""
-                                        }`}
+                                        ${fieldErrors.siape ? "p-invalid" : ""
+                    }`}
                 />
                 <label htmlFor="siape">SIAPE</label>
               </FloatLabel>
@@ -297,7 +303,7 @@ const Login = () => {
                 onMouseOut={({ target }) =>
                   (target.style.color = "var(--register-button-out-color)")
                 }
-                /*onClick={""}*/
+                onClick={handleForgotButton}
               />
             </div>
           </div>

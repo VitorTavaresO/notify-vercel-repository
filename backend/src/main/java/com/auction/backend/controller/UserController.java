@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.auction.backend.enums.RoleName;
 import com.auction.backend.model.User;
 import com.auction.backend.model.dto.UserAuthRequestDTO;
 import com.auction.backend.model.dto.UserAuthResponseDTO;
+import com.auction.backend.model.dto.UserChangePasswordDTO;
 import com.auction.backend.repository.UserRepository;
 import com.auction.backend.model.dto.PasswordResetDTO;
 import com.auction.backend.model.dto.PasswordResetValidateDTO;
@@ -220,5 +220,25 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @PostMapping("/recover-email")
+    public String recoverSendEmail(@RequestBody Map<String, String> json){
+        String email = json.get("email");
+        return userService.recoverSendEmail(email);
+    }
+
+    @PostMapping("/recover-code")
+    public User recoverVerifyCode(@RequestBody Map<String, String> request){
+        String validationCode = request.get("validationCode");
+        return userService.recoverVerifyCode(validationCode);
+    }
+
+    @PostMapping("/recover-change")
+    public User recoverChangePassword(@RequestBody UserChangePasswordDTO dto){
+
+        System.out.println(dto.getEmail());
+        System.out.println(dto.getPassword());
+        return userService.recoverChangePassword(dto);
     }
 }

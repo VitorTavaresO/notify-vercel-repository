@@ -1,6 +1,7 @@
 import "./App.css";
 import Login from "./pages/login/Login.jsx";
 import Register from "./pages/register/Register.jsx";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword"
 import Home from "./pages/home/Home";
 import EmployeeList from "./pages/employeeList/EmployeeList";
 import Profile from "./pages/profile/Profile";
@@ -31,6 +32,14 @@ function App() {
             element={
               <SimpleLayout>
                 <Register />
+              </SimpleLayout>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <SimpleLayout>
+                <ForgotPassword />
               </SimpleLayout>
             }
           />

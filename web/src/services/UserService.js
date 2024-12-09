@@ -22,6 +22,31 @@ class UserService extends BaseService {
     return response.data;
   }
 
+  async recoverSendEmail(email) {
+
+    const response = await this.api.post(
+      `${this.endPoint}/recover-email`,{email}
+    );
+    return response.data;
+  }
+
+  async recoverVerifyCode(validationCode) {
+
+    const response = await this.api.post(
+      `${this.endPoint}/recover-code`,{validationCode}
+    );
+    return response.data;
+  }
+
+  async recoverChangePassword(user) {
+
+    console.log(user);
+    const response = await this.api.post(
+      `${this.endPoint}/recover-change`,user
+    );
+    return response.data;
+  }
+
   async getUserRole(siape) {
     const response = await this.api.get(`${this.endPoint}/getUserRole`, {
       params: { siape },

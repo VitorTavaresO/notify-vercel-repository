@@ -2,14 +2,12 @@ package com.auction.backend.service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +22,7 @@ import com.auction.backend.model.User;
 import com.auction.backend.model.dto.PasswordResetDTO;
 import com.auction.backend.model.dto.PasswordResetValidateDTO;
 import com.auction.backend.model.dto.UserAuthRequestDTO;
+import com.auction.backend.model.dto.UserChangePasswordDTO;
 import com.auction.backend.repository.UserRepository;
 
 import jakarta.mail.MessagingException;
@@ -396,5 +395,62 @@ public class UserService implements UserDetailsService {
 
     public boolean isAnnouncementIssuer(User user) {
         return user.getRoleName() == RoleName.ANNOUNCEMENT_ISSUER;
+    
+    // --------------- RECOVER EMAIL ---------------
+
+    public String recoverSendEmail(String email) {
+
+        System.out.println(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
+
+        String code = generateRandomCode();
+
+        user.setValidationCode(code);
+        user.setValidationCodeValidity(LocalDateTime.now().plusMinutes(5));
+        userRepository.save(user);
+
+        Context context = new Context();
+        context.setVariable("name", user.getName());
+        context.setVariable("code", code);
+
+        try {
+            emailService.sendTemplateEmail(user.getEmail(), "Recuperar", context, "emailRecover");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        return "Email enviado!";
+    }
+
+
+    // --------------- RECOVER VALIDATION CODE ---------------
+
+    public User recoverVerifyCode(String validationCode){
+
+        User user = userRepository.findByValidationCode(validationCode).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
+
+        if(user.getValidationCode().equals(validationCode) && user.getValidationCodeValidity().isAfter(LocalDateTime.now())){
+
+            user.setValidationCode(null);
+            user.setValidationCodeValidity(null);
+
+            userRepository.save(user);
+            return user;
+        }
+        else { throw new IllegalArgumentException("Invalid Validation Code");}
+    }
+
+    
+    // --------------- RECOVER CHANGE PASSWORD ---------------
+
+    public User recoverChangePassword(UserChangePasswordDTO dto){
+
+        System.out.println(dto.getEmail() + "   " +dto.getPassword());
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not Found"));
+
+        user.setPassword(dto.getPassword());
+
+        userRepository.save(user);
+        return user;
     }
 }

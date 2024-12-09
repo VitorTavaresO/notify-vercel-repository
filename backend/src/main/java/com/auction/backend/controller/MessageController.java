@@ -1,6 +1,10 @@
 package com.auction.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,16 +35,14 @@ public class MessageController {
             @RequestPart("message") String messageJson,
             @RequestParam(value = "files", required = false) List<MultipartFile> files) {
         try {
-            System.out.println("JSON recebido: " + messageJson); // Verifica o JSON recebido
+            System.out.println("JSON recebido: " + messageJson); 
 
             ObjectMapper objectMapper = new ObjectMapper();
-            Message message = objectMapper.readValue(messageJson, Message.class); // Desserializa o JSON
+            Message message = objectMapper.readValue(messageJson, Message.class); 
 
-            // Verifica se as listas foram corretamente populadas
             System.out.println("Cursos recebidos: " + message.getCourse());
             System.out.println("Turmas recebidas: " + message.getClassName());
 
-            // Chama o serviço para criar a mensagem e salva anexos, se houver
             return messageService.create(message, files != null ? files : List.of());
 
         } catch (JsonMappingException e) {
@@ -82,6 +84,23 @@ public class MessageController {
 
     @GetMapping
     public Iterable<Message> findAll() {
-        return messageService.findAll(); // Simplesmente retorna a lista, Spring converte para JSON automaticamente
+        return messageService.findAll();
+    }
+
+    @GetMapping("/{messageId}/annexes/{annexId}/download")
+    public ResponseEntity<ByteArrayResource> downloadAnnex(
+            @PathVariable Long messageId,
+            @PathVariable Long annexId) {
+        try {
+            ByteArrayResource resource = messageService.downloadAnnex(messageId, annexId);
+            
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Anexo não encontrado", e);
+        }
     }
 }
