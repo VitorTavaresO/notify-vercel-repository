@@ -29,7 +29,7 @@ const ProfileCard = () => {
       console.log("SIAPE:", siape);
       try {
         const response = await fetch(
-          `http://localhost:8080/api/user/siape/${siape}`,
+          `https://backend-latest-s206.onrender.com/api/user/siape/${siape}`,
           {
             method: "GET",
           }
@@ -48,9 +48,12 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/messages", {
-          method: "GET",
-        });
+        const response = await fetch(
+          "https://backend-latest-s206.onrender.com/api/messages",
+          {
+            method: "GET",
+          }
+        );
         const data = await response.json();
 
         if (Array.isArray(data)) {
@@ -164,7 +167,7 @@ const ProfileCard = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/user/update-contact/${siape}`,
+        `https://backend-latest-s206.onrender.com/api/user/update-contact/${siape}`,
         {
           method: "PUT",
           headers: {
