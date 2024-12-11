@@ -1,0 +1,127 @@
+:root {
+  --register-color: rgb(245, 245, 245);
+  --login-container-color: rgb(255, 255, 255);
+  --register-button-out-color: rgb(62, 187, 83);
+  --register-button-over-color: rgb(46, 46, 46);
+  --acess-button-color: rgb(245, 245, 245);
+  --additional-content-border-color: rgb(100, 161, 112);
+  --second-additional-content-border-color: rgb(190, 59, 63);
+}
+
+html {
+  overflow-x: hidden;
+}
+
+.register {
+  background-color: var(--register-color);
+  overflow: hidden;
+}
+
+.register-container {
+  background-color: var(--register-container-color);
+}
+
+.register-container > div > div {
+  padding: 0;
+}
+
+.sub-title {
+  margin: 0 0 40px 0;
+}
+
+.password-area div {
+  width: 100%;
+}
+
+#register-button span {
+  color: var(--register-button-color);
+}
+
+#back-button span {
+  color: var(--back-button-out-color);
+}
+
+@media screen and (max-width: 600px) {
+  .p-card-body {
+    padding: 0;
+  }
+
+  .register-container {
+    width: 100%;
+    padding: 40px 40px;
+    box-shadow: none;
+  }
+
+  .container-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .grid-item {
+    min-width: 100%;
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .register {
+    padding: 20px 0;
+  }
+
+  .register-container {
+    max-width: 350px;
+    background: linear-gradient(white, white) padding-box,
+      linear-gradient(
+          to right,
+          var(--additional-content-border-color),
+          var(--second-additional-content-border-color)
+        )
+        border-box;
+    border-radius: 1rem;
+    border: 2px solid transparent;
+  }
+
+  .additional-content-background {
+    display: flex;
+    padding-left: min(40px, 5vw);
+    position: fixed;
+    height: 100vh;
+    padding-right: 50%;
+  }
+
+  .additional-content {
+    margin-right: min(50px, 5vw);
+    border-color: transparent;
+    position: relative;
+  }
+
+  .additional-content::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0%;
+    height: 75%;
+    width: 2.5px;
+    background-color: var(--additional-content-border-color);
+  }
+
+  .second-additional-content {
+    margin-right: min(50px, 5vw);
+    border-color: var(--second-additional-content-border-color);
+  }
+
+  #first-image {
+    max-width: 300px;
+  }
+
+  #second-image {
+    max-width: 350px;
+  }
+
+  #third-image {
+    max-width: 300px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}

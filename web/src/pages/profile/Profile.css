@@ -1,0 +1,114 @@
+.profile-container {
+    display: flex;
+    height: auto;
+    width: auto;
+    background-color: #F5F5F5;
+}
+
+.profile-card {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 45px auto 60px auto;
+    width: 100%;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #AFF9AD;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.profile-avatar {
+    margin-right: 20px;
+    border: 5px solid #3498db;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    color: #777;
+}
+
+.functions .function-tag {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.p-d-flex {
+    display: flex;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 20px;
+}
+
+.communications {
+    flex: 1;
+    margin-right: 0;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    margin: 10px;
+    padding: 15px;
+    max-width: 60%;
+    align-items: flex-start;
+}
+
+.itemText{
+    margin-top: 10px;
+}
+
+.communication-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.communication-item h4 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.profile-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.dialogComs{
+    position: relative;
+    top: 30px;
+    width: 50vw;
+}
+
+@media (max-width: 768px) {
+    .p-d-flex {
+        flex-direction: column;
+    }
+
+    .profile-details, .communications {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .dialogComs {
+        top: 20px;
+        width: 80vw;
+    }
+}

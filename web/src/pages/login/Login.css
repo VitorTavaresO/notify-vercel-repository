@@ -1,0 +1,123 @@
+:root {
+    --login-page-color: rgb(245, 245, 245);
+    --login-container-color: rgb(255, 255, 255);
+    --register-button-out-color: rgb(62, 187, 83);
+    --register-button-over-color: rgb(46, 46, 46);
+    --acess-button-color: rgb(245, 245, 245);
+    --additional-content-border-color: rgb(100, 161, 112);
+    --second-additional-content-border-color: rgb(190, 59, 63);
+}
+
+.login-page {
+    background-color: var(--login-page-color);
+    overflow: hidden;
+}
+
+.login-container {
+    background-color: var(--login-container-color);
+}
+
+.sub-title {
+    margin: 0 0 40px 0;
+}
+
+#login-button span {
+    color: var(--acess-button-color);
+}
+
+#button span {
+    color: var(--register-button-out-color);
+}
+
+.password-area div {
+    width: 100%;
+}
+
+/* --------------- MOBILE --------------- */
+@media screen and (max-width: 600px) {
+    .p-card-body {
+        padding: 0;
+    }
+
+    .additional-content-background {
+        display: none;
+    }
+
+    .login-page {
+        background-color: var(--login-container-color);
+    }
+
+    .login-container {
+        margin: 0 !important;
+        min-width: 100vw;
+        min-height: 100vh;
+        padding: 40px 10px;
+        box-shadow: none;
+    }
+
+    .container-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .grid-item {
+        min-width: 100%;
+    }
+}
+
+/* --------------- WEB --------------- */
+@media screen and (min-width: 601px) {
+    .additional-content-background {
+        display: flex;
+        padding-left: min(40px, 5vw);
+
+        height: 100vh;
+    }
+
+    .additional-content {
+        margin-right: min(50px, 5vw);
+        border-color: transparent;
+        position: relative;
+    }
+
+    .additional-content::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0%;
+        height: 75%;
+        width: 2.5px;
+        /* Largura da borda */
+        background-color: var(--additional-content-border-color);
+        /* Cor da borda */
+    }
+
+    .second-additional-content {
+        margin-right: min(50px, 5vw);
+        border-color: var(--second-additional-content-border-color);
+    }
+
+
+    .login-background {
+        padding-left: min(50px, 5vw);
+    }
+
+    .login-container {
+        max-width: 700px;
+
+        background: linear-gradient(white, white) padding-box,
+            linear-gradient(to right, var(--additional-content-border-color), var(--second-additional-content-border-color)) border-box;
+        border-radius: 1rem;
+        border: 2px solid transparent;
+    }
+
+    #first-image {
+        max-width: 300px;
+    }
+
+    #second-image {
+        max-width: 440px;
+    }
+
+}
